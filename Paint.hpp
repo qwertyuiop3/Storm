@@ -2,9 +2,9 @@ void __thiscall Redirected_Paint(void* Panel)
 {
 	using Set_Order_Type = void(__thiscall*)(void* Panel, __int32 Order);
 
-	Set_Order_Type((unsigned __int32)Client_Module + 4074160)(Panel, -1);
+	Set_Order_Type((unsigned __int32)Client_Module + 4082160)(Panel, -1);
 
-	void* Local_Player = *(void**)((unsigned __int32)Client_Module + 7490392);
+	void* Local_Player = *(void**)((unsigned __int32)Client_Module + 7498712);
 
 	__int32 Entity_Number = 1;
 
@@ -12,23 +12,27 @@ void __thiscall Redirected_Paint(void* Panel)
 
 	Traverse_Entity_List_Label:
 	{
-		void* Entity = *(void**)((unsigned __int32)Client_Module + 7636212 + ((Entity_Number - 4097) << 4));
+		void* Entity = *(void**)((unsigned __int32)Client_Module + 7644532 + ((Entity_Number - 4097) << 4));
 
 		if (Entity != nullptr)
 		{
 			if (Entity != Local_Player)
 			{
-				__int32 Identifier = Get_Identifier(Entity);
+				__int32 Identifier = Get_Identifier(Entity, 0, 1);
 
 				if (Identifier != -1)
 				{
-					float* Local_Player_Origin = (float*)((unsigned __int32)Local_Player + 292);
+					__int8 Equipment = Identifier < 0;
 
-					float* Entity_Origin = (float*)((unsigned __int32)Entity + 292);
+					using Get_Origin_Type = float*(__thiscall*)(void* Entity);
+
+					float* Local_Player_Origin = Get_Origin_Type((unsigned __int32)Client_Module + 297584)(Local_Player);
+
+					float* Entity_Origin = Get_Origin_Type((unsigned __int32)Client_Module + 297584)(Entity);
 
 					Target_Structure Target =
 					{
-						Identifier,
+						__builtin_abs(Identifier),
 
 						Entity,
 
@@ -37,12 +41,22 @@ void __thiscall Redirected_Paint(void* Panel)
 						__builtin_powf(Local_Player_Origin[0] - Entity_Origin[0], 2) + __builtin_powf(Local_Player_Origin[1] - Entity_Origin[1], 2) + __builtin_powf(Local_Player_Origin[2] - Entity_Origin[2], 2)
 					};
 
-					Sorted_Target_List.push_back(Target);
+					if (Equipment == 0)
+					{
+						Sorted_Target_List.push_back(Target);
+					}
+					else
+					{
+						if (__builtin_sqrtf(Target.Distance) <= Interface_Equipment_Distance.Floating_Point)
+						{
+							Sorted_Target_List.push_back(Target);
+						}
+					}
 				}
 			}
 		}
 
-		if (Entity_Number != *(__int32*)((unsigned __int32)Client_Module + 7636248))
+		if (Entity_Number != *(__int32*)((unsigned __int32)Client_Module + 7644568))
 		{
 			Entity_Number += 1;
 
@@ -71,7 +85,7 @@ void __thiscall Redirected_Paint(void* Panel)
 			{
 				float Bones[128][3][4];
 
-				void* Hitbox_Set = Get_Hitbox_Set(Target, Bones, (*(Global_Variables_Structure**)((unsigned __int32)Client_Module + 7088552))->Current_Time);
+				void* Hitbox_Set = Get_Hitbox_Set(Target, Bones, (*(Global_Variables_Structure**)((unsigned __int32)Client_Module + 7096744))->Current_Time);
 
 				if (Hitbox_Set != nullptr)
 				{
@@ -125,13 +139,13 @@ void __thiscall Redirected_Paint(void* Panel)
 
 								float Screen[3];
 
-								if (Screen_Transform_Type((unsigned __int32)Client_Module + 1841488)(Hitbox_Vertices[Vertex_Number], Screen) == 0)
+								if (Screen_Transform_Type((unsigned __int32)Client_Module + 1841648)(Hitbox_Vertices[Vertex_Number], Screen) == 0)
 								{
 									using Get_Screen_Size_Type = __int32(__cdecl*)();
 
-									__int32 Screen_Width = Get_Screen_Size_Type((unsigned __int32)Client_Module + 738528)();
+									__int32 Screen_Width = Get_Screen_Size_Type((unsigned __int32)Client_Module + 738576)();
 
-									__int32 Screen_Height = Get_Screen_Size_Type((unsigned __int32)Client_Module + 738496)();
+									__int32 Screen_Height = Get_Screen_Size_Type((unsigned __int32)Client_Module + 738544)();
 
 									Screen[0] = Screen[0] / 2 * Screen_Width + Screen_Width / 2;
 
@@ -180,42 +194,48 @@ void __thiscall Redirected_Paint(void* Panel)
 
 			if (Get_Bounds() == 1)
 			{
-				void* Surface = *(void**)((unsigned __int32)Client_Module + 8951284);
+				void* Surface = *(void**)((unsigned __int32)Client_Module + 8960244);
 
 				struct Paint_Data_Structure
 				{
 					unsigned __int8 Color[3];
-
-					unsigned __int8 Fill_Color[3];
 
 					wchar_t* Name;
 				};
 
 				static std::unordered_map<__int32, Paint_Data_Structure> Paint_Data_List =
 				{
-					{ 0, { { 255, 128, 0 }, { 128, 64, 0 }, (wchar_t*)L"Boomer" } },
+					{ 0, { { 255, 128, 0 }, (wchar_t*)L"Boomer" } },
 
-					{ 13, { { 0, 128, 255 }, { 0, 64, 128 }, (wchar_t*)L"Rock" } },
+					{ 13, { { 0, 128, 255 }, (wchar_t*)L"Rock" } },
 
-					{ 99, { { 255, 128, 0 }, { 128, 64, 0 }, (wchar_t*)L"Charger" } },
+					{ 73, { { 255, 255, 255 }, (wchar_t*)L"Aid" } },
 
-					{ 232, { { 0, 255, 0 }, { 0, 128, 0 }, (wchar_t*)L"Survivor" } },
+					{ 99, { { 255, 128, 0 }, (wchar_t*)L"Charger" } },
 
-					{ 263, { { 255, 128, 0 }, { 128, 64, 0 }, (wchar_t*)L"Hunter" } },
+					{ 105, { { 255, 255, 255 }, (wchar_t*)L"Adrenaline" } },
 
-					{ 264, { { 255, 0, 0 }, { 128, 0, 0 }, (wchar_t*)L"Infected" } },
+					{ 109, { { 255, 255, 255 }, (wchar_t*)L"Defibrillator" } },
 
-					{ 265, { { 255, 128, 0 }, { 128, 64, 0 }, (wchar_t*)L"Jockey" } },
+					{ 121, { { 255, 255, 255 }, (wchar_t*)L"Pain" } },
 
-					{ 270, { { 255, 128, 0 }, { 128, 64, 0 }, (wchar_t*)L"Smoker" } },
+					{ 232, { { 0, 255, 0 }, (wchar_t*)L"Survivor" } },
 
-					{ 272, { { 255, 128, 0 }, { 128, 64, 0 }, (wchar_t*)L"Spitter" } },
+					{ 256, { { 255, 255, 255 }, (wchar_t*)L"Ammo" } },
 
-					{ 275, { { 0, 255, 0 }, { 0, 128, 0 }, (wchar_t*)L"Survivor" } },
+					{ 263, { { 255, 128, 0 }, (wchar_t*)L"Hunter" } },
 
-					{ 276, { { 0, 128, 255 }, { 0, 64, 128 }, (wchar_t*)L"Tank" } },
+					{ 264, { { 255, 0, 0 }, (wchar_t*)L"Infected" } },
 
-					{ 277, { { 0, 128, 255 }, { 0, 64, 128 }, (wchar_t*)L"Witch" } }
+					{ 265, { { 255, 128, 0 }, (wchar_t*)L"Jockey" } },
+
+					{ 270, { { 255, 128, 0 }, (wchar_t*)L"Smoker" } },
+
+					{ 272, { { 255, 128, 0 }, (wchar_t*)L"Spitter" } },
+
+					{ 276, { { 0, 128, 255 }, (wchar_t*)L"Tank" } },
+
+					{ 277, { { 0, 128, 255 }, (wchar_t*)L"Witch" } }
 				};
 
 				Paint_Data_Structure* Paint_Data = &Paint_Data_List[Target->Identifier];
@@ -245,18 +265,18 @@ void __thiscall Redirected_Paint(void* Panel)
 					}
 					else
 					{
-						(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, 255, 255, 255, 255);
+						(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, 128, 128, 128, 255);
 					}
 
 					(*Draw_Rect_Type(*(unsigned __int32*)Surface + 56))(Surface, From_X, From_Y, To_X, To_Y);
 
 					if (Ghost == 0)
 					{
-						(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, Paint_Data->Fill_Color[0], Paint_Data->Fill_Color[1], Paint_Data->Fill_Color[2], 128);
+						(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, (__int32)(Paint_Data->Color[0] / 2 + 0.5f), (__int32)(Paint_Data->Color[1] / 2 + 0.5f), (__int32)(Paint_Data->Color[2] / 2 + 0.5f), 128);
 					}
 					else
 					{
-						(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, 128, 128, 128, 128);
+						(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, 64, 64, 64, 128);
 					}
 
 					using Draw_Filled_Rect_Type = void(__thiscall**)(void* Surface, __int32 From_X, __int32 From_Y, __int32 To_X, __int32 To_Y);
@@ -266,7 +286,7 @@ void __thiscall Redirected_Paint(void* Panel)
 
 				Draw_Box(Bounds[0], Bounds[2], Bounds[1], Bounds[3]);
 
-				using Draw_Text_Type = void(__cdecl*)(void* Font, __int32 X, __int32 Y, __int32 R, __int32 G, __int32 B, __int32 A, wchar_t* Text);
+				using Draw_Text_Type = void(__cdecl*)(void* Font, __int32 X, __int32 Y, __int32 Red, __int32 Green, __int32 Blue, __int32 Alpha, wchar_t* Text);
 
 				auto Create_Font = [&]() -> void*
 				{
@@ -286,7 +306,7 @@ void __thiscall Redirected_Paint(void* Panel)
 
 						Write_Character = Text[0];
 
-						Draw_Text_Type((unsigned __int32)Engine_Module + 2217776)(Font, 0, 0, 0, 0, 0, 0, Text);
+						Draw_Text_Type((unsigned __int32)Engine_Module + 2219056)(Font, 0, 0, 0, 0, 0, 0, Text);
 
 						if (Character != L'~')
 						{
@@ -344,11 +364,11 @@ void __thiscall Redirected_Paint(void* Panel)
 
 						if (Ghost == 0)
 						{
-							Draw_Text_Type((unsigned __int32)Engine_Module + 2217776)(Font, Bounds[1] + 7 + Offset_X - Character_Bounds[0], Bounds[2] + Offset_Y, Paint_Data->Color[0], Paint_Data->Color[1], Paint_Data->Color[2], 255, Text);
+							Draw_Text_Type((unsigned __int32)Engine_Module + 2219056)(Font, Bounds[1] + 7 + Offset_X - Character_Bounds[0], Bounds[2] + Offset_Y, Paint_Data->Color[0], Paint_Data->Color[1], Paint_Data->Color[2], 255, Text);
 						}
 						else
 						{
-							Draw_Text_Type((unsigned __int32)Engine_Module + 2217776)(Font, Bounds[1] + 7 + Offset_X - Character_Bounds[0], Bounds[2] + Offset_Y, 255, 255, 255, 255, Text);
+							Draw_Text_Type((unsigned __int32)Engine_Module + 2219056)(Font, Bounds[1] + 7 + Offset_X - Character_Bounds[0], Bounds[2] + Offset_Y, 128, 128, 128, 255, Text);
 						}
 
 						Write_Character = 0;

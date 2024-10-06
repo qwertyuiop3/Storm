@@ -1,6 +1,6 @@
 void Redirected_Draw_Crosshair()
 {
-	if ((*(__int32*)(*(unsigned __int32*)((unsigned __int32)Client_Module + 7490392) + 5008) | 55) == 55)
+	if ((*(__int32*)(*(unsigned __int32*)((unsigned __int32)Client_Module + 7498712) + 5008) | 55) == 55)
 	{
 		static float Rotation_Angle;
 
@@ -8,7 +8,7 @@ void Redirected_Draw_Crosshair()
 		{
 			using Set_Color_Type = void(__thiscall**)(void* Surface, unsigned __int8 Red, unsigned __int8 Green, unsigned __int8 Blue, unsigned __int8 Alpha);
 
-			void* Surface = *(void**)((unsigned __int32)Client_Module + 8951284);
+			void* Surface = *(void**)((unsigned __int32)Client_Module + 8960244);
 
 			(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, 0, 0, 0, 255);
 
@@ -43,9 +43,9 @@ void Redirected_Draw_Crosshair()
 
 		using Get_Screen_Size_Type = __int32(__cdecl*)();
 
-		__int32 Screen_Width = Get_Screen_Size_Type((unsigned __int32)Client_Module + 738528)() / 2;
+		__int32 Screen_Width = Get_Screen_Size_Type((unsigned __int32)Client_Module + 738576)() / 2;
 
-		__int32 Screen_Height = Get_Screen_Size_Type((unsigned __int32)Client_Module + 738496)() / 2;
+		__int32 Screen_Height = Get_Screen_Size_Type((unsigned __int32)Client_Module + 738544)() / 2;
 
 		Draw_Storm_Label:
 		{
@@ -59,6 +59,6 @@ void Redirected_Draw_Crosshair()
 			}
 		}
 
-		Rotation_Angle = __builtin_remainderf(Rotation_Angle + (*(Global_Variables_Structure**)((unsigned __int32)Client_Module + 7088552))->Frame_Time * Interface_Storm_Speed.Integer, 360);
+		Rotation_Angle = __builtin_remainderf(Rotation_Angle + (*(Global_Variables_Structure**)((unsigned __int32)Client_Module + 7096744))->Frame_Time * Interface_Storm_Speed.Integer, 360);
 	}
 }

@@ -17,7 +17,7 @@ void __declspec(naked) Redirected_Perform_Shove_Trace()
 	asm("call *%edx");
 	asm("pusha");
 	asm("mov %esp, %ecx");
-	asm("call %0" : : "m"(Perform_Shove_Trace));
+	asm("calll %0" : : "m"(Perform_Shove_Trace));
 	asm("popa");
 	asm("jmp *%0" : : "m"(Original_Perform_Shove_Trace_Caller));
 }

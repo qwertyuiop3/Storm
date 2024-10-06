@@ -4,19 +4,32 @@ float Vector_Normalize(float* Vector)
 {
 	using Vector_Normalize_Type = float(__thiscall*)(float* Vector);
 
-	return Vector_Normalize_Type((unsigned __int32)Client_Module + 3528928)(Vector);
+	return Vector_Normalize_Type((unsigned __int32)Client_Module + 3536176)(Vector);
 };
 
 void Angle_Vectors(float* Angles, float* Forward, float* Right, float* Up)
 {
 	using Angle_Vectors_Type = void(__cdecl*)(float* Angles, float* Forward, float* Right, float* Up);
 
-	Angle_Vectors_Type((unsigned __int32)Client_Module + 3532128)(Angles, Forward, Right, Up);
+	Angle_Vectors_Type((unsigned __int32)Client_Module + 3539376)(Angles, Forward, Right, Up);
 };
 
 void __thiscall Perform_Trace(void* Stack)
 {
 	void* Entity = *(void**)((unsigned __int32)Stack + 312);
+
+	if (Interface_Penetrate_Teammates.Integer == 0)
+	{
+		if (Get_Identifier(Entity, 0, 0) == 232)
+		{
+			void* Local_Player = *(void**)((unsigned __int32)Client_Module + 7498712);
+
+			if (*(__int32*)((unsigned __int32)Entity + 228) == *(__int32*)((unsigned __int32)Local_Player + 228))
+			{
+				Perform_Trace_Target = nullptr;
+			}
+		}
+	}
 
 	if (Entity == (void*)((unsigned __int32)Perform_Trace_Target ^ 1))
 	{
@@ -70,7 +83,7 @@ void __declspec(naked) Redirected_Perform_Trace()
 {
 	asm("pusha");
 	asm("mov %esp, %ecx");
-	asm("call %0" : : "m"(Perform_Trace));
+	asm("calll %0" : : "m"(Perform_Trace));
 	asm("popa");
 	asm("jmp *%0" : : "m"(Original_Perform_Trace_Caller));
 }
