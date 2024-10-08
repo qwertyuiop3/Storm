@@ -26,16 +26,24 @@ void __thiscall Perform_Trace(void* Stack)
 
 			if (*(__int32*)((unsigned __int32)Entity + 228) == *(__int32*)((unsigned __int32)Local_Player + 228))
 			{
-				Perform_Trace_Target = nullptr;
+				return;
 			}
 		}
 	}
 
 	if (Entity == (void*)((unsigned __int32)Perform_Trace_Target ^ 1))
 	{
+		if (Interface_Aim_Intersection.Integer == 0)
+		{
+			if (*(__int32*)((unsigned __int32)Stack + 304) != 1)
+			{
+				return;
+			}
+		}
+
 		void* Trace_Information = *(void**)((unsigned __int32)Stack + 36);
 
-		if ((*(__int32*)((unsigned int)Trace_Information + 36) & 255) + *(__int32*)((unsigned __int32)Entity + 52) == 17)
+		if ((*(__int32*)((unsigned __int32)Trace_Information + 36) & 255) + *(__int32*)((unsigned __int32)Entity + 52) == 17)
 		{
 			float Inflictor_Direction[3];
 

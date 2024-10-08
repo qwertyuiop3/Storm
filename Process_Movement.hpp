@@ -14,7 +14,7 @@ void __thiscall Redirected_Process_Movement(void* Unknown_Parameter, void* Playe
 
 		if (*(__int8*)((unsigned __int32)Player + 4636) == 1)
 		{
-			*(__int32*)((unsigned __int32)Move_Data + 36) |= 4u;
+			*(__int32*)((unsigned __int32)Move_Data + 36) |= 4;
 		}
 
 		*(float*)((unsigned __int32)Move_Data + 44) = 0;
