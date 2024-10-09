@@ -25,6 +25,8 @@ Interface_Structure Interface_Penetrate_Teammates;
 
 Interface_Structure Interface_Aim_Intersection;
 
+Interface_Structure Interface_Penetration_Damage;
+
 Interface_Structure Interface_Equipment_Distance;
 
 Interface_Structure Interface_Storm_Rotation_Radius;
@@ -63,6 +65,8 @@ void Implement_Extended_Interface()
 	Create_Console_Interface(Pointer_Name(Interface_Penetrate_Teammates), (char*)"0", nullptr);
 
 	Create_Console_Interface(Pointer_Name(Interface_Aim_Intersection), (char*)"1", nullptr);
+
+	Create_Console_Interface(Pointer_Name(Interface_Penetration_Damage), (char*)"25", nullptr);
 
 	Create_Console_Interface(Pointer_Name(Interface_Equipment_Distance), (char*)"2048", nullptr);
 

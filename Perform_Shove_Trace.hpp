@@ -12,12 +12,12 @@ void* Original_Perform_Shove_Trace_Caller;
 
 void __declspec(naked) Redirected_Perform_Shove_Trace()
 {
-	asm("lea -304(%ebp), %eax");
-	asm("push %eax");
-	asm("call *%edx");
-	asm("pusha");
-	asm("mov %esp, %ecx");
+	asm("leal -304(%ebp), %eax");
+	asm("pushl %eax");
+	asm("calll *%edx");
+	asm("pushal");
+	asm("movl %esp, %ecx");
 	asm("calll %0" : : "m"(Perform_Shove_Trace));
-	asm("popa");
-	asm("jmp *%0" : : "m"(Original_Perform_Shove_Trace_Caller));
+	asm("popal");
+	asm("jmpl *%0" : : "m"(Original_Perform_Shove_Trace_Caller));
 }
