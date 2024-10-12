@@ -181,6 +181,14 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 
 				Client_Module = GetModuleHandleW(L"client.dll");
 
+				//DEBUG
+				{
+					*(__int32*)((unsigned __int32)Client_Module + 0x7B25A8 + 0x14) &= ~0xA;
+					*(__int32*)((unsigned __int32)Client_Module + 0x782838 + 0x14) &= ~0xA;
+					*(__int32*)((unsigned __int32)Client_Module + 0x7803D8 + 0x14) &= ~0xA;
+					*(__int32*)((unsigned __int32)Engine_Module + 0x679538 + 0x14) &= ~0xA;
+				}
+
 				_putws(L"[ + ] Events");
 				{
 					Redirection_Manager::Redirect_Function(Original_Post_Network_Data_Received_Caller, 0, (void*)((unsigned __int32)Client_Module + 1555264), 1, (void*)Redirected_Post_Network_Data_Received);

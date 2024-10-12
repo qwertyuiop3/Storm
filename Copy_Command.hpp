@@ -33,7 +33,9 @@ void* Original_Copy_Command_Caller;
 
 void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structure* Command)
 {
-	Extended_Command_Structure* Extended_Command = &Extended_Commands[Command->Command_Number % 150];
+	Command->Frame_Number = Command->Command_Number % 150;
+
+	Extended_Command_Structure* Extended_Command = &Extended_Commands[Command->Frame_Number];
 
 	Extended_Command->Extra_Commands = 0;
 
@@ -292,7 +294,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 													{
 														if (Identifier == 277)
 														{
-															if (*(float*)((unsigned __int32)Entity + 4844) == 1)
+															//if (*(float*)((unsigned __int32)Entity + 4844) == 1)
 															{
 																Sorted_Target_List.push_back(Target);
 															}
@@ -366,7 +368,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 										__int8 Forced = 0;
 
-										if (Is_Melee + Healing != 0)
+										if (Is_Melee + Healing != 0) //zero clip?
 										{
 											if ((Target->Identifier ^ 72) % 348 >= 72)
 											{
@@ -409,11 +411,13 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 														*(__int32*)((unsigned __int32)Weapon + 3248) = 0;
 
-														Perform_Trace_Target = (void*)((unsigned __int32)Target->Self ^ 1);
+														Perform_Trace_Target = Target->Self;
+
+														Perform_Trace_Damage = 0;
 
 														Perform_Shove_Trace((unsigned __int32)Client_Module + 3220512)(Weapon, Direction);
 
-														if (Perform_Trace_Target == Target->Self)
+														if (Perform_Trace_Damage == 1)
 														{
 															Command->Tick_Number = Target->Tick_Number;
 
@@ -465,158 +469,12 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 								{
 									__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (*(__int32*)((unsigned __int32)Weapon + 2436) > 0 - Is_Melee * 2) * (*(float*)((unsigned __int32)Local_Player + 3872) <= Global_Variables->Current_Time);
 
-									if (Can_Attack == 1)
+									if ((Can_Attack == 0) + (Weapon_Identifier == 96) + Healing == 0)
 									{
-										if (Weapon_Identifier != 96)
+										Target_Structure* Aim_Target = nullptr;
+
+										if (Is_Melee == 0)
 										{
-											Target_Structure* Aim_Target = nullptr;
-
-											if (Is_Melee + Healing == 0)
-											{
-												Target_Number = 0;
-
-												Aim_Traverse_Sorted_Target_List_Label:
-												{
-													if (Target_Number != Sorted_Target_List.size())
-													{
-														Target_Structure* Target = &Sorted_Target_List.at(Target_Number);
-
-														float Bones[128][3][4];
-
-														void* Hitbox_Set = Get_Hitbox_Set(Target, Bones, Global_Variables->Current_Time);
-
-														if (Hitbox_Set != nullptr)
-														{
-															auto Perform_Trace = [&](float* Angles) -> __int8
-															{
-																using Fire_Bullet_Type = void(__thiscall*)(void* Player, float X, float Y, float Z, float* Angles, __int32 Identifier, void* Unknown_Parameter);
-
-																__int32 Bullets = *(__int32*)((unsigned __int32)Weapon_Data + 2520);
-
-																*(__int32*)((unsigned __int32)Weapon_Data + 2520) = 1;
-
-																Perform_Trace_Target = (void*)((unsigned __int32)Target->Self ^ 1);
-
-																void* Previous_Audio_Device = *(void**)((unsigned __int32)Engine_Module + 5050008);
-
-																*(void**)((unsigned __int32)Engine_Module + 5050008) = nullptr;
-
-																*(__int32*)((unsigned __int32)Client_Module + 7683464) = 1;
-
-																*(__int32*)((unsigned __int32)Client_Module + 8175320) = 0;
-
-																*(__int32*)((unsigned __int32)Client_Module + 8175392) = 0;
-
-																using Get_Weapon_Identifier_Type = __int32(__thiscall**)(void* Weapon);
-
-																Fire_Bullet_Type((unsigned __int32)Client_Module + 3103776)(Local_Player, Eye_Position[0], Eye_Position[1], Eye_Position[2], Angles, (*Get_Weapon_Identifier_Type(*(unsigned __int32*)Weapon + 1532))(Weapon), nullptr);
-
-																*(__int32*)((unsigned __int32)Client_Module + 8175392) = 1;
-
-																*(__int32*)((unsigned __int32)Client_Module + 8175320) = 1;
-
-																*(__int32*)((unsigned __int32)Client_Module + 7683464) = 0;
-
-																*(void**)((unsigned __int32)Engine_Module + 5050008) = Previous_Audio_Device;
-
-																*(__int32*)((unsigned __int32)Weapon_Data + 2520) = Bullets;
-
-																return Perform_Trace_Target == Target->Self;
-															};
-
-															static std::unordered_map<__int32, __int32> Hitboxes =
-															{
-																{ 0, 10 },
-
-																{ 13, 0 },
-
-																{ 99, 9 },
-
-																{ 263, 10 },
-
-																{ 264, 15 },
-
-																{ 265, 4 },
-
-																{ 270, 10 },
-
-																{ 272, 4 },
-
-																{ 276, 12 },
-
-																{ 277, 10 }
-															};
-
-															void* Hitbox = (void*)((unsigned __int32)Hitbox_Set + 12 + Hitboxes[Target->Identifier] * 68);
-
-															float* Hitbox_Minimum = (float*)((unsigned __int32)Hitbox + 8);
-
-															float* Hitbox_Maximum = (float*)((unsigned __int32)Hitbox + 20);
-
-															float Hitbox_Center[3]
-															{
-																(Hitbox_Minimum[0] + Hitbox_Maximum[0]) / 2,
-
-																(Hitbox_Minimum[1] + Hitbox_Maximum[1]) / 2,
-
-																(Hitbox_Minimum[2] + Hitbox_Maximum[2]) / 2
-															};
-
-															float Target_Origin[3] =
-															{
-																Bones[*(__int32*)Hitbox][0][0] * Hitbox_Center[0] + Bones[*(__int32*)Hitbox][0][1] * Hitbox_Center[1] + Bones[*(__int32*)Hitbox][0][2] * Hitbox_Center[2] + Bones[*(__int32*)Hitbox][0][3],
-
-																Bones[*(__int32*)Hitbox][1][0] * Hitbox_Center[0] + Bones[*(__int32*)Hitbox][1][1] * Hitbox_Center[1] + Bones[*(__int32*)Hitbox][1][2] * Hitbox_Center[2] + Bones[*(__int32*)Hitbox][1][3],
-
-																Bones[*(__int32*)Hitbox][2][0] * Hitbox_Center[0] + Bones[*(__int32*)Hitbox][2][1] * Hitbox_Center[1] + Bones[*(__int32*)Hitbox][2][2] * Hitbox_Center[2] + Bones[*(__int32*)Hitbox][2][3]
-															};
-
-															float Direction[3] =
-															{
-																Target_Origin[0] - Eye_Position[0],
-
-																Target_Origin[1] - Eye_Position[1],
-
-																Target_Origin[2] - Eye_Position[2]
-															};
-
-															Vector_Normalize(Direction);
-
-															float Angles[3] =
-															{
-																__builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180 / 3.1415927f,
-
-																__builtin_atan2f(Direction[1], Direction[0]) * 180 / 3.1415927f,
-
-																0
-															};
-
-															if (Perform_Trace(Angles) == 1)
-															{
-																Command->Tick_Number = Target->Tick_Number;
-
-																Byte_Manager::Copy_Bytes(0, Command->Angles, sizeof(Angles), Angles);
-
-																Command->Buttons |= 1;
-
-																*(float*)((unsigned __int32)Target->Self + 16) = Get_Target_Time(Target);
-
-																goto Aim_Found_Target_Label;
-															}
-														}
-
-														Target_Number += 1;
-
-														goto Aim_Traverse_Sorted_Target_List_Label;
-
-														Aim_Found_Target_Label:
-														{
-															Aim_Target = Target;
-														}
-													}
-												}
-											}
-
 											__int8 Compensate_Burst = 0;
 
 											if (Weapon_Identifier == 153)
@@ -629,44 +487,227 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 												}
 											}
 
-											if ((Command->Buttons & 1) == 1)
+											if (Weapon_Identifier == 2)
 											{
-												if (Shove_Target != nullptr)
-												{
-													*(float*)((unsigned __int32)Shove_Target->Self + 16) = 0;
+												Command->Command_Number = -2134739495;
 
-													if (Aim_Target != nullptr)
-													{
-														*(float*)((unsigned __int32)Aim_Target->Self + 16) = Get_Target_Time(Aim_Target);
-													}
-												}
-
-												if (Is_Melee == 0)
-												{
-													*(__int32*)((unsigned __int32)Client_Module + 7075944) = Command->Random_Seed;
-
-													using Random_Type = float(__cdecl*)(char* Name, float Minimum, float Maximum, void* Unknown_Parameter);
-
-													using Update_Spread_Type = void(__thiscall*)(void* Weapon);
-
-													if (Compensate_Burst == 0)
-													{
-														Update_Spread_Type((unsigned __int32)Client_Module + 3197648)(Weapon);
-													}
-
-													float Maximum_Spread = *(float*)((unsigned __int32)Weapon + 3340);
-
-													float* Recoil = (float*)((unsigned __int32)Local_Player + 4612);
-
-													Command->Angles[0] -= Random_Type((unsigned __int32)Client_Module + 1756592)((char*)"CTerrorGun::FireBullet HorizSpread", -Maximum_Spread, Maximum_Spread, nullptr) + Recoil[0];
-
-													Command->Angles[1] -= Random_Type((unsigned __int32)Client_Module + 1756592)((char*)"CTerrorGun::FireBullet VertSpread", -Maximum_Spread, Maximum_Spread, nullptr) + Recoil[1];
-
-													Command->Angles[2] -= Recoil[2];
-												}
-
-												Block_Buttons = 2048;
+												Command->Random_Seed = 11144000;
 											}
+											else
+											{
+												if (Weapon_Identifier == 148)
+												{
+													Command->Command_Number = -2139542887;
+
+													Command->Random_Seed = 1246243990;
+												}
+												else
+												{
+													if ((163 - Weapon_Identifier ^ Weapon_Identifier - 162) == 1)
+													{
+														Command->Command_Number = -2139097805;
+
+														Command->Random_Seed = 494641349;
+													}
+												}
+											}
+
+											using Update_Spread_Type = void(__thiscall*)(void* Weapon);
+
+											if (Compensate_Burst == 0)
+											{
+												Update_Spread_Type((unsigned __int32)Client_Module + 3197648)(Weapon);
+											}
+
+											Target_Number = 0;
+
+											Aim_Traverse_Sorted_Target_List_Label:
+											{
+												if (Target_Number != Sorted_Target_List.size())
+												{
+													Target_Structure* Target = &Sorted_Target_List.at(Target_Number);
+
+													float Bones[128][3][4];
+
+													void* Hitbox_Set = Get_Hitbox_Set(Target, Bones, Global_Variables->Current_Time);
+
+													if (Hitbox_Set != nullptr)
+													{
+														auto Perform_Trace = [&](float* Angles) -> __int8
+														{
+															using Fire_Bullet_Type = void(__thiscall*)(void* Player, float X, float Y, float Z, float* Angles, __int32 Identifier, void* Unknown_Parameter);
+
+															__int32 Bullets = *(__int32*)((unsigned __int32)Weapon_Data + 2520);
+
+															if (Interface_Penetration_Damage.Floating_Point == 0)
+															{
+																*(__int32*)((unsigned __int32)Weapon_Data + 2520) = 1;
+															}
+
+															Perform_Trace_Target = Target->Self;
+
+															Perform_Trace_Damage = 0;
+
+															void* Previous_Audio_Device = *(void**)((unsigned __int32)Engine_Module + 5050008);
+
+															*(void**)((unsigned __int32)Engine_Module + 5050008) = nullptr;
+
+															*(__int32*)((unsigned __int32)Client_Module + 7075944) = Command->Random_Seed;
+
+															*(__int32*)((unsigned __int32)Client_Module + 7683464) = 1;
+
+															*(__int32*)((unsigned __int32)Client_Module + 7689576) = 0;
+
+															*(__int32*)((unsigned __int32)Client_Module + 8175320) = 0;
+
+															*(__int32*)((unsigned __int32)Client_Module + 8175392) = 0;
+
+															using Get_Weapon_Identifier_Type = __int32(__thiscall**)(void* Weapon);
+
+															Fire_Bullet_Type((unsigned __int32)Client_Module + 3103776)(Local_Player, Eye_Position[0], Eye_Position[1], Eye_Position[2], Angles, (*Get_Weapon_Identifier_Type(*(unsigned __int32*)Weapon + 1532))(Weapon), nullptr);
+
+															*(__int32*)((unsigned __int32)Client_Module + 8175392) = 1;
+
+															*(__int32*)((unsigned __int32)Client_Module + 8175320) = 1;
+
+															*(__int32*)((unsigned __int32)Client_Module + 7689576) = 1;
+
+															*(__int32*)((unsigned __int32)Client_Module + 7683464) = 0;
+
+															*(void**)((unsigned __int32)Engine_Module + 5050008) = Previous_Audio_Device;
+
+															*(__int32*)((unsigned __int32)Weapon_Data + 2520) = Bullets;
+
+															Perform_Trace_Target = nullptr;
+
+															wprintf(L"%f\n", Perform_Trace_Damage);
+
+															return (Perform_Trace_Damage >= Interface_Penetration_Damage.Floating_Point) * (Perform_Trace_Damage != 0);
+														};
+
+														static std::unordered_map<__int32, __int32> Hitboxes =
+														{
+															{ 0, 10 },
+
+															{ 13, 0 },
+
+															{ 99, 9 },
+
+															{ 263, 10 },
+
+															{ 264, 15 },
+
+															{ 265, 4 },
+
+															{ 270, 10 },
+
+															{ 272, 4 },
+
+															{ 276, 12 },
+
+															{ 277, 10 }
+														};
+
+														void* Hitbox = (void*)((unsigned __int32)Hitbox_Set + 12 + Hitboxes[Target->Identifier] * 68);
+
+														float* Hitbox_Minimum = (float*)((unsigned __int32)Hitbox + 8);
+
+														float* Hitbox_Maximum = (float*)((unsigned __int32)Hitbox + 20);
+
+														float Hitbox_Center[3]
+														{
+															(Hitbox_Minimum[0] + Hitbox_Maximum[0]) / 2,
+
+															(Hitbox_Minimum[1] + Hitbox_Maximum[1]) / 2,
+
+															(Hitbox_Minimum[2] + Hitbox_Maximum[2]) / 2
+														};
+
+														float Target_Origin[3] =
+														{
+															Bones[*(__int32*)Hitbox][0][0] * Hitbox_Center[0] + Bones[*(__int32*)Hitbox][0][1] * Hitbox_Center[1] + Bones[*(__int32*)Hitbox][0][2] * Hitbox_Center[2] + Bones[*(__int32*)Hitbox][0][3],
+
+															Bones[*(__int32*)Hitbox][1][0] * Hitbox_Center[0] + Bones[*(__int32*)Hitbox][1][1] * Hitbox_Center[1] + Bones[*(__int32*)Hitbox][1][2] * Hitbox_Center[2] + Bones[*(__int32*)Hitbox][1][3],
+
+															Bones[*(__int32*)Hitbox][2][0] * Hitbox_Center[0] + Bones[*(__int32*)Hitbox][2][1] * Hitbox_Center[1] + Bones[*(__int32*)Hitbox][2][2] * Hitbox_Center[2] + Bones[*(__int32*)Hitbox][2][3]
+														};
+
+														float Direction[3] =
+														{
+															Target_Origin[0] - Eye_Position[0],
+
+															Target_Origin[1] - Eye_Position[1],
+
+															Target_Origin[2] - Eye_Position[2]
+														};
+
+														Vector_Normalize(Direction);
+
+														float Angles[3] =
+														{
+															__builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180 / 3.1415927f,
+
+															__builtin_atan2f(Direction[1], Direction[0]) * 180 / 3.1415927f,
+
+															0
+														};
+
+														if (Perform_Trace(Command->Angles) == 1)
+														{
+															Command->Tick_Number = Target->Tick_Number;
+
+															//Byte_Manager::Copy_Bytes(0, Command->Angles, sizeof(Angles), Angles);
+
+															//Command->Buttons |= 1;
+
+															*(float*)((unsigned __int32)Target->Self + 16) = Get_Target_Time(Target);
+
+															goto Aim_Found_Target_Label;
+														}
+													}
+
+													Target_Number += 1;
+
+													goto Aim_Traverse_Sorted_Target_List_Label;
+
+													Aim_Found_Target_Label:
+													{
+														Aim_Target = Target;
+													}
+												}
+											}
+										}
+
+										if ((Command->Buttons & 1) == 1)
+										{
+											if (Shove_Target != nullptr)
+											{
+												*(float*)((unsigned __int32)Shove_Target->Self + 16) = 0;
+
+												if (Aim_Target != nullptr)
+												{
+													*(float*)((unsigned __int32)Aim_Target->Self + 16) = Get_Target_Time(Aim_Target);
+												}
+											}
+
+											if (Is_Melee == 0)
+											{
+												*(__int32*)((unsigned __int32)Client_Module + 7075944) = Command->Random_Seed;
+
+												using Random_Type = float(__cdecl*)(char* Name, float Minimum, float Maximum, void* Unknown_Parameter);
+
+												float Maximum_Spread = *(float*)((unsigned __int32)Weapon + 3340);
+
+												float* Recoil = (float*)((unsigned __int32)Local_Player + 4612);
+												
+												Command->Angles[0] -= Random_Type((unsigned __int32)Client_Module + 1756592)((char*)"CTerrorGun::FireBullet HorizSpread", -Maximum_Spread, Maximum_Spread, nullptr) + Recoil[0];
+
+												Command->Angles[1] -= Random_Type((unsigned __int32)Client_Module + 1756592)((char*)"CTerrorGun::FireBullet VertSpread", -Maximum_Spread, Maximum_Spread, nullptr) + Recoil[1];
+
+												Command->Angles[2] -= Recoil[2];
+											}
+
+											Block_Buttons = 2048;
 										}
 									}
 

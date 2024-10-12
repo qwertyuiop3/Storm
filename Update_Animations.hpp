@@ -24,11 +24,11 @@ void __cdecl Redirected_Update_Animations()
 
             if ((*(__int8*)((unsigned __int32)Animation_List + 8 * Entity_Number + 4) & 1) != 0)
             {
+                using Update_Animation_Type = void(__thiscall**)(void* Entity);
+
                 void* Entity = *(void**)((unsigned __int32)Animation_List + 8 * Entity_Number);
 
                 *(float*)((unsigned __int32)Entity + 328) = Update_Animation_Time - Global_Variables->Frame_Time;
-
-                using Update_Animation_Type = void(__thiscall**)(void* Entity);
 
                 (*Update_Animation_Type(*(unsigned __int32*)Entity + 808))(Entity);
             }

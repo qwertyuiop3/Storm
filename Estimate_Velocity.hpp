@@ -42,6 +42,8 @@ __int32 Get_Identifier(void* Entity, __int8 Raw, __int8 Equipment)
 
 		if (Identifier == 13)
 		{
+			*(__int32*)((unsigned __int32)Entity + 228) = 1;
+
 			Valid = *(__int8*)((unsigned __int32)Entity + 324) == 5;
 		}
 		else

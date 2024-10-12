@@ -8,7 +8,9 @@ struct Command_Structure
 
 	float Angles[3];
 
-	float Move[3];
+	float Move[2];
+
+	__int32 Frame_Number;
 
 	__int32 Buttons;
 
@@ -28,7 +30,7 @@ void* Original_Run_Command_Caller;
 
 void __thiscall Redirected_Run_Command(void* Prediction, void* Player, Command_Structure* Command, void* Unknown_Parameter)
 {
-	Extended_Command_Structure* Extended_Command = &Extended_Commands[Command->Command_Number % 150];
+	Extended_Command_Structure* Extended_Command = &Extended_Commands[Command->Frame_Number];
 
 	*(__int32*)((unsigned __int32)Player + 5324) -= Extended_Command->Extra_Commands;
 

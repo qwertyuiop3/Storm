@@ -2,8 +2,6 @@ void* Original_Spawn_Grenade_Caller;
 
 void __thiscall Redirected_Spawn_Grenade(void* Entity)
 {
-	*(__int32*)((unsigned __int32)Entity + 228) = 3;
-
 	using Set_Size_Type = void(__thiscall*)(void* Entity, float* Minimum, float* Maximum);
 
 	float Minimum[3] =
