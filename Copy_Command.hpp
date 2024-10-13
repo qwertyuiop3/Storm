@@ -294,7 +294,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 													{
 														if (Identifier == 277)
 														{
-															//if (*(float*)((unsigned __int32)Entity + 4844) == 1)
+															if (*(float*)((unsigned __int32)Entity + 4844) == 1)
 															{
 																Sorted_Target_List.push_back(Target);
 															}
@@ -346,6 +346,8 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 								__int8 Healing = *(void**)((unsigned __int32)Local_Player + 8076) != INVALID_HANDLE_VALUE;
 
+								__int8 Reloading = *(__int8*)((unsigned __int32)Weapon + 2493);
+
 								__int32 Weapon_Identifier = Get_Identifier(Weapon, 1, 0);
 
 								__int8 Is_Cold_Melee = Weapon_Identifier == 231;
@@ -368,7 +370,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 										__int8 Forced = 0;
 
-										if (Is_Melee + Healing != 0) //zero clip?
+										if (Is_Melee + Healing + Reloading != 0)
 										{
 											if ((Target->Identifier ^ 72) % 348 >= 72)
 											{
@@ -416,6 +418,8 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 														Perform_Trace_Damage = 0;
 
 														Perform_Shove_Trace((unsigned __int32)Client_Module + 3220512)(Weapon, Direction);
+
+														Perform_Trace_Target = nullptr;
 
 														if (Perform_Trace_Damage == 1)
 														{
@@ -469,7 +473,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 								{
 									__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (*(__int32*)((unsigned __int32)Weapon + 2436) > 0 - Is_Melee * 2) * (*(float*)((unsigned __int32)Local_Player + 3872) <= Global_Variables->Current_Time);
 
-									if ((Can_Attack == 0) + (Weapon_Identifier == 96) + Healing == 0)
+									if ((Can_Attack ^ 1) + (Weapon_Identifier == 96) + Healing == 0)
 									{
 										Target_Structure* Aim_Target = nullptr;
 
@@ -576,11 +580,9 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 															*(void**)((unsigned __int32)Engine_Module + 5050008) = Previous_Audio_Device;
 
-															*(__int32*)((unsigned __int32)Weapon_Data + 2520) = Bullets;
-
 															Perform_Trace_Target = nullptr;
 
-															wprintf(L"%f\n", Perform_Trace_Damage);
+															*(__int32*)((unsigned __int32)Weapon_Data + 2520) = Bullets;
 
 															return (Perform_Trace_Damage >= Interface_Penetration_Damage.Floating_Point) * (Perform_Trace_Damage != 0);
 														};
@@ -652,13 +654,13 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 															0
 														};
 
-														if (Perform_Trace(Command->Angles) == 1)
+														if (Perform_Trace(Angles) == 1)
 														{
 															Command->Tick_Number = Target->Tick_Number;
 
-															//Byte_Manager::Copy_Bytes(0, Command->Angles, sizeof(Angles), Angles);
+															Byte_Manager::Copy_Bytes(0, Command->Angles, sizeof(Angles), Angles);
 
-															//Command->Buttons |= 1;
+															Command->Buttons |= 1;
 
 															*(float*)((unsigned __int32)Target->Self + 16) = Get_Target_Time(Target);
 

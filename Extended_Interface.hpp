@@ -1,10 +1,6 @@
 struct Interface_Structure
 {
-	__int8 Additional_Bytes_1[36];
-
-	char* String;
-
-	__int8 Additional_Bytes_2[4];
+	__int8 Additional_Bytes_1[44];
 
 	float Floating_Point;
 
@@ -66,7 +62,7 @@ void Implement_Extended_Interface()
 
 	Create_Console_Interface(Pointer_Name(Interface_Aim_Intersection), (char*)"1", nullptr);
 
-	Create_Console_Interface(Pointer_Name(Interface_Penetration_Damage), (char*)"25", nullptr);
+	Create_Console_Interface(Pointer_Name(Interface_Penetration_Damage), (char*)"20", nullptr);
 
 	Create_Console_Interface(Pointer_Name(Interface_Equipment_Distance), (char*)"2048", nullptr);
 

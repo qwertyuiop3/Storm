@@ -71,15 +71,22 @@ void __thiscall Perform_Trace(void* Stack)
 
 				static void* Calculate_Damage = (void*)((unsigned __int32)GetModuleHandleW(L"server.dll") + 3950416);
 				{
-					asm("pushal"); //temporary. just in case
 					asm("movl %0, %%esi" : : "m"(Weapon_Data) : "esi");
 					asm("subl $16, %esp");
 					asm("movss %0, %%xmm0" : : "m"(Distance) : "esp");
 					asm("movdqu %xmm0, (%esp)");
-					asm("calll *%0" : : "m"(Calculate_Damage));
+					asm("calll *%0" : : "m"(Calculate_Damage) : "eax", "ecx", "edx");
 					asm("movd %%xmm0, %0" : "=m"(Damage));
 					asm("addl $16, %esp");
-					asm("popal");
+				}
+
+				__int32 Bullet_Type = *(__int32*)((unsigned __int32)Weapon_Data + 2128);
+
+				__int8 Is_Shotgun = (Bullet_Type ^ 12) % 7 == 4;
+
+				if (Upgrade_Type * Is_Shotgun == 1)
+				{
+					Damage *= *(__int32*)((unsigned __int32)Weapon_Data + 2520);
 				}
 
 				__int32 Identifier = Get_Identifier(Entity, 1, 0);
@@ -93,39 +100,53 @@ void __thiscall Perform_Trace(void* Stack)
 					Damage *= Multipliers[Get_Difficulty_Type((unsigned __int32)Client_Module + 2650448)()];
 				};
 
-				__int32 Bullet_Type = *(__int32*)((unsigned __int32)Weapon_Data + 2128);
+				char* Mode = *(char**)((unsigned __int32)Client_Module + 8145092);
 
-				__int8 Is_Shotgun = (Bullet_Type ^ 12) % 7 == 4;
+				__int8 Realism = Mode[0] == 'r';
 
-				//should make sure it's not mutation8, mutation12, realism
 				auto Apply_Shotgun_Scaling = [&]() -> void
 				{
 					if (Is_Shotgun == 1)
 					{
-						using Compute_Bounds_Type = void(__thiscall*)(void* Collision, float* Start, float* Bounds);
+						__int8 Casual_Mode = 1;
 
-						using Get_Center_Type = float*(__thiscall*)(void* Entity);
+						char* Mode = *(char**)((unsigned __int32)Client_Module + 8145092);
 
-						void* Local_Player = *(void**)Trace_Information;
-
-						float Bounds[3];
-
-						Compute_Bounds_Type((unsigned __int32)Client_Module + 878528)((void*)((unsigned __int32)Entity + 540), Get_Center_Type((unsigned __int32)Client_Module + 114400)(Local_Player), Bounds);
-
-						using Calculate_Distance_Type = float(__thiscall*)(void* Collision, float* Bounds);
-
-						float Distance = Calculate_Distance_Type((unsigned __int32)Client_Module + 878608)((void*)((unsigned __int32)Local_Player + 540), Bounds);
-
-						if (Distance < 100)
+						if (__builtin_strlen(Mode) > 8)
 						{
-							Damage += (4.f * Damage) * __builtin_powf(1.f - Distance / 100.f, 2);
+							Casual_Mode = (Mode[8] != '8') + (Mode[9] != '2');
+						}
+						else
+						{
+							Casual_Mode += Realism ^ 1;
+						}
+
+						if (Casual_Mode == 2)
+						{
+							using Get_Bounds_Type = void(__thiscall*)(void* Collision, float* Start, float* Bounds);
+
+							using Get_Center_Type = float* (__thiscall*)(void* Entity);
+
+							void* Local_Player = *(void**)Trace_Information;
+
+							float Bounds[3];
+
+							Get_Bounds_Type((unsigned __int32)Client_Module + 878528)((void*)((unsigned __int32)Entity + 540), Get_Center_Type((unsigned __int32)Client_Module + 114400)(Local_Player), Bounds);
+
+							using Calculate_Distance_Type = float(__thiscall*)(void* Collision, float* Bounds);
+
+							float Distance = Calculate_Distance_Type((unsigned __int32)Client_Module + 878608)((void*)((unsigned __int32)Local_Player + 540), Bounds);
+
+							if (Distance < 100)
+							{
+								Damage += (4.f * Damage) * __builtin_powf(1.f - Distance / 100.f, 2);
+							}
 						}
 					}
 				};
 
 				if (Identifier == 277)
 				{
-					//nb_delete_all;z_spawn witch
 					if (Group != 1)
 					{
 						Apply_Difficulty_Scaling();
@@ -137,88 +158,69 @@ void __thiscall Perform_Trace(void* Stack)
 				{
 					if (Identifier == 264)
 					{
-						//nb_delete_all;ent_create commentary_zombie_spawner; ent_fire commentary_zombie_spawner spawnzombie common_male_fallen_survivor; ent_fire commentary_zombie_spawner kill
-						//id: 14
-						//nb_delete_all;ent_create commentary_zombie_spawner; ent_fire commentary_zombie_spawner spawnzombie common_male_jimmy; ent_fire commentary_zombie_spawner kill
-						//id: 17
-						if (Bullet_Type == 6)
+						if ((Upgrade_Type == 1) + (Bullet_Type == 6))
 						{
 							Damage = __builtin_inff();
 						}
 						else
 						{
-							if (Upgrade_Type == 1)
-							{
-								Damage = __builtin_inff();
-							}
-							else
-							{
-								Apply_Shotgun_Scaling();
+							Apply_Shotgun_Scaling();
 
-								__int8 Is_Sniper_Rifle = Bullet_Type == 9 || Bullet_Type == 10;
+							__int8 Is_Sniper_Rifle = (Bullet_Type - 8) > 0;
 
-								if (Group == 1)
+							if (Group == 1)
+							{
+								if (Gender == 14)
 								{
-									if (Gender == 14)
+									auto Is_Neutral = [&]() -> __int8
 									{
-										auto Is_Neutral = [&]() -> __int8
+										__int32 Sequence_Activity = *(__int32*)((unsigned __int32)Entity + 4688);
+
+										unsigned __int32 Absolute_Sequence_Activity = Sequence_Activity - 563;
+
+										if (Absolute_Sequence_Activity <= 29)
 										{
-											__int32 Sequence_Activity = *(__int32*)((unsigned __int32)Entity + 4688);
-
-											unsigned __int32 Absolute_Sequence_Activity = Sequence_Activity - 563;
-
-											if (Absolute_Sequence_Activity <= 29)
-											{
-												return (536870929 & (1 << (Absolute_Sequence_Activity & 31))) != 0;
-											}
-
-											return (Sequence_Activity == 600) + (Sequence_Activity == 648);
-										};
-
-										if (Is_Neutral() == 1)
-										{
-											Damage = __builtin_inff();
+											return (536870929 & (1 << (Absolute_Sequence_Activity & 31))) != 0;
 										}
-									}
-									else
+
+										return (Sequence_Activity == 600) + (Sequence_Activity == 648);
+									};
+
+									if (Is_Neutral() == 1)
 									{
-										if (Gender != 17)
-										{
-											Damage = __builtin_inff();
-										}
+										Damage = __builtin_inff();
 									}
 								}
 								else
 								{
-
-									if (Is_Shotgun * (Group == 3) == 1)
+									if (Gender != 17)
 									{
 										Damage = __builtin_inff();
 									}
-									else
-									{
-										Apply_Difficulty_Scaling();
+								}
+							}
+							else
+							{
+								if (Group * (Gender != 14) * (Gender != 17) * Is_Shotgun == 3)
+								{
+									Damage = __builtin_inff();
+								}
+								else
+								{
+									Apply_Difficulty_Scaling();
 
-										if (Bullet_Type == 2 || Is_Sniper_Rifle == 1)
+									if ((Bullet_Type == 2) + Is_Sniper_Rifle != 0)
+									{
+										if (Gender == 14)
 										{
-											if (Gender == 14)
+											if (Is_Sniper_Rifle * Realism == 0)
 											{
 												Damage = 450;
-											}
-											else
-											{
-												Damage = __builtin_inff();
 											}
 										}
 										else
 										{
-											if (Bullet_Type >= 6)
-											{
-												if ((Bullet_Type - 3) % 4 > 1)
-												{
-													Damage = __builtin_inff();
-												}
-											}
+											Damage = __builtin_inff();
 										}
 									}
 								}
@@ -229,39 +231,28 @@ void __thiscall Perform_Trace(void* Stack)
 					{
 						if (Identifier != 13)
 						{
-							//nb_delete_all;z_spawn tank
 							if (Identifier + Bullet_Type == 284)
 							{
 								Damage *= 0.85f;
 							}
 
-							if (Upgrade_Type != 1)
+							if ((Identifier != 276) + (Upgrade_Type != 1) == 2)
 							{
-								if (Identifier != 276)
-								{
-									Damage *= 1.f + 3.f * (Group == 1) + 0.25f * ((Group == 3) + -(Group == 7));
+								float Multipliers[8] = { 1.f, 4.f, 1.f, 1.25f, 1.f, 1.f, 0.75f, 0.75f };
 
-									if (Identifier * Group == 270)
-									{
-										if (*(void**)((unsigned __int32)Entity + 8040) != INVALID_HANDLE_VALUE)
-										{
-											Damage = __builtin_inff();
-										}
-									}
-								}
+								Damage *= Multipliers[Group];
 							}
 
-							Damage = (__int32)(Damage + 1.f * (Damage < 1));
+							//CTerrorPlayer::OnTakeDamage
+							//"AI controlled Chargers take 66% less damage while charging." (CTerrorPlayer::IsCustomAbilityActive)
+
+							if (Damage != __builtin_inff())
+							{
+								Damage = (__int32)(Damage + 1.f * (Damage < 1));
+							}
 						}
 					}
 				}
-
-				if (Is_Shotgun * Upgrade_Type == 1)
-				{
-					Damage *= *(__int32*)((unsigned __int32)Weapon_Data + 2520);
-				}
-
-				wprintf(L"[%d] type %d, %d\n", Group, Bullet_Type, Upgrade_Type);
 
 				Perform_Trace_Damage += Damage;
 			}

@@ -4,8 +4,6 @@ void __thiscall Perform_Shove_Trace(void* Stack)
 
 	if (Entity == Perform_Trace_Target)
 	{
-		Perform_Trace_Target = nullptr;
-
 		Perform_Trace_Damage = 1;
 	}
 }
