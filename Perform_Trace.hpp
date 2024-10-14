@@ -20,9 +20,11 @@ void __thiscall Perform_Trace(void* Stack)
 {
 	void* Entity = *(void**)((unsigned __int32)Stack + 312);
 
+	__int32 Identifier = Get_Identifier(Entity, 0, 0);
+
 	if (Interface_Penetrate_Teammates.Integer == 0)
 	{
-		if (Get_Identifier(Entity, 0, 0) == 232)
+		if (Identifier == 232)
 		{
 			void* Local_Player = *(void**)((unsigned __int32)Client_Module + 7498712);
 
@@ -88,8 +90,6 @@ void __thiscall Perform_Trace(void* Stack)
 				{
 					Damage *= *(__int32*)((unsigned __int32)Weapon_Data + 2520);
 				}
-
-				__int32 Identifier = Get_Identifier(Entity, 1, 0);
 
 				auto Apply_Difficulty_Scaling = [&]() -> void
 				{
@@ -246,7 +246,7 @@ void __thiscall Perform_Trace(void* Stack)
 							}
 							else
 							{
-								if (Group * Identifier == 270)
+								if (Identifier * Group == 270)
 								{
 									if (*(void**)((unsigned __int32)Entity + 8040) != INVALID_HANDLE_VALUE)
 									{
