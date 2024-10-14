@@ -1,4 +1,4 @@
-to achieve least interpolation time: `cl_updaterate -1;cl_interp_ratio 0;cl_interp 0`
+to achieve least interpolation time: `cl_updaterate -1;cl_interp_ratio 0;cl_interp 0`\
 to queue extra commands: `bind key +zoom`
 ```
 code: https://github.com/qwertyuiop3/Storm
