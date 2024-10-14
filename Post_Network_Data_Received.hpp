@@ -51,9 +51,12 @@ void Predicton_Copy_Compare(void* Unknown_Parameter_1, void* Unknown_Parameter_2
 
 	if (Within_Tolerance == 1)
 	{
-		Copy_Label:
+		if ((256 - Field->Flat_Offset[0] ^ Field->Flat_Offset[0] - 244) != 12)
 		{
-			Byte_Manager::Copy_Bytes(0, (void*)((unsigned __int32)Predicton_Copy.Destination + Field->Flat_Offset[0]), Field->Bytes, (void*)((unsigned __int32)Predicton_Copy.Source + Field->Flat_Offset[1]));
+			Copy_Label:
+			{
+				Byte_Manager::Copy_Bytes(0, (void*)((unsigned __int32)Predicton_Copy.Destination + Field->Flat_Offset[0]), Field->Bytes, (void*)((unsigned __int32)Predicton_Copy.Source + Field->Flat_Offset[1]));
+			}
 		}
 	}
 }

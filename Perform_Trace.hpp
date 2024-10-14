@@ -108,20 +108,14 @@ void __thiscall Perform_Trace(void* Stack)
 				{
 					if (Is_Shotgun == 1)
 					{
-						__int8 Casual_Mode = 1;
-
-						char* Mode = *(char**)((unsigned __int32)Client_Module + 8145092);
+						__int8 Hardcore = Realism;
 
 						if (__builtin_strlen(Mode) > 8)
 						{
-							Casual_Mode = (Mode[8] != '8') + (Mode[9] != '2');
-						}
-						else
-						{
-							Casual_Mode += Realism ^ 1;
+							Hardcore = (Mode[8] == '8') + (Mode[9] == '2');
 						}
 
-						if (Casual_Mode == 2)
+						if (Hardcore == 0)
 						{
 							using Get_Bounds_Type = void(__thiscall*)(void* Collision, float* Start, float* Bounds);
 
@@ -243,8 +237,31 @@ void __thiscall Perform_Trace(void* Stack)
 								Damage *= Multipliers[Group];
 							}
 
-							//CTerrorPlayer::OnTakeDamage
-							//"AI controlled Chargers take 66% less damage while charging." (CTerrorPlayer::IsCustomAbilityActive)
+							__int32 Raw_Identifier = Get_Identifier(Entity, 1, 0);
+
+							if (Raw_Identifier == 99)
+							{
+								if (*(__int32*)((unsigned __int32)Entity + 2212) == 5)
+								{
+									Damage *= 1.f / 3.f;
+								}
+							}
+							else
+							{
+								if (Raw_Identifier == 270) //or: Identifier == 270
+								{
+									/*
+									1. CTerrorPlayer::OnTakeDamage
+									2. CBaseEntity::TakeDamage
+									3. CTongue::OnOwnerTakeDamage
+									4. CTerrorPlayer::OnTakeDamage_Alive (m_customAbility)
+									5. NextBotPlayer<CTerrorPlayer>::OnTakeDamage_Alive
+									6. CBaseCombatCharacter::OnTakeDamage
+									7. CCSPlayer::OnTakeDamage
+									8. CTerrorPlayer::OnTakeDamage (recursive)
+									*/
+								}
+							}
 
 							if (Damage != __builtin_inff())
 							{
