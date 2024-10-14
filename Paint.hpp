@@ -4,9 +4,9 @@ void __thiscall Redirected_Paint(void* Panel)
 
 	Set_Order_Type((unsigned __int32)Client_Module + 4082160)(Panel, -1);
 
-	void* Local_Player = *(void**)((unsigned __int32)Client_Module + 7498712);
-
 	__int32 Entity_Number = 1;
+
+	void* Local_Player = *(void**)((unsigned __int32)Client_Module + 7498712);
 
 	Sorted_Target_List.clear();
 
@@ -22,8 +22,6 @@ void __thiscall Redirected_Paint(void* Panel)
 
 				if (Identifier != -1)
 				{
-					__int8 Equipment = Identifier < 0;
-
 					using Get_Origin_Type = float*(__thiscall*)(void* Entity);
 
 					float* Local_Player_Origin = Get_Origin_Type((unsigned __int32)Client_Module + 297584)(Local_Player);
@@ -41,7 +39,7 @@ void __thiscall Redirected_Paint(void* Panel)
 						__builtin_powf(Local_Player_Origin[0] - Entity_Origin[0], 2) + __builtin_powf(Local_Player_Origin[1] - Entity_Origin[1], 2) + __builtin_powf(Local_Player_Origin[2] - Entity_Origin[2], 2)
 					};
 
-					if (Equipment == 0)
+					if (Identifier >= 0)
 					{
 						Sorted_Target_List.push_back(Target);
 					}

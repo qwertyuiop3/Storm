@@ -133,7 +133,7 @@ void __thiscall Perform_Trace(void* Stack)
 
 							if (Distance < 100)
 							{
-								Damage += (4.f * Damage) * __builtin_powf(1.f - Distance / 100.f, 2);
+								Damage += 4.f * Damage * __builtin_powf(1.f - Distance / 100.f, 2);
 							}
 						}
 					}
@@ -237,9 +237,7 @@ void __thiscall Perform_Trace(void* Stack)
 								Damage *= Multipliers[Group];
 							}
 
-							__int32 Raw_Identifier = Get_Identifier(Entity, 1, 0);
-
-							if (Raw_Identifier == 99)
+							if (Get_Identifier(Entity, 1, 0) == 99)
 							{
 								if (*(__int32*)((unsigned __int32)Entity + 2212) == 5)
 								{
@@ -248,18 +246,25 @@ void __thiscall Perform_Trace(void* Stack)
 							}
 							else
 							{
-								if (Raw_Identifier == 270) //or: Identifier == 270
+								if (Group * Identifier == 270)
 								{
-									/*
-									1. CTerrorPlayer::OnTakeDamage
-									2. CBaseEntity::TakeDamage
-									3. CTongue::OnOwnerTakeDamage
-									4. CTerrorPlayer::OnTakeDamage_Alive (m_customAbility)
-									5. NextBotPlayer<CTerrorPlayer>::OnTakeDamage_Alive
-									6. CBaseCombatCharacter::OnTakeDamage
-									7. CCSPlayer::OnTakeDamage
-									8. CTerrorPlayer::OnTakeDamage (recursive)
-									*/
+									if (*(void**)((unsigned __int32)Entity + 8040) != INVALID_HANDLE_VALUE)
+									{
+										if (Damage > 50)
+										{
+											__int8 Competitive = ('v' - Mode[0] ^ Mode[0] - 's') == 3;
+
+											if (__builtin_strlen(Mode) > 8)
+											{
+												Competitive = Mode[9] == '8';
+											}
+
+											if (Competitive == 0)
+											{
+												Damage = __builtin_inff();
+											}
+										}
+									}
 								}
 							}
 

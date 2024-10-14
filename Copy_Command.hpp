@@ -481,16 +481,6 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 										{
 											__int8 Compensate_Burst = 0;
 
-											if (Weapon_Identifier == 153)
-											{
-												if (*(float*)((unsigned __int32)Weapon + 3392) + *(float*)((unsigned __int32)Weapon + 3396) != 0)
-												{
-													Compensate_Burst = 1;
-
-													Command->Buttons |= 1;
-												}
-											}
-
 											if (Weapon_Identifier == 2)
 											{
 												Command->Command_Number = -2134739495;
@@ -507,11 +497,23 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 												}
 												else
 												{
-													if ((163 - Weapon_Identifier ^ Weapon_Identifier - 162) == 1)
+													if (Weapon_Identifier == 153)
 													{
-														Command->Command_Number = -2139097805;
+														if (*(float*)((unsigned __int32)Weapon + 3392) + *(float*)((unsigned __int32)Weapon + 3396) != 0)
+														{
+															Compensate_Burst = 1;
 
-														Command->Random_Seed = 494641349;
+															Command->Buttons |= 1;
+														}
+													}
+													else
+													{
+														if ((163 - Weapon_Identifier ^ Weapon_Identifier - 162) == 1)
+														{
+															Command->Command_Number = -2139097805;
+
+															Command->Random_Seed = 494641349;
+														}
 													}
 												}
 											}
