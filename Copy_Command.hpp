@@ -179,7 +179,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 		{
 			if (Extra_Commands < 1)
 			{
-				*(__int32*)((unsigned __int32)Network_Channel + 8) += (Command->Tick_Number + ~-150) / 150 * 150 + (Reserve * 150);
+				*(__int32*)((unsigned __int32)Network_Channel + 8) += (*(__int32*)((unsigned __int32)Local_Player + 5324) + ~-150) / 150 * 150 + (Reserve * 150);
 			}
 
 			*(__int32*)((unsigned __int32)Local_Player + 20) = 1 + (Reserve > 0);
@@ -192,6 +192,13 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 				if (*(__int32*)((unsigned __int32)Local_Player + 7324) == 0)
 				{
 					Sequence_Shift(-2);
+				}
+			}
+			else
+			{
+				if (*(void**)((unsigned __int32)Local_Player + 10008) != INVALID_HANDLE_VALUE)
+				{
+					Sequence_Shift(0);
 				}
 			}
 		}
@@ -518,10 +525,10 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 												}
 											}
 
-											using Update_Spread_Type = void(__thiscall*)(void* Weapon);
-
 											if (Compensate_Burst == 0)
 											{
+												using Update_Spread_Type = void(__thiscall*)(void* Weapon);
+
 												Update_Spread_Type((unsigned __int32)Client_Module + 3197648)(Weapon);
 											}
 
