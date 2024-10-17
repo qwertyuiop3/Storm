@@ -179,18 +179,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 		{
 			if (Extra_Commands < 1)
 			{
-				if (Reserve == 0)
-				{
-					*(__int32*)((unsigned __int32)Network_Channel + 8) += 150;
-				}
-				else
-				{
-					__int32 Sequence_Shift = (*(__int32*)((unsigned __int32)Local_Player + 5324) + ~- 150) / 150 * 150 + (Reserve * 150);
+				__int32 Sequence_Shift = (*(__int32*)((unsigned __int32)Local_Player + 5324) + ~-150) / 150 * 150 + (Reserve * 150);
 
-					if (Sequence_Shift > 0)
-					{
-						*(__int32*)((unsigned __int32)Network_Channel + 8) += Sequence_Shift;
-					}
+				if (Sequence_Shift > 0)
+				{
+					*(__int32*)((unsigned __int32)Network_Channel + 8) += Sequence_Shift;
 				}
 			}
 
@@ -363,9 +356,9 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 								__int8 Is_Melee = *(__int32*)((unsigned __int32)Weapon_Data + 352) * (*(__int32*)((unsigned __int32)Weapon_Data + 348) ^ 1) <= 1;
 
-								__int8 Healing = (*(__int32*)((unsigned __int32)Local_Player + 7080) == 1) + (*(void**)((unsigned __int32)Local_Player + 8076) != INVALID_HANDLE_VALUE);
-
 								__int8 Reloading = *(__int8*)((unsigned __int32)Weapon + 2493);
+
+								__int32 Healing = (*(__int32*)((unsigned __int32)Local_Player + 7080) == 1) + (*(void**)((unsigned __int32)Local_Player + 8076) != INVALID_HANDLE_VALUE);
 
 								__int32 Weapon_Identifier = Get_Identifier(Weapon, 1, 0);
 
@@ -389,7 +382,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 										__int8 Forced = 0;
 
-										if (Is_Melee + Healing + Reloading != 0)
+										if ((Is_Melee + Reloading) * (Healing ^ 1) != 0)
 										{
 											if ((Target->Identifier ^ 72) % 348 >= 72)
 											{
@@ -405,7 +398,9 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 											{
 												__int8 Infected = (Target->Identifier == 264) * (Forced ^ 1);
 
-												if ((Infected ^ 1) + (*(__int32*)((unsigned __int32)Target->Self + 52) == 15) != 0)
+												__int32 Gender = *(__int32*)((unsigned __int32)Target->Self + 52);
+
+												if ((Infected ^ 1) + (Gender == 15) != 0)
 												{
 													using Get_Sequence_Name_Type = char*(__thiscall*)(void* Entity, __int32 Sequence);
 
@@ -442,33 +437,37 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 														if (Perform_Trace_Damage == 1)
 														{
-															Command->Tick_Number = Target->Tick_Number;
-
-															Command->Angles[0] = __builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180 / 3.1415927f;
-
-															Command->Angles[1] = __builtin_atan2f(Direction[1], Direction[0]) * 180 / 3.1415927f;
-
-															if (Cancelable_Shove == 1)
+															if (Healing == 0)
 															{
-																float Shove_Multiplier = min((Global_Variables->Current_Time - *(float*)((unsigned __int32)Weapon + 2704) + *(float*)((unsigned __int32)Weapon + 2700)) / *(float*)((unsigned __int32)Weapon + 2700), 1.f);
+																Command->Tick_Number = Target->Tick_Number;
 
-																Command->Angles[1] += -45 * Shove_Multiplier + 45 * (1 - Shove_Multiplier);
+																Command->Angles[0] = __builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180 / 3.1415927f;
+
+																Command->Angles[1] = __builtin_atan2f(Direction[1], Direction[0]) * 180 / 3.1415927f;
+
+																if (Cancelable_Shove == 1)
+																{
+																	float Shove_Multiplier = min((Global_Variables->Current_Time - *(float*)((unsigned __int32)Weapon + 2704) + *(float*)((unsigned __int32)Weapon + 2700)) / *(float*)((unsigned __int32)Weapon + 2700), 1.f);
+
+																	Command->Angles[1] += -45 * Shove_Multiplier + 45 * (1 - Shove_Multiplier);
+																}
+																else
+																{
+																	Command->Angles[1] += 45;
+																}
+
+																Command->Buttons |= 2048;
+
+																Block_Buttons = 1;
+
+																Cancelable_Shove = (Gender * Interface_Riot_Deprioritize.Integer * (Forced ^ 1)) == 15;
+
+																*(float*)((unsigned __int32)Target->Self + 16) = Get_Target_Time(Target);
+
+																goto Shove_Found_Target_Label;
 															}
-															else
-															{
-																Command->Angles[1] += 45;
-															}
 
-															Command->Buttons |= 2048;
-
-															Block_Buttons = 1;
-
-															if (Interface_Riot_Deprioritize.Integer == 1)
-															{
-																Cancelable_Shove = Infected * 2;
-															}
-
-															*(float*)((unsigned __int32)Target->Self + 16) = Get_Target_Time(Target);
+															Cancelable_Shove = 0;
 
 															goto Shove_Found_Target_Label;
 														}
@@ -492,7 +491,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 								{
 									__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (*(__int32*)((unsigned __int32)Weapon + 2436) > 0 - Is_Melee * 2) * (*(float*)((unsigned __int32)Local_Player + 3872) <= Global_Variables->Current_Time);
 
-									if (Healing + (Can_Attack ^ 1) + (Weapon_Identifier == 96) == 0)
+									if ((Weapon_Identifier == 96) + (Can_Attack ^ 1) == 0)
 									{
 										Target_Structure* Aim_Target = nullptr;
 
@@ -696,34 +695,6 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 													Aim_Found_Target_Label:
 													{
 														Aim_Target = Target;
-													}
-												}
-											}
-										}
-										else
-										{
-											if (Weapon_Identifier == 73)
-											{										
-												//ideally 150 commands should always be buffered beforehand
-												//at worst buffer them right before slot* command
-												//current solution without buffering takes (interval_per_tick*150) seconds to prepare itself
-												//reason why i'm not doing that now is because it'll take time to redesign prediction code to function properly
-												//specifically:
-												//ignoring network time updates for good period of time isn't good idea
-												//viewmodel animations will jitter at moment of centering around network time 
-												//so is interpolation
-												//besides all that, it'll invoke clock correction on server's side and that's pretty unstable (especially on ~100 tickrate)
-													
-												Global_Variables->Current_Time -= Global_Variables->Interval_Per_Tick * 150;
-
-												//leaving other ones of sanity for later
-												if (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time)
-												{
-													if ((Command->Buttons & 2049) != 0)
-													{
-														Sequence_Shift(0);
-
-														Block_Buttons = 1;
 													}
 												}
 											}

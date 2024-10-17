@@ -6,20 +6,20 @@ void __thiscall Redirected_Spawn_Grenade(void* Entity)
 
 	float Minimum[3] =
 	{
-		-16,
+		-16.f,
 		
-		-16,
+		-16.f,
 		
-		-16
+		-16.f
 	};
 
 	float Maximum[3] =
 	{ 
-		16,
+		16.f,
 
-		16,
+		16.f,
 
-		16
+		16.f
 	};
 
 	Set_Size_Type((unsigned __int32)Client_Module + 281664)(Entity, Minimum, Maximum);

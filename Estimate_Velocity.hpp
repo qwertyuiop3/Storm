@@ -50,7 +50,7 @@ __int32 Get_Identifier(void* Entity, __int8 Raw, __int8 Equipment)
 		{
 			if (*(__int8*)((unsigned __int32)Entity + 221) == 0)
 			{
-				if (*(__int32*)((unsigned __int32)Entity + 572) == 131088)
+				if ((*(__int32*)((unsigned __int32)Entity + 572) - 131088 & 255) == 0)
 				{
 					using Get_Sequence_Name_Type = char*(__thiscall*)(void* Entity, __int32 Sequence);
 
