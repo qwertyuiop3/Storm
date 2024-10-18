@@ -491,7 +491,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 								{
 									__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (*(__int32*)((unsigned __int32)Weapon + 2436) > 0 - Is_Melee * 2) * (*(float*)((unsigned __int32)Local_Player + 3872) <= Global_Variables->Current_Time);
 
-									if ((Weapon_Identifier == 96) + (Can_Attack ^ 1) == 0)
+									if (Healing + (Weapon_Identifier == 96) + (Can_Attack ^ 1) == 0)
 									{
 										Target_Structure* Aim_Target = nullptr;
 
