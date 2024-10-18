@@ -358,7 +358,9 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 								__int8 Reloading = *(__int8*)((unsigned __int32)Weapon + 2493);
 
-								__int32 Healing = (*(__int32*)((unsigned __int32)Local_Player + 7080) == 1) + (*(void**)((unsigned __int32)Local_Player + 8076) != INVALID_HANDLE_VALUE);
+								__int8 Healing = *(__int32*)((unsigned __int32)Local_Player + 7080) == 1;
+
+								__int8 Reviving = *(void**)((unsigned __int32)Local_Player + 8076) != INVALID_HANDLE_VALUE;
 
 								__int32 Weapon_Identifier = Get_Identifier(Weapon, 1, 0);
 
@@ -382,7 +384,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 										__int8 Forced = 0;
 
-										if ((Is_Melee + Reloading) * (Healing ^ 1) != 0)
+										if ((Is_Melee + Reloading) * (Healing + Reviving ^ 1) != 0)
 										{
 											if ((Target->Identifier ^ 72) % 348 >= 72)
 											{
@@ -491,7 +493,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 								{
 									__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (*(__int32*)((unsigned __int32)Weapon + 2436) > 0 - Is_Melee * 2) * (*(float*)((unsigned __int32)Local_Player + 3872) <= Global_Variables->Current_Time);
 
-									if (Healing + (Weapon_Identifier == 96) + (Can_Attack ^ 1) == 0)
+									if (Reviving + (Weapon_Identifier == 96) + (Can_Attack ^ 1) == 0)
 									{
 										Target_Structure* Aim_Target = nullptr;
 
