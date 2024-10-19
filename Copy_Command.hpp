@@ -203,17 +203,17 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			{
 				if (*(void**)((unsigned __int32)Local_Player + 10008) != INVALID_HANDLE_VALUE)
 				{
-					Sequence_Shift(2);
+					Sequence_Shift(150);
 				}
 			}
 		}
 		else
 		{
-			if ((*(float*)((unsigned __int32)Local_Player + 4604) + 800 * Global_Variables->Interval_Per_Tick >= 560) + (*(__int8*)((unsigned __int32)Local_Player + 8068) + *(__int8*)((unsigned __int32)Local_Player + 9708)) != 0)
+			if ((*(float*)((unsigned __int32)Local_Player + 4604) + 800 * Global_Variables->Interval_Per_Tick >= 560) + *(__int8*)((unsigned __int32)Local_Player + 8068) + *(__int8*)((unsigned __int32)Local_Player + 9708) != 0)
 			{
 				Command->Buttons &= ~10241;
 
-				Sequence_Shift(2);
+				Sequence_Shift(150);
 			}
 			else
 			{
@@ -754,9 +754,16 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 			*(__int8*)((unsigned __int32)__builtin_frame_address(0) + 235) = Extra_Commands <= 0;
 		}
-	}	
+	}
 
 	Command->Buttons &= ~524288;
 
 	(decltype(&Redirected_Copy_Command)(Original_Copy_Command_Caller))(Unknown_Parameter, Command);
+
+	void* Prediction_Frame = *(void**)((unsigned __int32)Local_Player + 1500);
+
+	if (Prediction_Frame != nullptr)
+	{
+		*(__int32*)Prediction_Frame = *(__int32*)((unsigned __int32)Local_Player + 16);
+	}
 }

@@ -15,6 +15,8 @@ struct Prediction_Field_Structure
 	__int8 Additionals_Bytes_2[12];
 
 	__int32 Flat_Offset[2];
+
+	__int8 Additionals_Bytes_3[2];
 };
 
 struct Prediction_Copy_Structure
@@ -71,7 +73,7 @@ struct Prediction_Descriptor_Structure
 
 	Prediction_Descriptor_Structure* Parent;
 
-	__int8 Additional_Bytes_2[6];
+	__int8 Additional_Bytes_2[8];
 };
 
 void* Original_Post_Network_Data_Received_Caller;
@@ -80,11 +82,11 @@ void __thiscall Redirected_Post_Network_Data_Received(void* Unknown_Parameter, _
 {
 	void* Local_Player = *(void**)((unsigned __int32)Client_Module + 7498712);
 
-	void* Result = *(void**)((unsigned __int32)Local_Player + 900 + (150 - ((Commands_Acknowledged - 1) % 150 + 1) * 150 % -~150) * 4);
+	void* Prediction_Frame = *(void**)((unsigned __int32)Local_Player + 900 + (150 - ((Commands_Acknowledged - 1) % 150 + 1) * 150 % -~150) * 4);
 
-	if (Result != nullptr)
+	if (Prediction_Frame != nullptr)
 	{
-		Predicton_Copy.Construct(Local_Player, Result, (void*)Predicton_Copy_Compare);
+		Predicton_Copy.Construct(Local_Player, Prediction_Frame, (void*)Predicton_Copy_Compare);
 
 		using Transfer_Data_Type = __int32(__thiscall*)(Prediction_Copy_Structure* Prediction_Copy, void* Unknown_Parameter, __int32 Entity_Number, Prediction_Descriptor_Structure* Descriptor);
 
