@@ -39,6 +39,8 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 	Extended_Command->Extra_Commands = 0;
 
+	Extended_Command->Sequence_Shift = 0;
+
 	Global_Variables_Structure* Global_Variables = *(Global_Variables_Structure**)((unsigned __int32)Client_Module + 7096744);
 
 	void* Local_Player = *(void**)((unsigned __int32)Client_Module + 7498712);
@@ -56,8 +58,6 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			*(__int32*)((unsigned __int32)Local_Player + 16) = max(0, *(__int32*)((unsigned __int32)Local_Player + 16) - 1);
 		}
 	}
-
-	*(__int32*)((unsigned __int32)Local_Player + 20) = 0;
 
 	if (*(__int8*)((unsigned __int32)Local_Player + 327) == 0)
 	{
@@ -177,18 +177,23 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 		auto Sequence_Shift = [&](__int32 Reserve)
 		{
-			if (Extra_Commands < 1)
+			if (Extra_Commands < 1) //td: should work on it
 			{
 				__int32 Sequence_Shift = (*(__int32*)((unsigned __int32)Local_Player + 5324) + ~-150) / 150 * 150 + (Reserve * 150);
 
 				if (Sequence_Shift > 0)
 				{
 					*(__int32*)((unsigned __int32)Network_Channel + 8) += Sequence_Shift;
+
+					Extended_Command->Sequence_Shift = Sequence_Shift;
 				}
 			}
-
-			*(__int32*)((unsigned __int32)Local_Player + 20) = 1 + (Reserve > 0);
 		};
+
+		if (GetKeyState(VK_INSERT) < 0)
+		{
+			Sequence_Shift(2);
+		}
 
 		if (*(__int32*)((unsigned __int32)Local_Player + 228) == 3)
 		{
@@ -203,7 +208,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			{
 				if (*(void**)((unsigned __int32)Local_Player + 10008) != INVALID_HANDLE_VALUE)
 				{
-					Sequence_Shift(150);
+					Sequence_Shift(2);
 				}
 			}
 		}
@@ -211,27 +216,34 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 		{
 			if ((*(float*)((unsigned __int32)Local_Player + 4604) + 800 * Global_Variables->Interval_Per_Tick >= 560) + *(__int8*)((unsigned __int32)Local_Player + 8068) + *(__int8*)((unsigned __int32)Local_Player + 9708) != 0)
 			{
-				Command->Buttons &= ~10241;
-
-				Sequence_Shift(150);
+				Sequence_Shift(2);
 			}
 			else
 			{
-				void* Prediction = (void*)((unsigned __int32)Client_Module + 8072728);
+				//will be used later for reprediction
+				auto Predict = [&]() -> void
+				{
+					Run_Prediction();
+					{
+						void* Prediction = (void*)((unsigned __int32)Client_Module + 8072728);
 
-				*(__int8*)((unsigned __int32)Prediction + 8) = 1;
+						*(__int8*)((unsigned __int32)Prediction + 8) = 1;
 
-				*(__int8*)((unsigned __int32)Prediction + 24) = 0;
+						*(__int8*)((unsigned __int32)Prediction + 24) = 0;
 
-				using Set_Host_Type = void(__thiscall*)(void* Move_Helper, void* Player);
+						using Set_Host_Type = void(__thiscall*)(void* Move_Helper, void* Player);
 
-				Set_Host_Type((unsigned __int32)Client_Module + 1331184)((void*)((unsigned __int32)Client_Module + 7174888), Local_Player);
+						Set_Host_Type((unsigned __int32)Client_Module + 1331184)((void*)((unsigned __int32)Client_Module + 7174888), Local_Player);
 
-				Redirected_Run_Command(Prediction, Local_Player, Command, (void*)((unsigned __int32)Client_Module + 7174888));
+						Redirected_Run_Command(Prediction, Local_Player, Command, (void*)((unsigned __int32)Client_Module + 7174888));
 
-				Set_Host_Type((unsigned __int32)Client_Module + 1331184)((void*)((unsigned __int32)Client_Module + 7174888), nullptr);
+						Set_Host_Type((unsigned __int32)Client_Module + 1331184)((void*)((unsigned __int32)Client_Module + 7174888), nullptr);
 
-				*(__int8*)((unsigned __int32)Prediction + 8) = 0;
+						*(__int8*)((unsigned __int32)Prediction + 8) = 0;
+					}
+				};
+
+				Predict();
 
 				__int32 Block_Buttons = 2049;
 
@@ -358,7 +370,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 								__int8 Reloading = *(__int8*)((unsigned __int32)Weapon + 2493);
 
-								__int8 Healing = *(__int32*)((unsigned __int32)Local_Player + 7080) == 1;
+								__int32 Action = *(__int32*)((unsigned __int32)Local_Player + 7080);
 
 								__int8 Reviving = *(void**)((unsigned __int32)Local_Player + 8076) != INVALID_HANDLE_VALUE;
 
@@ -384,7 +396,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 										__int8 Forced = 0;
 
-										if ((Is_Melee + Reloading) * (Healing + Reviving ^ 1) != 0)
+										if ((Is_Melee + Reloading) * (Action + Reviving ^ 1) != 0)
 										{
 											if ((Target->Identifier ^ 72) % 348 >= 72)
 											{
@@ -410,9 +422,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 													{
 														using Perform_Shove_Trace = __int8(__thiscall*)(void* Weapon, float* Direction);
 
-														using Get_Center_Type = float*(__thiscall*)(void* Entity);
-
-														float* Target_Origin = Get_Center_Type((unsigned __int32)Client_Module + 114400)(Target->Self);
+														float* Target_Origin = Get_Center(Target->Self);
 
 														float Direction[3] =
 														{
@@ -439,7 +449,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 														if (Perform_Trace_Damage == 1)
 														{
-															if (Healing == 0)
+															if (Action == 0)
 															{
 																Command->Tick_Number = Target->Tick_Number;
 

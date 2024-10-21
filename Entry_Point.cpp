@@ -291,6 +291,9 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 					Byte_Manager::Set_Bytes(1, (void*)((unsigned __int32)Client_Module + 2655546), 1, 216);
 
 					*(void**)((unsigned __int32)Client_Module + 8115120) = (void*)((unsigned __int32)Client_Module + 955708);
+
+					//rem: there is annoying "power bounce" effect (extremely noticeable with broken lerp)
+					//actually it's m_duckUntilOnGround
 				}
 
 				_putws(L"[ + ] Paint");

@@ -62,7 +62,7 @@ void Implement_Extended_Interface()
 
 	Create_Console_Interface(Pointer_Name(Interface_Aim_Intersection), (char*)"1", nullptr);
 
-	Create_Console_Interface(Pointer_Name(Interface_Penetration_Damage), (char*)"20", nullptr);
+	Create_Console_Interface(Pointer_Name(Interface_Penetration_Damage), (char*)"12", nullptr);
 
 	Create_Console_Interface(Pointer_Name(Interface_Equipment_Distance), (char*)"2048", nullptr);
 

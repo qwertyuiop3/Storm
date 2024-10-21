@@ -62,7 +62,7 @@ void Redirected_Send_Move()
 
 	void* Network_Channel = *(void**)(*(unsigned __int32*)((unsigned __int32)Engine_Module + 4352236) + 24);
 
-	*(__int32*)((unsigned __int32)Network_Channel + 28) -= Extra_Commands_Queue;
+	*(__int32*)((unsigned __int32)Network_Channel + 28) -= Extra_Commands_Queue; //td: should do same thing i'm doing in v34 instead
 
 	using Send_Network_Message_Type = void(__thiscall**)(void* Network_Channel, void* Message, void* Unknown_Parameter_1, void* Unknown_Parameter_2);
 

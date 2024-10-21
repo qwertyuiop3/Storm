@@ -41,24 +41,13 @@ Prediction_Copy_Structure Predicton_Copy;
 
 void Predicton_Copy_Compare(void* Unknown_Parameter_1, void* Unknown_Parameter_2, void* Unknown_Parameter_3, void* Unknown_Parameter_4, void* Unknown_Parameter_5, void* Unknown_Parameter_6, __int8 Within_Tolerance, void* Unknown_Parameter_7)
 {
-	Prediction_Field_Structure* Field = *(Prediction_Field_Structure**)((unsigned __int32)__builtin_frame_address(0) + 60);
-
-	if (Field->Flat_Offset[0] == 5324)
-	{
-		if (*(__int32*)((unsigned __int32)Predicton_Copy.Destination + 20) != 0)
-		{
-			goto Copy_Label;
-		}
-	}
-
 	if (Within_Tolerance == 1)
 	{
+		Prediction_Field_Structure* Field = *(Prediction_Field_Structure**)((unsigned __int32)__builtin_frame_address(0) + 60);
+
 		if ((256 - Field->Flat_Offset[0] ^ Field->Flat_Offset[0] - 244) != 12)
 		{
-			Copy_Label:
-			{
-				Byte_Manager::Copy_Bytes(0, (void*)((unsigned __int32)Predicton_Copy.Destination + Field->Flat_Offset[0]), Field->Bytes, (void*)((unsigned __int32)Predicton_Copy.Source + Field->Flat_Offset[1]));
-			}
+			Byte_Manager::Copy_Bytes(0, (void*)((unsigned __int32)Predicton_Copy.Destination + Field->Flat_Offset[0]), Field->Bytes, (void*)((unsigned __int32)Predicton_Copy.Source + Field->Flat_Offset[1]));
 		}
 	}
 }
@@ -91,6 +80,8 @@ void __thiscall Redirected_Post_Network_Data_Received(void* Unknown_Parameter, _
 		using Transfer_Data_Type = __int32(__thiscall*)(Prediction_Copy_Structure* Prediction_Copy, void* Unknown_Parameter, __int32 Entity_Number, Prediction_Descriptor_Structure* Descriptor);
 
 		Transfer_Data_Type((unsigned __int32)Client_Module + 1573744)(&Predicton_Copy, nullptr, -1, (Prediction_Descriptor_Structure*)((unsigned __int32)Client_Module + 7236480));
+
+		*(__int32*)((unsigned __int32)Local_Player + 5324) += Commands_Acknowledged - Commands_Acknowledged % 150;
 	}
 
 	(decltype(&Redirected_Post_Network_Data_Received)(Original_Post_Network_Data_Received_Caller))(Unknown_Parameter, Commands_Acknowledged);

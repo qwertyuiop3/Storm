@@ -1,5 +1,14 @@
 void* Perform_Trace_Target;
 
+float* Get_Center(void* Entity)
+{
+	using Get_Center_Type = float*(__thiscall*)(void* Entity);
+
+	return Get_Center_Type((unsigned __int32)Client_Module + 114400)(Entity);
+}
+
+float Perform_Trace_Damage;
+
 float Vector_Normalize(float* Vector)
 {
 	using Vector_Normalize_Type = float(__thiscall*)(float* Vector);
@@ -13,8 +22,6 @@ void Angle_Vectors(float* Angles, float* Forward, float* Right, float* Up)
 
 	Angle_Vectors_Type((unsigned __int32)Client_Module + 3539376)(Angles, Forward, Right, Up);
 };
-
-float Perform_Trace_Damage;
 
 void __thiscall Perform_Trace(void* Stack)
 {
@@ -119,13 +126,11 @@ void __thiscall Perform_Trace(void* Stack)
 						{
 							using Get_Bounds_Type = void(__thiscall*)(void* Collision, float* Start, float* Bounds);
 
-							using Get_Center_Type = float* (__thiscall*)(void* Entity);
-
 							void* Local_Player = *(void**)Trace_Information;
 
 							float Bounds[3];
 
-							Get_Bounds_Type((unsigned __int32)Client_Module + 878528)((void*)((unsigned __int32)Entity + 540), Get_Center_Type((unsigned __int32)Client_Module + 114400)(Local_Player), Bounds);
+							Get_Bounds_Type((unsigned __int32)Client_Module + 878528)((void*)((unsigned __int32)Entity + 540), Get_Center(Local_Player), Bounds);
 
 							using Calculate_Distance_Type = float(__thiscall*)(void* Collision, float* Bounds);
 
@@ -284,9 +289,7 @@ void __thiscall Perform_Trace(void* Stack)
 		{
 			float Inflictor_Direction[3];
 
-			using Get_Center_Type = float*(__thiscall*)(void* Entity);
-
-			float* Start = Get_Center_Type((unsigned __int32)Client_Module + 114400)(*(void**)Trace_Information);
+			float* Start = Get_Center(*(void**)Trace_Information);
 
 			Inflictor_Direction[0] = End[0] - Start[0];
 
