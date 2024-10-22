@@ -41,21 +41,28 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 	Extended_Command->Sequence_Shift = 0;
 
+	void* Local_Player = *(void**)((unsigned __int32)Client_Module + 7498712);
+
 	Global_Variables_Structure* Global_Variables = *(Global_Variables_Structure**)((unsigned __int32)Client_Module + 7096744);
 
-	void* Local_Player = *(void**)((unsigned __int32)Client_Module + 7498712);
+	__int8 First_Command = Extra_Commands == -1;
 
 	if (Extra_Commands == -1)
 	{
-		if ((Command->Buttons & 524288) == 524288)
-		{
-			Extended_Command->Extra_Commands = max(0, Extra_Commands = std::clamp(Interface_Extra_Commands.Integer, (__int32)(0.06f / Global_Variables->Interval_Per_Tick + 0.5f), 21));
+		void* Prediction_Frame = *(void**)((unsigned __int32)Local_Player + 1500);
 
-			*(__int32*)((unsigned __int32)Local_Player + 16) = min(*(__int32*)((unsigned __int32)Local_Player + 16) + 1, Extended_Command->Extra_Commands * Interface_Interpolate_Extra_Commands.Integer);
-		}
-		else
+		if (Prediction_Frame != nullptr)
 		{
-			*(__int32*)((unsigned __int32)Local_Player + 16) = max(0, *(__int32*)((unsigned __int32)Local_Player + 16) - 1);
+			if ((Command->Buttons & 524288) == 524288)
+			{
+				Extended_Command->Extra_Commands = max(0, Extra_Commands = std::clamp(Interface_Extra_Commands.Integer, (__int32)(0.06f / Global_Variables->Interval_Per_Tick + 0.5f), 21));
+
+				*(__int32*)Prediction_Frame = min(*(__int32*)Prediction_Frame + 1, Extended_Command->Extra_Commands * Interface_Interpolate_Extra_Commands.Integer);
+			}
+			else
+			{
+				*(__int32*)Prediction_Frame = max(0, *(__int32*)Prediction_Frame - 1);
+			}
 		}
 	}
 
@@ -177,7 +184,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 		auto Sequence_Shift = [&](__int32 Reserve)
 		{
-			if (Extra_Commands < 1) //td: should work on it
+			if (First_Command == 0)
+			{
+				Extended_Command->Sequence_Shift = Extended_Commands[((Command->Frame_Number - 1) % 150 + 150) % 150].Sequence_Shift;
+			}
+			else
 			{
 				__int32 Sequence_Shift = (*(__int32*)((unsigned __int32)Local_Player + 5324) + ~-150) / 150 * 150 + (Reserve * 150);
 
@@ -193,6 +204,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 		if (GetKeyState(VK_INSERT) < 0)
 		{
 			Sequence_Shift(2);
+		}
+
+		if (GetKeyState(VK_HOME) < 0)
+		{
+			Sequence_Shift(-2);
 		}
 
 		if (*(__int32*)((unsigned __int32)Local_Player + 228) == 3)
@@ -769,11 +785,4 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 	Command->Buttons &= ~524288;
 
 	(decltype(&Redirected_Copy_Command)(Original_Copy_Command_Caller))(Unknown_Parameter, Command);
-
-	void* Prediction_Frame = *(void**)((unsigned __int32)Local_Player + 1500);
-
-	if (Prediction_Frame != nullptr)
-	{
-		*(__int32*)Prediction_Frame = *(__int32*)((unsigned __int32)Local_Player + 16);
-	}
 }
