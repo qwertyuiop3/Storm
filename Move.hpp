@@ -1,21 +1,16 @@
-void Run_Prediction()
-{
-	using Run_Prediction_Type = void(__cdecl*)();
-
-	Run_Prediction_Type((unsigned __int32)Engine_Module + 527776)();
-}
-
 __int32 Extra_Commands;
 
 void* Original_Move_Caller;
 
 void Redirected_Move(float Unknown_Parameter, __int8 Final)
 {
+	using Run_Prediction_Type = void(__cdecl*)();
+
 	if (*(void**)((unsigned __int32)Client_Module + 7498712) != nullptr)
 	{
 		Redirected_Read_Packets(Final);
 
-		Run_Prediction();
+		Run_Prediction_Type((unsigned __int32)Engine_Module + 527776)();
 
 		using Update_Animations_Type = void(__cdecl*)();
 
@@ -40,7 +35,7 @@ void Redirected_Move(float Unknown_Parameter, __int8 Final)
 	{
 		(decltype(&Redirected_Move)(Original_Move_Caller))(Unknown_Parameter, Final);
 
-		Run_Prediction();
+		Run_Prediction_Type((unsigned __int32)Engine_Module + 527776)();
 
 		if (Extra_Commands > 0)
 		{

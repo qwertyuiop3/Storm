@@ -8,9 +8,7 @@ struct Command_Structure
 
 	float Angles[3];
 
-	float Move[2];
-
-	__int32 Frame_Number;
+	float Move[3];
 
 	__int32 Buttons;
 
@@ -30,13 +28,13 @@ Extended_Command_Structure Extended_Commands[150];
 
 void* Original_Run_Command_Caller;
 
-void __thiscall Redirected_Run_Command(void* Prediction, void* Player, Command_Structure* Command, void* Unknown_Parameter)
+void __thiscall Redirected_Run_Command(void* Prediction, void* Player, Command_Structure* Command, void* Move_Helper)
 {
-	Extended_Command_Structure* Extended_Command = &Extended_Commands[Command->Frame_Number];
+	Extended_Command_Structure* Extended_Command = &Extended_Commands[*(__int32*)((unsigned __int32)Player + 5620) % 150];
 
 	*(__int32*)((unsigned __int32)Player + 5324) -= Extended_Command->Extra_Commands + Extended_Command->Sequence_Shift;
 
-	(decltype(&Redirected_Run_Command)(Original_Run_Command_Caller))(Prediction, Player, Command, Unknown_Parameter);
+	(decltype(&Redirected_Run_Command)(Original_Run_Command_Caller))(Prediction, Player, Command, Move_Helper);
 
 	if (__builtin_return_address(0) == (void*)((unsigned __int32)Client_Module + 423107))
 	{
