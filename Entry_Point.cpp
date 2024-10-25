@@ -295,11 +295,13 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 
 				_putws(L"[ + ] Paint");
 				{
-					Redirection_Manager::Redirect_Function(Original_Write_Texture_Caller, 0, (void*)((unsigned __int32)GetModuleHandleW(L"vguimatsurface.dll") + 100560), 1, (void*)Redirected_Write_Texture);
+					Redirection_Manager::Redirect_Function(Original_Write_Texture_Caller, 0, (void*)((unsigned __int32)GetModuleHandleW(L"vguimatsurface.dll") + 100592), 1, (void*)Redirected_Write_Texture);
 
 					Redirection_Manager::Redirect_Function(1, (void*)((unsigned __int32)Client_Module + 2913504), (void*)Redirected_Paint);
 
 					Redirection_Manager::Redirect_Function(Original_Get_Glow_Color_Caller, 1, (void*)((unsigned __int32)Client_Module + 2455600), 1, (void*)Redirected_Get_Glow_Color);
+
+					Byte_Manager::Set_Bytes(1, (void*)((unsigned __int32)Client_Module + 3244715), 1, 49);
 
 					Redirection_Manager::Redirect_Function(1, (void*)((unsigned __int32)Client_Module + 2301184), (void*)Redirected_Draw_Crosshair);
 

@@ -13,14 +13,14 @@ float Vector_Normalize(float* Vector)
 {
 	using Vector_Normalize_Type = float(__thiscall*)(float* Vector);
 
-	return Vector_Normalize_Type((unsigned __int32)Client_Module + 3536176)(Vector);
+	return Vector_Normalize_Type((unsigned __int32)Client_Module + 3536192)(Vector);
 };
 
 void Angle_Vectors(float* Angles, float* Forward, float* Right, float* Up)
 {
 	using Angle_Vectors_Type = void(__cdecl*)(float* Angles, float* Forward, float* Right, float* Up);
 
-	Angle_Vectors_Type((unsigned __int32)Client_Module + 3539376)(Angles, Forward, Right, Up);
+	Angle_Vectors_Type((unsigned __int32)Client_Module + 3539392)(Angles, Forward, Right, Up);
 };
 
 void __thiscall Perform_Trace(void* Stack)

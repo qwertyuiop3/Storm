@@ -8,7 +8,7 @@ void Redirected_Send_Move()
 		{
 			Byte_Manager::Set_Bytes(0, Message, sizeof(Message), 0);
 
-			*(void**)Message = (void*)((unsigned __int32)Engine_Module + 3501348);
+			*(void**)Message = (void*)((unsigned __int32)Engine_Module + 3501364);
 
 			*(void**)((unsigned __int32)Message + 132) = Data;
 

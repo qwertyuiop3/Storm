@@ -192,15 +192,15 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 					Extended_Command->Sequence_Shift += Sequence_Shift;
 
-					__int32 Command_Number = Command->Command_Number - 1;
+					__int32 Command_Number = Command->Command_Number;
 
 					Traverse_Command_Batch_Label:
 					{
+						Command_Number -= 1;
+
 						if (Command_Number >= *(__int32*)((unsigned __int32)Local_Player + 20))
 						{
 							Extended_Commands[Command_Number % 150].Sequence_Shift = Extended_Command->Sequence_Shift;
-
-							Command_Number -= 1;
 
 							goto Traverse_Command_Batch_Label;
 						}
@@ -263,11 +263,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 					if (Can_Attack_Type((unsigned __int32)Client_Module + 2541696)(Local_Player) == 1)
 					{
-						void* Weapon = *(__int16*)((unsigned __int32)Local_Player + 7866) == 0 ? *(void**)((unsigned __int32)Client_Module + 7644532 + (((*(unsigned __int32*)((unsigned __int32)Local_Player + 4228) & 4095) - 4097) << 4)) : nullptr;
+						void* Weapon = *(__int8*)((unsigned __int32)Local_Player + 7867) == 0 ? *(void**)((unsigned __int32)Client_Module + 7644532 + (((*(unsigned __int32*)((unsigned __int32)Local_Player + 4228) & 4095) - 4097) << 4)) : nullptr;
 
 						if (Weapon == nullptr)
 						{
-							Block_Buttons = 0;
+							Block_Buttons = 2048;
 						}
 						else
 						{
