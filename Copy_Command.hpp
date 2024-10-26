@@ -376,7 +376,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							__int8 Is_Melee = *(__int32*)((unsigned __int32)Weapon_Data + 352) * (*(__int32*)((unsigned __int32)Weapon_Data + 348) ^ 1) <= 1;
 
-							__int32 Action = *(__int32*)((unsigned __int32)Local_Player + 7080) != 0;
+							__int8 Action = *(__int32*)((unsigned __int32)Local_Player + 7080) != 0;
 
 							__int8 Reviving = *(void**)((unsigned __int32)Local_Player + 8076) != INVALID_HANDLE_VALUE;
 

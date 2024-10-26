@@ -69,19 +69,22 @@ void* Original_Post_Network_Data_Received_Caller;
 
 void __thiscall Redirected_Post_Network_Data_Received(void* Unknown_Parameter, __int32 Commands_Acknowledged)
 {
-	void* Local_Player = *(void**)((unsigned __int32)Client_Module + 7498712);
-
-	void* Prediction_Frame = *(void**)((unsigned __int32)Local_Player + 900 + (150 - ((Commands_Acknowledged - 1) % 150 + 1) * 150 % -~150) * 4);
-
-	if (Prediction_Frame != nullptr)
+	if (Commands_Acknowledged >= 0)
 	{
-		Predicton_Copy.Construct(Local_Player, Prediction_Frame, (void*)Predicton_Copy_Compare);
+		void* Local_Player = *(void**)((unsigned __int32)Client_Module + 7498712);
 
-		using Transfer_Data_Type = __int32(__thiscall*)(Prediction_Copy_Structure* Prediction_Copy, void* Unknown_Parameter, __int32 Entity_Number, Prediction_Descriptor_Structure* Descriptor);
+		void* Prediction_Frame = *(void**)((unsigned __int32)Local_Player + 900 + (150 - ((Commands_Acknowledged - 1) % 150 + 1) * 150 % -~150) * 4);
 
-		Transfer_Data_Type((unsigned __int32)Client_Module + 1573744)(&Predicton_Copy, nullptr, -1, (Prediction_Descriptor_Structure*)((unsigned __int32)Client_Module + 7236480));
+		if (Prediction_Frame != nullptr)
+		{
+			Predicton_Copy.Construct(Local_Player, Prediction_Frame, (void*)Predicton_Copy_Compare);
 
-		*(__int32*)((unsigned __int32)Local_Player + 5324) += Commands_Acknowledged - Commands_Acknowledged % 150;
+			using Transfer_Data_Type = __int32(__thiscall*)(Prediction_Copy_Structure* Prediction_Copy, void* Unknown_Parameter, __int32 Entity_Number, Prediction_Descriptor_Structure* Descriptor);
+
+			Transfer_Data_Type((unsigned __int32)Client_Module + 1573744)(&Predicton_Copy, nullptr, -1, (Prediction_Descriptor_Structure*)((unsigned __int32)Client_Module + 7236480));
+
+			*(__int32*)((unsigned __int32)Local_Player + 5324) += Commands_Acknowledged - Commands_Acknowledged % 150;
+		}
 	}
 
 	(decltype(&Redirected_Post_Network_Data_Received)(Original_Post_Network_Data_Received_Caller))(Unknown_Parameter, Commands_Acknowledged);
