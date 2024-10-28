@@ -187,6 +187,8 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 
 					Byte_Manager::Set_Bytes(1, (void*)((unsigned __int32)Client_Module + 316816), 1, 195);
 
+					Byte_Manager::Set_Bytes(1, (void*)((unsigned __int32)Engine_Module + 350575), 1, 94);
+
 					Byte_Manager::Set_Bytes(1, (void*)((unsigned __int32)Engine_Module + 521741), 1, 235);
 				}
 
