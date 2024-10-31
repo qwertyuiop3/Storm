@@ -102,7 +102,7 @@ void __thiscall Perform_Trace(void* Stack)
 				{
 					using Get_Difficulty_Type = __int32(__cdecl*)();
 
-					float Multipliers[3] = { 0.8f, 0.7f, 0.6f };
+					static float Multipliers[3] = { 0.8f, 0.7f, 0.6f };
 
 					Damage *= Multipliers[Get_Difficulty_Type((unsigned __int32)Client_Module + 2650448)()];
 				};
@@ -228,7 +228,14 @@ void __thiscall Perform_Trace(void* Stack)
 					}
 					else
 					{
-						if (Identifier != 13)
+						if (Identifier == 13)
+						{
+							if (*(float*)((unsigned __int32)Entity + 336) - *(float*)((unsigned __int32)Entity + 472) < 0.5f)
+							{
+								Damage = 0;
+							}
+						}
+						else
 						{
 							if (Identifier + Bullet_Type == 284)
 							{
@@ -237,7 +244,7 @@ void __thiscall Perform_Trace(void* Stack)
 
 							if ((Identifier != 276) + (Upgrade_Type != 1) == 2)
 							{
-								float Multipliers[8] = { 1.f, 4.f, 1.f, 1.25f, 1.f, 1.f, 0.75f, 0.75f };
+								static float Multipliers[8] = { 1.f, 4.f, 1.f, 1.25f, 1.f, 1.f, 0.75f, 0.75f };
 
 								Damage *= Multipliers[Group];
 							}

@@ -84,6 +84,7 @@
   <ItemGroup>
     <ClInclude Include="Calculate_View.hpp" />
     <ClInclude Include="Process_Movement.hpp" />
+    <ClInclude Include="Set_Move_Type.hpp" />
     <ClInclude Include="Update.hpp" />
     <ClInclude Include="Send_Move.hpp" />
     <ClInclude Include="Spawn_Grenade.hpp" />

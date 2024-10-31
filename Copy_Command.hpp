@@ -180,7 +180,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 		void* Network_Channel = *(void**)(*(unsigned __int32*)((unsigned __int32)Engine_Module + 4352236) + 24);
 
-		auto Sequence_Shift = [&](__int32 Reserve)
+		auto Sequence_Shift = [&](__int32 Reserve) -> void
 		{
 			if (Extended_Commands[*(__int32*)((unsigned __int32)Local_Player + 20) % 150].Sequence_Shift == 0)
 			{

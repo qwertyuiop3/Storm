@@ -88,5 +88,8 @@
     <ClInclude Include="Update_Animations.hpp">
       <Filter>Header++</Filter>
     </ClInclude>
+    <ClInclude Include="Set_Move_Type.hpp">
+      <Filter>Header++</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
