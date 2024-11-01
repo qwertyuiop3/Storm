@@ -36,7 +36,7 @@ void __thiscall Redirected_Paint(void* Panel)
 
 						0,
 
-						__builtin_powf(Local_Player_Origin[0] - Entity_Origin[0], 2) + __builtin_powf(Local_Player_Origin[1] - Entity_Origin[1], 2) + __builtin_powf(Local_Player_Origin[2] - Entity_Origin[2], 2)
+						__builtin_powf(Local_Player_Origin[0] - Entity_Origin[0], 2.f) + __builtin_powf(Local_Player_Origin[1] - Entity_Origin[1], 2.f) + __builtin_powf(Local_Player_Origin[2] - Entity_Origin[2], 2.f)
 					};
 
 					if (Identifier >= 0)
@@ -145,9 +145,9 @@ void __thiscall Redirected_Paint(void* Panel)
 
 									__int32 Screen_Height = Get_Screen_Size_Type((unsigned __int32)Client_Module + 738544)();
 
-									Screen[0] = Screen[0] / 2 * Screen_Width + Screen_Width / 2;
+									Screen[0] = Screen[0] / 2.f * Screen_Width + Screen_Width / 2.f;
 
-									Screen[1] = -Screen[1] / 2 * Screen_Height + Screen_Height / 2;
+									Screen[1] = -Screen[1] / 2.f * Screen_Height + Screen_Height / 2.f;
 
 									Bounds[0] = min(Bounds[0], Screen[0]);
 
@@ -176,15 +176,15 @@ void __thiscall Redirected_Paint(void* Panel)
 						}
 					}
 
-					Bounds[0] -= 2;
+					Bounds[0] -= 2.f;
 
-					Bounds[1] += 2;
+					Bounds[1] += 2.f;
 
-					Bounds[2] -= 2;
+					Bounds[2] -= 2.f;
 
-					Bounds[3] += 2;
+					Bounds[3] += 2.f;
 
-					return (Bounds[1] != 2) * (Bounds[3] != 2);
+					return (Bounds[1] != 2.f) * (Bounds[3] != 2.f);
 				}
 
 				return 0;
@@ -270,7 +270,7 @@ void __thiscall Redirected_Paint(void* Panel)
 
 					if (Ghost == 0)
 					{
-						(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, (__int32)(Paint_Data->Color[0] / 2 + 0.5f), (__int32)(Paint_Data->Color[1] / 2 + 0.5f), (__int32)(Paint_Data->Color[2] / 2 + 0.5f), 128);
+						(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, (__int32)(Paint_Data->Color[0] / 2.f + 0.5f), (__int32)(Paint_Data->Color[1] / 2.f + 0.5f), (__int32)(Paint_Data->Color[2] / 2.f + 0.5f), 128);
 					}
 					else
 					{

@@ -90,23 +90,23 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 				Command->Buttons &= ~(*(__int32*)((unsigned __int32)Local_Player + 5028) & 2);
 			}
 
-			float Difference = __builtin_remainderf(Move_Angles[1] - Previous_Move_Angle_Y, 360);
+			float Difference = __builtin_remainderf(Move_Angles[1] - Previous_Move_Angle_Y, 360.f);
 
 			Previous_Move_Angle_Y = Move_Angles[1];
 
 			float* Velocity = (float*)((unsigned __int32)Local_Player + 256);
 
-			if (__builtin_fabsf(Difference) < __builtin_atan2f(30, __builtin_hypotf(Velocity[0], Velocity[1])) * 180 / 3.1415927f)
+			if (__builtin_fabsf(Difference) < __builtin_atan2f(30, __builtin_hypotf(Velocity[0], Velocity[1])) * 180.f / 3.1415927f)
 			{
-				float Strafe_Angle = __builtin_remainderf(Move_Angles[1] - __builtin_atan2f(Velocity[1], Velocity[0]) * 180 / 3.1415927f, 360);
+				float Strafe_Angle = __builtin_remainderf(Move_Angles[1] - __builtin_atan2f(Velocity[1], Velocity[0]) * 180.f / 3.1415927f, 360.f);
 
 				if (__builtin_signbitf(Strafe_Angle) == 0)
 				{
-					Command->Move[1] = -400;
+					Command->Move[1] = -400.f;
 				}
 				else
 				{
-					Command->Move[1] = 400;
+					Command->Move[1] = 400.f;
 				}
 
 				Move_Angles[1] -= Strafe_Angle;
@@ -115,11 +115,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			{
 				if (__builtin_signbitf(Difference) == 0)
 				{
-					Command->Move[1] = -400;
+					Command->Move[1] = -400.f;
 				}
 				else
 				{
-					Command->Move[1] = 400;
+					Command->Move[1] = 400.f;
 				}
 			}
 		}
@@ -230,7 +230,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 		}
 		else
 		{
-			if ((*(float*)((unsigned __int32)Local_Player + 4604) + 800 * Global_Variables->Interval_Per_Tick >= 560) + *(__int8*)((unsigned __int32)Local_Player + 8068) + *(__int8*)((unsigned __int32)Local_Player + 9708) != 0)
+			if ((*(float*)((unsigned __int32)Local_Player + 4604) + 800.f * Global_Variables->Interval_Per_Tick >= 560.f) + *(__int8*)((unsigned __int32)Local_Player + 8068) + *(__int8*)((unsigned __int32)Local_Player + 9708) != 0)
 			{
 				Sequence_Shift(2);
 			}
@@ -317,7 +317,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 													(__int8)(Identifier == 270 ? *(void**)((unsigned __int32)Entity + 8040) == *(void**)((unsigned __int32)Local_Player + 376) : 0),
 
-													__builtin_powf(Local_Player_Origin[0] - Entity_Origin[0], 2) + __builtin_powf(Local_Player_Origin[1] - Entity_Origin[1], 2) + __builtin_powf(Local_Player_Origin[2] - Entity_Origin[2], 2),
+													__builtin_powf(Local_Player_Origin[0] - Entity_Origin[0], 2.f) + __builtin_powf(Local_Player_Origin[1] - Entity_Origin[1], 2.f) + __builtin_powf(Local_Player_Origin[2] - Entity_Origin[2], 2.f),
 
 													(__int32)(Time / Global_Variables->Interval_Per_Tick + 0.5f)
 												};
@@ -326,7 +326,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 												{
 													if (Identifier == 277)
 													{
-														if (*(float*)((unsigned __int32)Entity + 4844) == 1)
+														if (*(float*)((unsigned __int32)Entity + 4844) == 1.f)
 														{
 															Sorted_Target_List.push_back(Target);
 														}
@@ -441,7 +441,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 													Vector_Normalize(Direction);
 
-													*(float*)((unsigned __int32)Weapon + 2724) = 75;
+													*(float*)((unsigned __int32)Weapon + 2724) = 75.f;
 
 													*(__int32*)((unsigned __int32)Weapon + 3248) = 0;
 
@@ -459,19 +459,19 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 														{
 															Command->Tick_Number = Target->Tick_Number;
 
-															Command->Angles[0] = __builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180 / 3.1415927f;
+															Command->Angles[0] = __builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180.f / 3.1415927f;
 
-															Command->Angles[1] = __builtin_atan2f(Direction[1], Direction[0]) * 180 / 3.1415927f;
+															Command->Angles[1] = __builtin_atan2f(Direction[1], Direction[0]) * 180.f / 3.1415927f;
 
 															if (Cancelable_Shove == 1)
 															{
 																float Shove_Multiplier = min((Global_Variables->Current_Time - *(float*)((unsigned __int32)Weapon + 2704) + *(float*)((unsigned __int32)Weapon + 2700)) / *(float*)((unsigned __int32)Weapon + 2700), 1.f);
 
-																Command->Angles[1] += -45 * Shove_Multiplier + 45 * (1 - Shove_Multiplier);
+																Command->Angles[1] += -45.f * Shove_Multiplier + 45.f * (1.f - Shove_Multiplier);
 															}
 															else
 															{
-																Command->Angles[1] += 45;
+																Command->Angles[1] += 45.f;
 															}
 
 															Command->Buttons |= 2048;
@@ -685,9 +685,9 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 													float Angles[3] =
 													{
-														__builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180 / 3.1415927f,
+														__builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180.f / 3.1415927f,
 
-														__builtin_atan2f(Direction[1], Direction[0]) * 180 / 3.1415927f,
+														__builtin_atan2f(Direction[1], Direction[0]) * 180.f / 3.1415927f,
 
 														0
 													};
@@ -722,7 +722,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 									{
 										if (Shove_Target != nullptr)
 										{
-											*(float*)((unsigned __int32)Shove_Target->Self + 16) = 0;
+											*(float*)((unsigned __int32)Shove_Target->Self + 16) = 0.f;
 
 											if (Aim_Target != nullptr)
 											{

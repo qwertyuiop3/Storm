@@ -74,7 +74,7 @@ void __thiscall Perform_Trace(void* Stack)
 			{
 				float* Start = (float*)((unsigned __int32)Stack + 236);
 
-				float Distance = __builtin_sqrtf(__builtin_powf(End[0] - Start[0], 2) + __builtin_powf(End[1] - Start[1], 2) + __builtin_powf(End[2] - Start[2], 2));
+				float Distance = __builtin_sqrtf(__builtin_powf(End[0] - Start[0], 2.f) + __builtin_powf(End[1] - Start[1], 2.f) + __builtin_powf(End[2] - Start[2], 2.f));
 
 				float Damage;
 
@@ -138,20 +138,15 @@ void __thiscall Perform_Trace(void* Stack)
 
 							if (Distance < 100)
 							{
-								Damage += 4.f * Damage * __builtin_powf(1.f - Distance / 100.f, 2);
+								Damage += 4.f * Damage * __builtin_powf(1.f - Distance / 100.f, 2.f);
 							}
 						}
 					}
 				};
 
-				if (Identifier == 277)
+				if (Identifier == 13)
 				{
-					if (Group != 1)
-					{
-						Apply_Difficulty_Scaling();
-					}
-
-					Apply_Shotgun_Scaling();
+					Damage *= *(float*)((unsigned __int32)Entity + 336) - *(float*)((unsigned __int32)Entity + 472) >= 0.5f;
 				}
 				else
 				{
@@ -228,12 +223,14 @@ void __thiscall Perform_Trace(void* Stack)
 					}
 					else
 					{
-						if (Identifier == 13)
+						if (Identifier == 277)
 						{
-							if (*(float*)((unsigned __int32)Entity + 336) - *(float*)((unsigned __int32)Entity + 472) < 0.5f)
+							if (Group != 1)
 							{
-								Damage = 0;
+								Apply_Difficulty_Scaling();
 							}
+
+							Apply_Shotgun_Scaling();
 						}
 						else
 						{
@@ -246,7 +243,7 @@ void __thiscall Perform_Trace(void* Stack)
 							{
 								static float Multipliers[8] = { 1.f, 4.f, 1.f, 1.25f, 1.f, 1.f, 0.75f, 0.75f };
 
-								Damage *= Multipliers[Group];
+								Damage *= min(4.f - 2.75f * Is_Shotgun, Multipliers[Group]);
 							}
 
 							if (Get_Identifier(Entity, 1, 0) == 99)
@@ -318,7 +315,7 @@ void __thiscall Perform_Trace(void* Stack)
 
 			Angle_Vectors(Angle, Victim_Direction, nullptr, nullptr);
 
-			if (Inflictor_Direction[0] * Victim_Direction[0] + Inflictor_Direction[1] * Victim_Direction[1] + Inflictor_Direction[2] * Victim_Direction[2] >= 0)
+			if (Inflictor_Direction[0] * Victim_Direction[0] + Inflictor_Direction[1] * Victim_Direction[1] + Inflictor_Direction[2] * Victim_Direction[2] >= 0.f)
 			{
 				Compute_Damage();
 			}
