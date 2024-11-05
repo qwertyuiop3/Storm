@@ -7,14 +7,14 @@ void __thiscall Redirected_Spawn_Grenade(void* Entity)
 	float Minimum[3] =
 	{
 		-16.f,
-		
+
 		-16.f,
-		
+
 		-16.f
 	};
 
 	float Maximum[3] =
-	{ 
+	{
 		16.f,
 
 		16.f,

@@ -106,21 +106,21 @@ void __thiscall Redirected_Paint(void* Panel)
 							Initialize_Vertices_Label:
 							{
 								Hitbox_Vertices[0][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Minimum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Minimum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Minimum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
-						
+
 								Hitbox_Vertices[1][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Maximum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Minimum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Minimum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
-						
+
 								Hitbox_Vertices[2][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Minimum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Maximum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Minimum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
-						
+
 								Hitbox_Vertices[3][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Minimum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Minimum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Maximum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
-						
+
 								Hitbox_Vertices[4][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Maximum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Maximum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Minimum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
-						
+
 								Hitbox_Vertices[5][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Maximum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Minimum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Maximum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
-						
+
 								Hitbox_Vertices[6][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Minimum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Maximum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Maximum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
-						
+
 								Hitbox_Vertices[7][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Maximum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Maximum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Maximum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
-						
+
 								if (Axis_Number != 2)
 								{
 									Axis_Number += 1;

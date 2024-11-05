@@ -243,7 +243,7 @@ void __thiscall Perform_Trace(void* Stack)
 							{
 								static float Multipliers[8] = { 1.f, 4.f, 1.f, 1.25f, 1.f, 1.f, 0.75f, 0.75f };
 
-								Damage *= min(4.f - 2.75f * Is_Shotgun, Multipliers[Group]);
+								Damage *= min(Multipliers[Group], 4.f - 2.75f * Is_Shotgun);
 							}
 
 							if (Get_Identifier(Entity, 1, 0) == 99)
@@ -306,7 +306,7 @@ void __thiscall Perform_Trace(void* Stack)
 			using Get_Attachment_Type = void(__thiscall*)(void* Entity, char* Attachment, float* Origin, float* Angle);
 
 			float Origin[3];
-			
+
 			float Angle[3];
 
 			Get_Attachment_Type((unsigned __int32)Client_Module + 178656)(Entity, (char*)"chest", Origin, Angle);

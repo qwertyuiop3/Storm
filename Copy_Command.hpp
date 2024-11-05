@@ -96,7 +96,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 			float* Velocity = (float*)((unsigned __int32)Local_Player + 256);
 
-			if (__builtin_fabsf(Difference) < __builtin_atan2f(30, __builtin_hypotf(Velocity[0], Velocity[1])) * 180.f / 3.1415927f)
+			if (__builtin_fabsf(Difference) < __builtin_atan2f(30.f, __builtin_hypotf(Velocity[0], Velocity[1])) * 180.f / 3.1415927f)
 			{
 				float Strafe_Angle = __builtin_remainderf(Move_Angles[1] - __builtin_atan2f(Velocity[1], Velocity[0]) * 180.f / 3.1415927f, 360.f);
 
@@ -739,7 +739,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 											float Maximum_Spread = *(float*)((unsigned __int32)Weapon + 3340);
 
 											float* Recoil = (float*)((unsigned __int32)Local_Player + 4612);
-												
+
 											Command->Angles[0] -= Random_Type((unsigned __int32)Client_Module + 1756592)((char*)"CTerrorGun::FireBullet HorizSpread", -Maximum_Spread, Maximum_Spread, nullptr) + Recoil[0];
 
 											Command->Angles[1] -= Random_Type((unsigned __int32)Client_Module + 1756592)((char*)"CTerrorGun::FireBullet VertSpread", -Maximum_Spread, Maximum_Spread, nullptr) + Recoil[1];
