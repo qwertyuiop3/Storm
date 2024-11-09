@@ -39,11 +39,17 @@ void Redirected_Draw_Crosshair()
 
 	__int32 Storm_Number = 0;
 
-	using Get_Screen_Size_Type = __int32(__cdecl*)();
+	using Get_Screen_Size_Type = __int32(__cdecl*)(__int32* Width, __int32* Height);
 
-	__int32 Screen_Width = Get_Screen_Size_Type((unsigned __int32)Client_Module + 738576)() / 2;
+	__int32 Screen_Width;
 
-	__int32 Screen_Height = Get_Screen_Size_Type((unsigned __int32)Client_Module + 738544)() / 2;
+	__int32 Screen_Height;
+
+	Get_Screen_Size_Type((unsigned __int32)Client_Module + 1780352)(&Screen_Width, &Screen_Height);
+
+	Screen_Width /= 2;
+
+	Screen_Height /= 2;
 
 	Draw_Storm_Label:
 	{

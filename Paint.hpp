@@ -24,7 +24,7 @@ void __thiscall Redirected_Paint(void* Panel)
 				{
 					using Get_Origin_Type = float*(__thiscall*)(void* Entity);
 
-					float* Local_Player_Origin = Get_Origin_Type((unsigned __int32)Client_Module + 297584)(Local_Player);
+					float* Local_Origin = Get_Origin_Type((unsigned __int32)Client_Module + 297584)(Local_Player);
 
 					float* Entity_Origin = Get_Origin_Type((unsigned __int32)Client_Module + 297584)(Entity);
 
@@ -36,7 +36,7 @@ void __thiscall Redirected_Paint(void* Panel)
 
 						0,
 
-						__builtin_powf(Local_Player_Origin[0] - Entity_Origin[0], 2.f) + __builtin_powf(Local_Player_Origin[1] - Entity_Origin[1], 2.f) + __builtin_powf(Local_Player_Origin[2] - Entity_Origin[2], 2.f)
+						__builtin_powf(Local_Origin[0] - Entity_Origin[0], 2.f) + __builtin_powf(Local_Origin[1] - Entity_Origin[1], 2.f) + __builtin_powf(Local_Origin[2] - Entity_Origin[2], 2.f)
 					};
 
 					if (Identifier >= 0)

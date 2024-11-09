@@ -6,5 +6,5 @@ void __thiscall Redirected_Calculate_View(void* Player, void* Unknown_Parameter_
 
 	using Get_Eye_Angles_Type = float*(__thiscall*)(void* Entity);
 
-	Byte_Manager::Copy_Bytes(0, Angles, sizeof(float[3]), Get_Eye_Angles_Type((unsigned __int32)Client_Module + 2237296)(Player));
+	Byte_Manager::Copy_Bytes(1, Angles, sizeof(float[3]), Get_Eye_Angles_Type((unsigned __int32)Client_Module + 2237296)(Player));
 }

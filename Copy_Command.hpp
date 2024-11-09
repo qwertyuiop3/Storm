@@ -70,9 +70,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 		{
 			Command->Angles[0],
 
-			Command->Angles[1],
-
-			0
+			Command->Angles[1]
 		};
 
 		static float Previous_Move_Angle_Y;
@@ -130,7 +128,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 		float Previous_Move[2];
 
-		Byte_Manager::Copy_Bytes(0, Previous_Move, sizeof(Previous_Move), Command->Move);
+		Byte_Manager::Copy_Bytes(1, Previous_Move, sizeof(Previous_Move), Command->Move);
 
 		float Desired_Move_Forward[3];
 
@@ -138,11 +136,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 		Angle_Vectors(Move_Angles, Desired_Move_Forward, Desired_Move_Right, nullptr);
 
-		Desired_Move_Forward[2] = 0;
+		Desired_Move_Forward[2] = 0.f;
 
 		Vector_Normalize(Desired_Move_Forward);
 
-		Desired_Move_Right[2] = 0;
+		Desired_Move_Right[2] = 0.f;
 
 		Vector_Normalize(Desired_Move_Right);
 
@@ -161,11 +159,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 			Angle_Vectors(Command->Angles, Move_Forward, Move_Right, nullptr);
 
-			Move_Forward[2] = 0;
+			Move_Forward[2] = 0.f;
 
 			Vector_Normalize(Move_Forward);
 
-			Move_Right[2] = 0;
+			Move_Right[2] = 0.f;
 
 			Vector_Normalize(Move_Right);
 
@@ -303,7 +301,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 										{
 											if (*(__int32*)((unsigned __int32)Entity + 228) % 2 != *(__int32*)((unsigned __int32)Local_Player + 228) % 2)
 											{
-												float* Local_Player_Origin = (float*)((unsigned __int32)Local_Player + 292);
+												float* Local_Origin = (float*)((unsigned __int32)Local_Player + 292);
 
 												float* Entity_Origin = (float*)((unsigned __int32)Entity + 292);
 
@@ -317,7 +315,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 													(__int8)(Identifier == 270 ? *(void**)((unsigned __int32)Entity + 8040) == *(void**)((unsigned __int32)Local_Player + 376) : 0),
 
-													__builtin_powf(Local_Player_Origin[0] - Entity_Origin[0], 2.f) + __builtin_powf(Local_Player_Origin[1] - Entity_Origin[1], 2.f) + __builtin_powf(Local_Player_Origin[2] - Entity_Origin[2], 2.f),
+													__builtin_powf(Local_Origin[0] - Entity_Origin[0], 2.f) + __builtin_powf(Local_Origin[1] - Entity_Origin[1], 2.f) + __builtin_powf(Local_Origin[2] - Entity_Origin[2], 2.f),
 
 													(__int32)(Time / Global_Variables->Interval_Per_Tick + 0.5f)
 												};
@@ -656,11 +654,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 													float Hitbox_Center[3]
 													{
-														(Hitbox_Minimum[0] + Hitbox_Maximum[0]) / 2,
+														(Hitbox_Minimum[0] + Hitbox_Maximum[0]) / 2.f,
 
-														(Hitbox_Minimum[1] + Hitbox_Maximum[1]) / 2,
+														(Hitbox_Minimum[1] + Hitbox_Maximum[1]) / 2.f,
 
-														(Hitbox_Minimum[2] + Hitbox_Maximum[2]) / 2
+														(Hitbox_Minimum[2] + Hitbox_Maximum[2]) / 2.f
 													};
 
 													float Target_Origin[3] =
@@ -696,7 +694,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 													{
 														Command->Tick_Number = Target->Tick_Number;
 
-														Byte_Manager::Copy_Bytes(0, Command->Angles, sizeof(Angles), Angles);
+														Byte_Manager::Copy_Bytes(1, Command->Angles, sizeof(Angles), Angles);
 
 														Command->Buttons |= 1;
 
@@ -763,7 +761,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 			Command->Buttons &= ~Block_Buttons;
 
-			Byte_Manager::Copy_Bytes(0, Command->Move, sizeof(Previous_Move), Previous_Move);
+			Byte_Manager::Copy_Bytes(1, Command->Move, sizeof(Previous_Move), Previous_Move);
 
 			Correct_Movement();
 

@@ -6,7 +6,7 @@ void Redirected_Send_Move()
 
 		void Construct(__int8* Data, unsigned __int32 Size)
 		{
-			Byte_Manager::Set_Bytes(0, Message, sizeof(Message), 0);
+			Byte_Manager::Set_Bytes(1, Message, sizeof(Message), 0);
 
 			*(void**)Message = (void*)((unsigned __int32)Engine_Module + 3501364);
 
@@ -64,7 +64,7 @@ void Redirected_Send_Move()
 
 	*(__int32*)((unsigned __int32)Network_Channel + 28) -= Extra_Commands_Queue;
 
-	using Send_Network_Message_Type = void(__thiscall**)(void* Network_Channel, void* Message, void* Unknown_Parameter_1, void* Unknown_Parameter_2);
+	using Send_Message_Type = void(__thiscall**)(void* Network_Channel, void* Message, void* Unknown_Parameter_1, void* Unknown_Parameter_2);
 
-	(*Send_Network_Message_Type(*(unsigned __int32*)Network_Channel + 164))(Network_Channel, &Message, nullptr, nullptr);
+	(*Send_Message_Type(*(unsigned __int32*)Network_Channel + 164))(Network_Channel, &Message, nullptr, nullptr);
 }
