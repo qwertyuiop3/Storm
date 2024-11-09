@@ -161,16 +161,11 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 
 				GetConsoleScreenBufferInfo(Standard_Output_Handle, &Console_Screen_Buffer_Information);
 
-				COORD Top_Left =
-				{
-					0,
+				COORD Top_Left = { };
 
-					0
-				};
+				DWORD Characters_Written;
 
-				DWORD Characters_Written_Count;
-
-				FillConsoleOutputAttribute(Standard_Output_Handle, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY | BACKGROUND_BLUE, Console_Screen_Buffer_Information.dwSize.X * Console_Screen_Buffer_Information.dwSize.Y, Top_Left, &Characters_Written_Count);
+				FillConsoleOutputAttribute(Standard_Output_Handle, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY | BACKGROUND_BLUE, Console_Screen_Buffer_Information.dwSize.X * Console_Screen_Buffer_Information.dwSize.Y, Top_Left, &Characters_Written);
 
 				Engine_Module = GetModuleHandleW(L"engine.dll");
 

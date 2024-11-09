@@ -75,13 +75,13 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 		static float Previous_Move_Angle_Y;
 
-		if ((Command->Buttons & 2) == 2)
+		if ((Command->Buttons & 2) + *(__int8*)((unsigned __int32)Local_Player + 324) == 4)
 		{
 			Command->Move[0] = 0;
 
 			if (*(__int32*)((unsigned __int32)Local_Player + 316) == -1)
 			{
-				Command->Buttons &= ~(*(__int8*)((unsigned __int32)Local_Player + 324) & 2);
+				Command->Buttons &= ~2;
 			}
 			else
 			{
