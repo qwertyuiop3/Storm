@@ -209,26 +209,19 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 
 				_putws(L"[ + ] Prediction");
 				{
-					auto Add_Prediction_Fields = [](Prediction_Descriptor_Structure* Descriptor, Prediction_Field_Structure* Fields, __int32 Size) -> void
-					{
-						Prediction_Descriptor_Structure* Original_Descriptor = (Prediction_Descriptor_Structure*)malloc(sizeof(Prediction_Descriptor_Structure));
+					static Prediction_Descriptor_Structure Original_Prediction_Descriptor;
 
-						Byte_Manager::Copy_Bytes(1, Original_Descriptor, sizeof(Prediction_Descriptor_Structure), Descriptor);
+					Prediction_Descriptor_Structure* Prediction_Descriptor = (Prediction_Descriptor_Structure*)((unsigned __int32)Client_Module + 7290836);
 
-						Descriptor->Fields = Fields;
+					Byte_Manager::Copy_Bytes(0, &Original_Prediction_Descriptor, sizeof(Prediction_Descriptor_Structure), Prediction_Descriptor);
 
-						Descriptor->Size = Size;
+					static Prediction_Field_Structure Prediction_Fields = { 1, (char*)"m_fMaxSpread", 3340, 1, { }, sizeof(float) };
 
-						Descriptor->Parent = Original_Descriptor;
-					};
+					Prediction_Descriptor->Fields = &Prediction_Fields;
 
-					static Prediction_Field_Structure Player_Fields = { 5, (char*)(*(unsigned __int32*)((unsigned __int32)GetModuleHandleW(L"vphysics.dll") + 1701868) + 2226), 16, 1, { }, sizeof(__int32) };
+					Prediction_Descriptor->Size = sizeof(Prediction_Fields) / sizeof(Prediction_Field_Structure);
 
-					Add_Prediction_Fields((Prediction_Descriptor_Structure*)((unsigned __int32)Client_Module + 7236480), &Player_Fields, sizeof(Player_Fields) / sizeof(Prediction_Field_Structure));
-
-					static Prediction_Field_Structure Weapon_Fields = { 1, (char*)"m_fMaxSpread", 3340, 1, { }, sizeof(float) };
-
-					Add_Prediction_Fields((Prediction_Descriptor_Structure*)((unsigned __int32)Client_Module + 7290836), &Weapon_Fields, sizeof(Weapon_Fields) / sizeof(Prediction_Field_Structure));
+					Prediction_Descriptor->Parent = &Original_Prediction_Descriptor;
 
 					Original_Spawn_Grenade_Caller = Redirection_Manager::Redirect_Function(2, (void*)((unsigned __int32)Client_Module + 2227424), (void*)Redirected_Spawn_Grenade);
 

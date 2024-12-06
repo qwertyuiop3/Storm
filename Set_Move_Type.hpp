@@ -1,4 +1,4 @@
-void __cdecl Redirected_Set_Move_Type(void* Input, void* Output)
+void Redirected_Set_Move_Type(void* Input, void* Output)
 {
 	if (*(__int8*)((unsigned __int32)Output + 324) == 0)
 	{

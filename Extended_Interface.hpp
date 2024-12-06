@@ -50,7 +50,7 @@ void Implement_Extended_Interface()
 
 	#define Pointer_Name(Interface) &Interface, (char*)#Interface + 10
 
-	Create_Interface(Pointer_Name(Interface_Extra_Commands), (char*)"4", nullptr);
+	Create_Interface(Pointer_Name(Interface_Extra_Commands), (char*)"5", nullptr);
 
 	Create_Interface(Pointer_Name(Interface_Interpolate_Extra_Commands), (char*)"1", nullptr);
 

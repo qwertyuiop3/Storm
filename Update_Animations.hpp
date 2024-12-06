@@ -1,8 +1,21 @@
+struct Global_Variables_Structure
+{
+    __int8 Additional_Bytes_1[12];
+
+    float Current_Time;
+
+    float Frame_Time;
+
+    __int8 Additional_Bytes_2[8];
+
+    float Interval_Per_Tick;
+};
+
 float Update_Animation_Time;
 
 __int8 Update_Animation_Type;
 
-void __cdecl Redirected_Update_Animations()
+void Redirected_Update_Animations()
 {
     Global_Variables_Structure* Global_Variables = *(Global_Variables_Structure**)((unsigned __int32)Client_Module + 7096744);
 

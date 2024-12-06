@@ -329,7 +329,7 @@ void __thiscall Perform_Trace(void* Stack)
 
 void* Original_Perform_Trace_Caller;
 
-void __declspec(naked) Redirected_Perform_Trace()
+__attribute__((naked)) void Redirected_Perform_Trace()
 {
 	asm("pushal");
 	asm("movl %esp, %ecx");

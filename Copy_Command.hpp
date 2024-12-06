@@ -45,21 +45,30 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 	if (Extra_Commands == -1)
 	{
+		*(float*)((unsigned __int32)Local_Player + 16) = Global_Variables->Interval_Per_Tick;
+
 		*(__int32*)((unsigned __int32)Local_Player + 20) = Command->Command_Number;
 
-		void* Prediction_Frame = *(void**)((unsigned __int32)Local_Player + 1500);
-
-		if (Prediction_Frame != nullptr)
+		if ((Command->Buttons & 524288) == 524288)
 		{
-			if ((Command->Buttons & 524288) == 524288)
-			{
-				Extended_Command->Extra_Commands = max(0, Extra_Commands = std::clamp(Interface_Extra_Commands.Integer, (__int32)(0.06f / Global_Variables->Interval_Per_Tick + 0.5f), 14));
+			Extended_Command->Extra_Commands = max(0, Extra_Commands = std::clamp(Interface_Extra_Commands.Integer, (__int32)(0.06f / Global_Variables->Interval_Per_Tick + 0.5f), 14));
 
-				*(__int32*)Prediction_Frame = min(*(__int32*)Prediction_Frame + 1, Extended_Command->Extra_Commands * Interface_Interpolate_Extra_Commands.Integer);
-			}
-			else
+			*(float*)((unsigned __int32)Local_Player + 16) *= 1.f + Extended_Command->Extra_Commands;
+		}
+
+		__int32 Variable_Number = 0;
+
+		Traverse_Variables_Label:
+		{
+			void* Variable = *(void**)(*(unsigned __int32*)((unsigned __int32)Local_Player + 24) + Variable_Number * 12 + 8);
+
+			*(float*)((unsigned __int32)Variable + 36) = *(float*)((unsigned __int32)Local_Player + 16);
+
+			Variable_Number += 1;
+
+			if (Variable_Number != *(__int32*)((unsigned __int32)Local_Player + 36))
 			{
-				*(__int32*)Prediction_Frame = max(0, *(__int32*)Prediction_Frame - 1);
+				goto Traverse_Variables_Label;
 			}
 		}
 	}
@@ -79,7 +88,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 		{
 			Command->Move[0] = 0;
 
-			if (*(__int32*)((unsigned __int32)Local_Player + 316) == -1)
+			if (*(void**)((unsigned __int32)Local_Player + 316) == INVALID_HANDLE_VALUE)
 			{
 				Command->Buttons &= ~2;
 			}
@@ -533,7 +542,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 											{
 												if (Weapon_Identifier == 153)
 												{
-													if (*(float*)((unsigned __int32)Weapon + 3392) + *(float*)((unsigned __int32)Weapon + 3396) != 0)
+													if (*(double*)((unsigned __int32)Weapon + 3392) != 0.)
 													{
 														Compensate_Burst = 1;
 
@@ -685,9 +694,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 													{
 														__builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180.f / 3.1415927f,
 
-														__builtin_atan2f(Direction[1], Direction[0]) * 180.f / 3.1415927f,
-
-														0
+														__builtin_atan2f(Direction[1], Direction[0]) * 180.f / 3.1415927f
 													};
 
 													if (Perform_Trace(Angles) == 1)
