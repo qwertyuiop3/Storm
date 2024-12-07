@@ -217,7 +217,7 @@ void __thiscall Redirected_Paint(void* Panel)
 
 					{ 121, { { 255, 255, 255 }, (wchar_t*)L"Pain" } },
 
-					{ 232, { { 0, 255, 0 }, (wchar_t*)L"Survivor" } },
+					{ 232, { { 0, 255, 0 } } },
 
 					{ 256, { { 255, 255, 255 }, (wchar_t*)L"Ammo" } },
 
@@ -237,6 +237,13 @@ void __thiscall Redirected_Paint(void* Panel)
 				};
 
 				Paint_Data_Structure* Paint_Data = &Paint_Data_List[Target->Identifier];
+
+				if (Target->Identifier == 232)
+				{
+					static wchar_t* Survivors[8] = { (wchar_t*)L"Nick", (wchar_t*)L"Rochelle", (wchar_t*)L"Coach", (wchar_t*)L"Ellis", (wchar_t*)L"Bill", (wchar_t*)L"Zoey", (wchar_t*)L"Francis", (wchar_t*)L"Louis" };
+
+					Paint_Data->Name = Survivors[*(__int32*)((unsigned __int32)Target->Self + 7308)];
+				}
 
 				__int8 Ghost = 0;
 
