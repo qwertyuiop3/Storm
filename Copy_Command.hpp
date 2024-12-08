@@ -237,6 +237,8 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 		}
 		else
 		{
+			*(__int32*)((unsigned __int32)Local_Player + 5324) -= Extended_Commands[*(__int32*)((unsigned __int32)Local_Player + 20) % 150].Extra_Commands ^ Extended_Command->Extra_Commands;
+
 			if ((*(float*)((unsigned __int32)Local_Player + 4604) + 800.f * Global_Variables->Interval_Per_Tick >= 560.f) + *(__int8*)((unsigned __int32)Local_Player + 8068) + *(__int8*)((unsigned __int32)Local_Player + 9708) != 0)
 			{
 				Sequence_Shift(2);
@@ -514,7 +516,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							if (Cancelable_Shove != 0)
 							{
-								__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (*(__int32*)((unsigned __int32)Weapon + 2436) > 0 - Is_Melee * 2) * (*(float*)((unsigned __int32)Local_Player + 3872) <= Global_Variables->Current_Time);
+								__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (*(__int32*)((unsigned __int32)Weapon + 2436) > 0 - Is_Melee * 2) * (*(__int8*)((unsigned __int32)Weapon + 2493) ^ 1) * (*(float*)((unsigned __int32)Local_Player + 3872) <= Global_Variables->Current_Time);
 
 								if (Reviving + (Weapon_Identifier == 96) + (Can_Attack ^ 1) == 0)
 								{
