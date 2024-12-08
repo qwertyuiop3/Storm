@@ -185,13 +185,15 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 		Correct_Movement();
 
+		Extended_Command_Structure* Initial_Extended_Command = &Extended_Commands[*(__int32*)((unsigned __int32)Local_Player + 20) % 150];
+
 		void* Network_Channel = *(void**)(*(unsigned __int32*)((unsigned __int32)Engine_Module + 4352236) + 24);
 
 		auto Sequence_Shift = [&](__int32 Reserve) -> void
 		{
-			if (Extended_Commands[*(__int32*)((unsigned __int32)Local_Player + 20) % 150].Sequence_Shift == 0)
+			if (Initial_Extended_Command->Sequence_Shift == 0)
 			{
-				__int32 Sequence_Shift = (*(__int32*)((unsigned __int32)Local_Player + 5324) + ~-150) / 150 * 150 + (Reserve * 150);
+				__int32 Sequence_Shift = (*(__int32*)((unsigned __int32)Local_Player + 5324) - Extended_Command->Extra_Commands + ~-150) / 150 * 150 + (Reserve * 150);
 
 				if (Sequence_Shift > 0)
 				{
@@ -233,7 +235,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 				}
 			}
 
-			Extended_Command->Sequence_Shift = Extended_Commands[*(__int32*)((unsigned __int32)Local_Player + 20) % 150].Sequence_Shift;
+			Extended_Command->Sequence_Shift = Initial_Extended_Command->Sequence_Shift;
 		}
 		else
 		{
@@ -242,7 +244,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 				Sequence_Shift(2);
 			}
 
-			Extended_Command->Sequence_Shift = Extended_Commands[*(__int32*)((unsigned __int32)Local_Player + 20) % 150].Sequence_Shift;
+			Extended_Command->Sequence_Shift = Initial_Extended_Command->Sequence_Shift;
 
 			void* Prediction = (void*)((unsigned __int32)Client_Module + 8072728);
 
@@ -514,7 +516,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							if (Cancelable_Shove != 0)
 							{
-								__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (*(__int32*)((unsigned __int32)Weapon + 2436) > 0 - Is_Melee * 2) * (*(float*)((unsigned __int32)Local_Player + 3872) <= Global_Variables->Current_Time);
+								__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (*(__int32*)((unsigned __int32)Weapon + 2436) > 0 - Is_Melee * 2) * (*(__int8*)((unsigned __int32)Weapon + 2493) ^ 1) * (*(float*)((unsigned __int32)Local_Player + 3872) <= Global_Variables->Current_Time);
 
 								if (Reviving + (Weapon_Identifier == 96) + (Can_Attack ^ 1) == 0)
 								{
