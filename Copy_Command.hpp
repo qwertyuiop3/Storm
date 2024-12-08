@@ -53,7 +53,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 		{
 			Extended_Command->Extra_Commands = max(0, Extra_Commands = std::clamp(Interface_Extra_Commands.Integer, (__int32)(0.06f / Global_Variables->Interval_Per_Tick + 0.5f), 14));
 
-			*(float*)((unsigned __int32)Local_Player + 16) *= 1.f + Extended_Command->Extra_Commands;
+			*(float*)((unsigned __int32)Local_Player + 16) *= 1.f + Extended_Command->Extra_Commands * Interface_Interpolate_Extra_Commands.Integer;
 		}
 
 		__int32 Variable_Number = 0;
