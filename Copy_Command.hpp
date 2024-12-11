@@ -379,6 +379,8 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							size_t Target_Number = 0;
 
+							__int8 Reloading = *(__int8*)((unsigned __int32)Weapon + 2493);
+
 							using Get_Weapon_Data_Type = void*(__thiscall*)(void* Weapon);
 
 							void* Weapon_Data = Get_Weapon_Data_Type((unsigned __int32)Client_Module + 86432)(Weapon);
@@ -411,7 +413,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 									__int8 Forced = 0;
 
-									if ((*(__int8*)((unsigned __int32)Weapon + 2493) + Is_Melee) * (Action + Reviving ^ 1) != 0)
+									if ((Reloading + (*(__int32*)((unsigned __int32)Weapon + 2476) == 1276) + Is_Melee) * (Action + Reviving ^ 1) != 0)
 									{
 										if ((Target->Identifier ^ 72) % 348 >= 72)
 										{
@@ -516,7 +518,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							if (Cancelable_Shove != 0)
 							{
-								__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (*(__int32*)((unsigned __int32)Weapon + 2436) > 0 - Is_Melee * 2) * (*(__int8*)((unsigned __int32)Weapon + 2493) ^ 1) * (*(float*)((unsigned __int32)Local_Player + 3872) <= Global_Variables->Current_Time);
+								__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (*(__int32*)((unsigned __int32)Weapon + 2436) > 0 - Is_Melee * 2) * (Reloading ^ 1) * (*(float*)((unsigned __int32)Local_Player + 3872) <= Global_Variables->Current_Time);
 
 								if (Reviving + (Weapon_Identifier == 96) + (Can_Attack ^ 1) == 0)
 								{
