@@ -13,15 +13,20 @@ struct Target_Structure
 
 std::vector<Target_Structure> Sorted_Target_List;
 
+void* Get_Studio_Header(void* Entity)
+{
+	using Get_Studio_Header_Type = void*(__thiscall*)(void* Entity);
+
+	return Get_Studio_Header_Type((unsigned __int32)Client_Module + 8512)(Entity);
+}
+
 void* Get_Hitbox_Set(Target_Structure* Target, float(*Bones)[3][4], float Time)
 {
 	using Setup_Bones_Type = __int8(__thiscall*)(void* Entity, void* Bones, __int32 Maximum_Bones, __int32 Mask, float Current_Time);
 
 	if (Setup_Bones_Type((unsigned __int32)Client_Module + 246656)((void*)((unsigned __int32)Target->Self + 4), Bones, 128, 524032, Time) == 1)
 	{
-		using Get_Studio_Header_Type = void*(__thiscall*)(void* Entity);
-
-		void* Studio_Header = *(void**)Get_Studio_Header_Type((unsigned __int32)Client_Module + 8512)(Target->Self);
+		void* Studio_Header = *(void**)Get_Studio_Header(Target->Self);
 
 		return (void*)((unsigned __int32)Studio_Header + *(__int32*)((unsigned __int32)Studio_Header + 176));
 	}
@@ -381,11 +386,25 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							__int8 Reloading = *(__int8*)((unsigned __int32)Weapon + 2493);
 
+							using Get_Sequence_Duration_Type = float(__thiscall*)(void* Entity, void* Studio_Header, __int32 Sequence);
+
+							using Select_Sequence_Type = __int32(__thiscall*)(void* Entity, __int32 Activity);
+
+							using Get_Deploy_Activity_Type = __int32(__thiscall**)(void* Weapon);
+
+							using Translate_Activity_Type = __int32(__thiscall**)(void* Weapon, __int32 Activity);
+
+							__int8 Holstering = min(*(float*)((unsigned __int32)Local_Player + 3872), *(float*)((unsigned __int32)Weapon + 2412)) + Get_Sequence_Duration_Type((unsigned __int32)Client_Module + 180400)(Weapon, Get_Studio_Header(Weapon), Select_Sequence_Type((unsigned __int32)Client_Module + 202896)(Weapon, (*Translate_Activity_Type(*(unsigned __int32*)Weapon + 1692))(Weapon, (*Get_Deploy_Activity_Type(*(unsigned __int32*)Weapon + 1600))(Weapon)))) > Global_Variables->Current_Time;
+
 							using Get_Weapon_Data_Type = void*(__thiscall*)(void* Weapon);
 
 							void* Weapon_Data = Get_Weapon_Data_Type((unsigned __int32)Client_Module + 86432)(Weapon);
 
 							__int8 Is_Melee = *(__int32*)((unsigned __int32)Weapon_Data + 352) * (*(__int32*)((unsigned __int32)Weapon_Data + 348) ^ 1) <= 1;
+
+							__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (*(__int32*)((unsigned __int32)Weapon + 2436) > 0 - Is_Melee * 2) * (Reloading ^ 1) * (*(float*)((unsigned __int32)Local_Player + 3872) <= Global_Variables->Current_Time);
+
+							Holstering *= Can_Attack ^ 1;
 
 							__int8 Action = *(__int32*)((unsigned __int32)Local_Player + 7080) != 0;
 
@@ -413,7 +432,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 									__int8 Forced = 0;
 
-									if ((Reloading + (*(__int32*)((unsigned __int32)Weapon + 2476) == 1276) + Is_Melee) * (Action + Reviving ^ 1) != 0)
+									if ((Reloading + Holstering + Is_Melee) * (Action + Reviving ^ 1) != 0)
 									{
 										if ((Target->Identifier ^ 72) % 348 >= 72)
 										{
@@ -518,8 +537,6 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							if (Cancelable_Shove != 0)
 							{
-								__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (*(__int32*)((unsigned __int32)Weapon + 2436) > 0 - Is_Melee * 2) * (Reloading ^ 1) * (*(float*)((unsigned __int32)Local_Player + 3872) <= Global_Variables->Current_Time);
-
 								if (Reviving + (Weapon_Identifier == 96) + (Can_Attack ^ 1) == 0)
 								{
 									Target_Structure* Aim_Target = nullptr;
