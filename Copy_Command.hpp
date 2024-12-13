@@ -271,7 +271,9 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 			if ((*(__int32*)((unsigned __int32)Local_Player + 324) & 9) == 0)
 			{
-				if ((*(__int32*)((unsigned __int32)Local_Player + 5020) & 32) == 0)
+				__int8 Action = *(__int32*)((unsigned __int32)Local_Player + 7080) != 0;
+
+				if ((*(__int32*)((unsigned __int32)Local_Player + 5020) & 32) * (Action ^ 1) == 0)
 				{
 					using Can_Attack_Type = __int8(__thiscall*)(void* Player);
 
@@ -406,8 +408,6 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							Holstering *= Can_Attack ^ 1;
 
-							__int8 Action = *(__int32*)((unsigned __int32)Local_Player + 7080) != 0;
-
 							__int8 Reviving = *(void**)((unsigned __int32)Local_Player + 8076) != INVALID_HANDLE_VALUE;
 
 							__int32 Weapon_Identifier = Get_Identifier(Weapon, 1, 0);
@@ -423,6 +423,8 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 							__int8 Cancelable_Shove = 1 + (*(float*)((unsigned __int32)Local_Player + 7336) < Global_Variables->Current_Time);
 
 							Target_Structure* Shove_Target = nullptr;
+
+							//td: timing condition
 
 							Shove_Traverse_Sorted_Target_List_Label:
 							{
@@ -477,13 +479,13 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 													Perform_Trace_Target = Target->Self;
 
-													Perform_Trace_Damage = 0;
+													Perform_Trace_Damage = 0.f;
 
 													Perform_Shove_Trace((unsigned __int32)Client_Module + 3220512)(Weapon, Direction);
 
 													Perform_Trace_Target = nullptr;
 
-													if (Perform_Trace_Damage == 1)
+													if (Perform_Trace_Damage == 1.f)
 													{
 														if (Action == 0)
 														{
@@ -616,7 +618,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 														Perform_Trace_Target = Target->Self;
 
-														Perform_Trace_Damage = 0;
+														Perform_Trace_Damage = 0.f;
 
 														void* Previous_Audio_Device = *(void**)((unsigned __int32)Engine_Module + 5050008);
 
@@ -650,7 +652,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 														*(__int32*)((unsigned __int32)Weapon_Data + 2520) = Bullets;
 
-														return (Perform_Trace_Damage >= Interface_Penetration_Damage.Floating_Point) * (Perform_Trace_Damage != 0);
+														return (Perform_Trace_Damage >= Interface_Penetration_Damage.Floating_Point) * (Perform_Trace_Damage != 0.f);
 													};
 
 													static std::unordered_map<__int32, __int32> Hitboxes =

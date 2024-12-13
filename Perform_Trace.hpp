@@ -37,6 +37,10 @@ void __thiscall Perform_Trace(void* Stack)
 
 			if (*(__int32*)((unsigned __int32)Entity + 228) == *(__int32*)((unsigned __int32)Local_Player + 228))
 			{
+				Perform_Trace_Target = nullptr;
+
+				Perform_Trace_Damage = 0.f;
+
 				return;
 			}
 		}
@@ -68,7 +72,7 @@ void __thiscall Perform_Trace(void* Stack)
 		{
 			if (Interface_Penetration_Damage.Integer == 0)
 			{
-				Perform_Trace_Damage = 1;
+				Perform_Trace_Damage = 1.f;
 			}
 			else
 			{
