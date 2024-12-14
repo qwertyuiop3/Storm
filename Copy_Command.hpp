@@ -251,6 +251,8 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 			Extended_Command->Sequence_Shift = Initial_Extended_Command->Sequence_Shift;
 
+			*(__int32*)((unsigned __int32)Local_Player + 5620) = Command->Command_Number;
+
 			void* Prediction = (void*)((unsigned __int32)Client_Module + 8072728);
 
 			*(__int8*)((unsigned __int32)Prediction + 8) = 1;
@@ -388,16 +390,6 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							__int8 Reloading = *(__int8*)((unsigned __int32)Weapon + 2493);
 
-							using Get_Sequence_Duration_Type = float(__thiscall*)(void* Entity, void* Studio_Header, __int32 Sequence);
-
-							using Select_Sequence_Type = __int32(__thiscall*)(void* Entity, __int32 Activity);
-
-							using Get_Deploy_Activity_Type = __int32(__thiscall**)(void* Weapon);
-
-							using Translate_Activity_Type = __int32(__thiscall**)(void* Weapon, __int32 Activity);
-
-							__int8 Holstering = min(*(float*)((unsigned __int32)Local_Player + 3872), *(float*)((unsigned __int32)Weapon + 2412)) + Get_Sequence_Duration_Type((unsigned __int32)Client_Module + 180400)(Weapon, Get_Studio_Header(Weapon), Select_Sequence_Type((unsigned __int32)Client_Module + 202896)(Weapon, (*Translate_Activity_Type(*(unsigned __int32*)Weapon + 1692))(Weapon, (*Get_Deploy_Activity_Type(*(unsigned __int32*)Weapon + 1600))(Weapon)))) > Global_Variables->Current_Time;
-
 							using Get_Weapon_Data_Type = void*(__thiscall*)(void* Weapon);
 
 							void* Weapon_Data = Get_Weapon_Data_Type((unsigned __int32)Client_Module + 86432)(Weapon);
@@ -406,13 +398,9 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (*(__int32*)((unsigned __int32)Weapon + 2436) > 0 - Is_Melee * 2) * (Reloading ^ 1) * (*(float*)((unsigned __int32)Local_Player + 3872) <= Global_Variables->Current_Time);
 
-							Holstering *= Can_Attack ^ 1;
-
 							__int8 Reviving = *(void**)((unsigned __int32)Local_Player + 8076) != INVALID_HANDLE_VALUE;
 
 							__int32 Weapon_Identifier = Get_Identifier(Weapon, 1, 0);
-
-							__int8 Is_Cold_Melee = Weapon_Identifier == 231;
 
 							using Get_Eye_Position_Type = void(__thiscall*)(void* Entity, float* Eye_Position);
 
@@ -424,115 +412,128 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							Target_Structure* Shove_Target = nullptr;
 
-							//td: timing condition
+							if (Cancelable_Shove + (*(float*)((unsigned __int32)Weapon + 2400) == *(float*)((unsigned __int32)Weapon + 2404)) > 1)
+							{		
+								using Get_Sequence_Duration_Type = float(__thiscall*)(void* Entity, void* Studio_Header, __int32 Sequence);
 
-							Shove_Traverse_Sorted_Target_List_Label:
-							{
-								if (Target_Number != Sorted_Target_List.size())
+								using Select_Sequence_Type = __int32(__thiscall*)(void* Entity, __int32 Activity);
+
+								using Get_Deploy_Activity_Type = __int32(__thiscall**)(void* Weapon);
+
+								using Translate_Activity_Type = __int32(__thiscall**)(void* Weapon, __int32 Activity);
+
+								__int8 Holstering = (min(*(float*)((unsigned __int32)Local_Player + 3872), *(float*)((unsigned __int32)Weapon + 2412)) + Get_Sequence_Duration_Type((unsigned __int32)Client_Module + 180400)(Weapon, Get_Studio_Header(Weapon), Select_Sequence_Type((unsigned __int32)Client_Module + 202896)(Weapon, (*Translate_Activity_Type(*(unsigned __int32*)Weapon + 1692))(Weapon, (*Get_Deploy_Activity_Type(*(unsigned __int32*)Weapon + 1600))(Weapon)))) > Global_Variables->Current_Time) * (Can_Attack ^ 1);
+
+								__int8 Is_Cold_Melee = Weapon_Identifier == 231;
+
+								Shove_Traverse_Sorted_Target_List_Label:
 								{
-									Target_Structure* Target = &Sorted_Target_List.at(Target_Number);
-
-									__int8 Forced = 0;
-
-									if ((Reloading + Holstering + Is_Melee) * (Action + Reviving ^ 1) != 0)
+									if (Target_Number != Sorted_Target_List.size())
 									{
-										if ((Target->Identifier ^ 72) % 348 >= 72)
+										Target_Structure* Target = &Sorted_Target_List.at(Target_Number);
+
+										__int8 Forced = 0;
+
+										if ((Reloading + Holstering + Is_Melee * (Weapon_Identifier * (Command->Buttons & 1) != 39)) * (Action + Reviving ^ 1) != 0)
 										{
-											Forced = 1;
-
-											goto Shove_Label;
-										}
-									}
-
-									if (((270 - Is_Cold_Melee - (*(__int8*)((unsigned __int32)Local_Player + 8070) ^ 1) - Target->Identifier) ^ Target->Identifier - 263) > 0)
-									{
-										Shove_Label:
-										{
-											__int8 Infected = (Target->Identifier == 264) * (Forced ^ 1);
-
-											__int32 Gender = *(__int32*)((unsigned __int32)Target->Self + 52);
-
-											if ((Infected ^ 1) + (Gender == 15) != 0)
+											if ((Target->Identifier ^ 72) % 348 >= 72)
 											{
-												using Get_Sequence_Name_Type = char*(__thiscall*)(void* Entity, __int32 Sequence);
+												Forced = 1;
 
-												if (__builtin_strstr(Get_Sequence_Name_Type((unsigned __int32)Client_Module + 203392)(Target->Self, *(__int32*)((unsigned __int32)Target->Self + 2212)), "hove") == nullptr)
+												goto Shove_Label;
+											}
+										}
+
+										if (((270 - Is_Cold_Melee - (*(__int8*)((unsigned __int32)Local_Player + 8070) ^ 1) - Target->Identifier) ^ Target->Identifier - 263) > 0)
+										{
+											Shove_Label:
+											{
+												__int8 Infected = (Target->Identifier == 264) * (Forced ^ 1);
+
+												__int32 Gender = *(__int32*)((unsigned __int32)Target->Self + 52);
+
+												if ((Infected ^ 1) + (Gender == 15) != 0)
 												{
-													using Perform_Shove_Trace = __int8(__thiscall*)(void* Weapon, float* Direction);
+													using Get_Sequence_Name_Type = char*(__thiscall*)(void* Entity, __int32 Sequence);
 
-													float* Target_Origin = Get_Center(Target->Self);
-
-													float Direction[3] =
+													if (__builtin_strstr(Get_Sequence_Name_Type((unsigned __int32)Client_Module + 203392)(Target->Self, *(__int32*)((unsigned __int32)Target->Self + 2212)), "hove") == nullptr)
 													{
-														Target_Origin[0] - Eye_Position[0],
+														using Perform_Shove_Trace = __int8(__thiscall*)(void* Weapon, float* Direction);
 
-														Target_Origin[1] - Eye_Position[1],
+														float* Target_Origin = Get_Center(Target->Self);
 
-														Target_Origin[2] - Eye_Position[2]
-													};
-
-													Vector_Normalize(Direction);
-
-													*(float*)((unsigned __int32)Weapon + 2724) = 75.f;
-
-													*(__int32*)((unsigned __int32)Weapon + 3248) = 0;
-
-													Perform_Trace_Target = Target->Self;
-
-													Perform_Trace_Damage = 0.f;
-
-													Perform_Shove_Trace((unsigned __int32)Client_Module + 3220512)(Weapon, Direction);
-
-													Perform_Trace_Target = nullptr;
-
-													if (Perform_Trace_Damage == 1.f)
-													{
-														if (Action == 0)
+														float Direction[3] =
 														{
-															Command->Tick_Number = Target->Tick_Number;
+															Target_Origin[0] - Eye_Position[0],
 
-															Command->Angles[0] = __builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180.f / 3.1415927f;
+															Target_Origin[1] - Eye_Position[1],
 
-															Command->Angles[1] = __builtin_atan2f(Direction[1], Direction[0]) * 180.f / 3.1415927f;
+															Target_Origin[2] - Eye_Position[2]
+														};
 
-															if (Cancelable_Shove == 1)
+														Vector_Normalize(Direction);
+
+														*(float*)((unsigned __int32)Weapon + 2724) = 75.f;
+
+														*(__int32*)((unsigned __int32)Weapon + 3248) = 0;
+
+														Perform_Trace_Target = Target->Self;
+
+														Perform_Trace_Damage = 0.f;
+
+														Perform_Shove_Trace((unsigned __int32)Client_Module + 3220512)(Weapon, Direction);
+
+														Perform_Trace_Target = nullptr;
+
+														if (Perform_Trace_Damage == 1.f)
+														{
+															if (Action == 0)
 															{
-																float Shove_Multiplier = min((Global_Variables->Current_Time - *(float*)((unsigned __int32)Weapon + 2704) + *(float*)((unsigned __int32)Weapon + 2700)) / *(float*)((unsigned __int32)Weapon + 2700), 1.f);
+																Command->Tick_Number = Target->Tick_Number;
 
-																Command->Angles[1] += -45.f * Shove_Multiplier + 45.f * (1.f - Shove_Multiplier);
+																Command->Angles[0] = __builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180.f / 3.1415927f;
+
+																Command->Angles[1] = __builtin_atan2f(Direction[1], Direction[0]) * 180.f / 3.1415927f;
+
+																if (Cancelable_Shove == 1)
+																{
+																	float Shove_Multiplier = min((Global_Variables->Current_Time - *(float*)((unsigned __int32)Weapon + 2704) + *(float*)((unsigned __int32)Weapon + 2700)) / *(float*)((unsigned __int32)Weapon + 2700), 1.f);
+
+																	Command->Angles[1] += -45.f * Shove_Multiplier + 45.f * (1.f - Shove_Multiplier);
+																}
+																else
+																{
+																	Command->Angles[1] += 45.f;
+																}
+
+																Command->Buttons |= 2048;
+
+																Block_Buttons = 1;
+
+																Cancelable_Shove = (Gender * Interface_Riot_Deprioritize.Integer * (Forced ^ 1)) == 15;
+
+																*(float*)((unsigned __int32)Target->Self + 16) = Get_Target_Time(Target);
+
+																goto Shove_Found_Target_Label;
 															}
-															else
-															{
-																Command->Angles[1] += 45.f;
-															}
 
-															Command->Buttons |= 2048;
-
-															Block_Buttons = 1;
-
-															Cancelable_Shove = (Gender * Interface_Riot_Deprioritize.Integer * (Forced ^ 1)) == 15;
-
-															*(float*)((unsigned __int32)Target->Self + 16) = Get_Target_Time(Target);
+															Cancelable_Shove = 0;
 
 															goto Shove_Found_Target_Label;
 														}
-
-														Cancelable_Shove = 0;
-
-														goto Shove_Found_Target_Label;
 													}
 												}
 											}
 										}
-									}
 
-									Target_Number += 1;
+										Target_Number += 1;
 
-									goto Shove_Traverse_Sorted_Target_List_Label;
+										goto Shove_Traverse_Sorted_Target_List_Label;
 
-									Shove_Found_Target_Label:
-									{
-										Shove_Target = Target;
+										Shove_Found_Target_Label:
+										{
+											Shove_Target = Target;
+										}
 									}
 								}
 							}

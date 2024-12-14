@@ -35,7 +35,6 @@ void Redirected_Move(float Unknown_Parameter, __int8 Final)
 	{
 		(decltype(&Redirected_Move)(Original_Move_Caller))(Unknown_Parameter, Final);
 
-		//td: reprediction timing
 		Run_Prediction_Type((unsigned __int32)Engine_Module + 527776)();
 
 		if (Extra_Commands > 0)
