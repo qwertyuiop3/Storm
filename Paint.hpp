@@ -77,7 +77,7 @@ void __thiscall Redirected_Paint(void* Panel)
 		{
 			Target_Structure* Target = &Sorted_Target_List.at(Target_Number);
 
-			float Bounds[4] = { __builtin_inff(), -__builtin_inff(), __builtin_inff(),  -__builtin_inff()};
+			float Bounds[4] = { __builtin_inff(), -__builtin_inff(), __builtin_inff(), -__builtin_inff()};
 
 			auto Get_Bounds = [&]() -> __int8
 			{
@@ -121,10 +121,10 @@ void __thiscall Redirected_Paint(void* Panel)
 
 								Hitbox_Vertices[7][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Maximum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Maximum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Maximum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
 
-								if (Axis_Number != 2)
-								{
-									Axis_Number += 1;
+								Axis_Number += 1;
 
+								if (Axis_Number != sizeof(Hitbox_Vertices[0]) / sizeof(float))
+								{
 									goto Initialize_Vertices_Label;
 								}
 							}
@@ -162,10 +162,10 @@ void __thiscall Redirected_Paint(void* Panel)
 									return 0;
 								}
 
-								if (Vertex_Number != 7)
-								{
-									Vertex_Number += 1;
+								Vertex_Number += 1;
 
+								if (Vertex_Number != sizeof(Hitbox_Vertices) / sizeof(Hitbox_Vertices[0]))
+								{
 									goto Transform_Vertices_Label;
 								}
 							}
@@ -252,9 +252,22 @@ void __thiscall Redirected_Paint(void* Panel)
 					Ghost = *(__int8*)((unsigned __int32)Target->Self + 7322);
 				}
 
-				auto Draw_Box = [&](__int32 From_X, __int32 From_Y, __int32 To_X, __int32 To_Y)
+				auto Draw_Box = [&](__int32 From_X, __int32 From_Y, __int32 To_X, __int32 To_Y) -> void
 				{
 					using Set_Color_Type = void(__thiscall**)(void* Surface, unsigned __int8 Red, unsigned __int8 Green, unsigned __int8 Blue, unsigned __int8 Alpha);
+
+					if (Ghost == 0)
+					{
+						(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, (__int32)(Paint_Data->Color[0] / 2.f + 0.5f), (__int32)(Paint_Data->Color[1] / 2.f + 0.5f), (__int32)(Paint_Data->Color[2] / 2.f + 0.5f), 128);
+					}
+					else
+					{
+						(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, 64, 64, 64, 128);
+					}
+
+					using Draw_Filled_Rect_Type = void(__thiscall**)(void* Surface, __int32 From_X, __int32 From_Y, __int32 To_X, __int32 To_Y);
+
+					(*Draw_Filled_Rect_Type(*(unsigned __int32*)Surface + 48))(Surface, From_X + 2, From_Y + 2, To_X - 2, To_Y - 2);
 
 					(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, 0, 0, 0, 255);
 
@@ -274,19 +287,6 @@ void __thiscall Redirected_Paint(void* Panel)
 					}
 
 					(*Draw_Rect_Type(*(unsigned __int32*)Surface + 56))(Surface, From_X, From_Y, To_X, To_Y);
-
-					if (Ghost == 0)
-					{
-						(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, (__int32)(Paint_Data->Color[0] / 2.f + 0.5f), (__int32)(Paint_Data->Color[1] / 2.f + 0.5f), (__int32)(Paint_Data->Color[2] / 2.f + 0.5f), 128);
-					}
-					else
-					{
-						(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, 64, 64, 64, 128);
-					}
-
-					using Draw_Filled_Rect_Type = void(__thiscall**)(void* Surface, __int32 From_X, __int32 From_Y, __int32 To_X, __int32 To_Y);
-
-					(*Draw_Filled_Rect_Type(*(unsigned __int32*)Surface + 48))(Surface, From_X + 2, From_Y + 2, To_X - 2, To_Y - 2);
 				};
 
 				Draw_Box(Bounds[0], Bounds[2], Bounds[1], Bounds[3]);

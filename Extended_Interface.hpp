@@ -15,6 +15,8 @@ Interface_Structure Interface_Interpolate_Extra_Commands;
 
 Interface_Structure Interface_Target_On_Simulation;
 
+Interface_Structure Interface_Shotgun_Shove;
+
 Interface_Structure Interface_Riot_Deprioritize;
 
 Interface_Structure Interface_Penetrate_Teammates;
@@ -55,6 +57,8 @@ void Implement_Extended_Interface()
 	Create_Interface(Pointer_Name(Interface_Interpolate_Extra_Commands), (char*)"1", nullptr);
 
 	Create_Interface(Pointer_Name(Interface_Target_On_Simulation), (char*)"0", nullptr);
+
+	Create_Interface(Pointer_Name(Interface_Shotgun_Shove), (char*)"1", nullptr);
 
 	Create_Interface(Pointer_Name(Interface_Riot_Deprioritize), (char*)"0", nullptr);
 
