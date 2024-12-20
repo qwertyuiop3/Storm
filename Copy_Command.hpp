@@ -289,7 +289,14 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 						}
 						else
 						{
-							__int8 Cancelable_Shove = 1 + (*(float*)((unsigned __int32)Local_Player + 7336) < Global_Variables->Current_Time);
+							__int8 Cancelable_Shove = 1 + (*(float*)((unsigned __int32)Local_Player + 7336) < Global_Variables->Current_Time) * (*(float*)((unsigned __int32)Weapon + 2404) <= Global_Variables->Current_Time);
+
+							__int8 In_Shove = Global_Variables->Current_Time >= *(float*)((unsigned __int32)Local_Player + 7904);
+
+							if (Global_Variables->Current_Time >= *(float*)((unsigned __int32)Weapon + 2704))
+							{
+								In_Shove = *(__int8*)((unsigned __int32)Weapon + 2720);
+							}
 
 							__int32 Weapon_Identifier = Get_Identifier(Weapon, 1, 0);
 
@@ -305,7 +312,8 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							__int8 Reloading = *(__int8*)((unsigned __int32)Weapon + 2493);
 
-							__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (Ammo > 0 - Is_Melee * 2) * (Reloading ^ 1) * (*(float*)((unsigned __int32)Local_Player + 3872) <= Global_Variables->Current_Time);
+							//note: m_flTimeWeaponIdle is used by some weapons (shotguns?, chainsaw) implementing it will fix false nulling of `Holstering`
+							__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (Ammo > 0 - Is_Melee * 2) * (Reloading ^ 1);
 
 							__int32 Entity_Number = 1;
 
@@ -416,8 +424,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							Target_Structure* Shove_Target = nullptr;
 
-							//should be m_flLastShoveTime + z_gun_swing_duration (2704)
-							if (Cancelable_Shove + (*(float*)((unsigned __int32)Weapon + 2400) == *(float*)((unsigned __int32)Weapon + 2404)) > 1)
+							if (Cancelable_Shove + In_Shove > 1)
 							{
 								if (*(__int8*)((unsigned __int32)Local_Player + 8070) * (Weapon_Identifier == 231) == 0)
 								{
