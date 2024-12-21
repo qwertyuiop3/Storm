@@ -223,6 +223,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			}
 		};
 
+		//td: disable clock correction serversidely abusing m_nChokedPackets
 		if (*(__int32*)((unsigned __int32)Local_Player + 228) == 3)
 		{
 			if (*(__int8*)((unsigned __int32)Local_Player + 7322) == 1)
@@ -291,14 +292,31 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 						{
 							__int8 Cancelable_Shove = 1 + (*(float*)((unsigned __int32)Local_Player + 7336) < Global_Variables->Current_Time) * (*(float*)((unsigned __int32)Weapon + 2404) <= Global_Variables->Current_Time);
 
+							__int32 Weapon_Identifier = Get_Identifier(Weapon, 1, 0);
+
+							if ((Weapon_Identifier == 105) + (Weapon_Identifier == 121) != 0)
+							{
+								Cancelable_Shove = min(1 + (*(float*)((unsigned __int32)Weapon + 3312) == -1.f), Cancelable_Shove);
+							}
+							else
+							{
+								if ((129 * (Weapon_Identifier != 120) - Weapon_Identifier ^ Weapon_Identifier - 106) >= 0)
+								{
+									using Is_Grenade_Type = __int8(__thiscall**)(void* Weapon);
+
+									if ((*Is_Grenade_Type(*(unsigned __int32*)Weapon + 1308))(Weapon) == 1)
+									{
+										Cancelable_Shove = min((*(__int16*)((unsigned __int32)Weapon + 3304) == 0) + (*(float*)((unsigned __int32)Weapon + 3308) == 0.f), Cancelable_Shove);
+									}
+								}
+							}
+
 							__int8 In_Shove = Global_Variables->Current_Time >= *(float*)((unsigned __int32)Local_Player + 7904);
 
 							if (Global_Variables->Current_Time >= *(float*)((unsigned __int32)Weapon + 2704))
 							{
 								In_Shove = *(__int8*)((unsigned __int32)Weapon + 2720);
 							}
-
-							__int32 Weapon_Identifier = Get_Identifier(Weapon, 1, 0);
 
 							__int32 Ammo = *(__int32*)((unsigned __int32)Weapon + 2436);
 
@@ -308,12 +326,21 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							void* Weapon_Data = Get_Weapon_Data_Type((unsigned __int32)Client_Module + 86432)(Weapon);
 
-							__int8 Is_Melee = *(__int32*)((unsigned __int32)Weapon_Data + 352) * (*(__int32*)((unsigned __int32)Weapon_Data + 348) ^ 1) <= 1;
+							__int8 Is_Melee = (*(__int32*)((unsigned __int32)Weapon_Data + 352) * (*(__int32*)((unsigned __int32)Weapon_Data + 348) ^ 1) <= 1) * (Weapon_Identifier != 96);
 
 							__int8 Reloading = *(__int8*)((unsigned __int32)Weapon + 2493);
 
-							//note: m_flTimeWeaponIdle is used by some weapons (shotguns?, chainsaw) implementing it will fix false nulling of `Holstering`
-							__int8 Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (Ammo > 0 - Is_Melee * 2) * (Reloading ^ 1);
+							__int8 Can_Attack = (*(__int32*)((unsigned __int32)Weapon + 3368) > 1) * (In_Shove ^ 1); //note: predicted value should be used instead [CChainsaw::ItemPostFrame]
+
+							if (Weapon_Identifier != 39)
+							{
+								Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (Ammo > 0 - Is_Melee * 2) * (Reloading ^ 1);
+
+								if ((*(double*)((unsigned __int32)Weapon + 3392) == 0.) * Weapon_Identifier == 153)
+								{
+									Can_Attack *= *(float*)((unsigned __int32)Weapon + 3400) <= Global_Variables->Current_Time;
+								}
+							}
 
 							__int32 Entity_Number = 1;
 
@@ -443,15 +470,26 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 										}
 									}
 
-									using Get_Sequence_Duration_Type = float(__thiscall*)(void* Entity, void* Studio_Header, __int32 Sequence);
+									__int8 Is_Chainsaw = Weapon_Identifier == 39;
 
-									using Select_Sequence_Type = __int32(__thiscall*)(void* Entity, __int32 Activity);
+									__int8 Holstering = 0;
 
-									using Get_Deploy_Activity_Type = __int32(__thiscall**)(void* Weapon);
+									if (Is_Chainsaw == 0)
+									{
+										using Get_Sequence_Duration_Type = float(__thiscall*)(void* Entity, void* Studio_Header, __int32 Sequence);
 
-									using Translate_Activity_Type = __int32(__thiscall**)(void* Weapon, __int32 Activity);
+										using Select_Sequence_Type = __int32(__thiscall*)(void* Entity, __int32 Activity);
 
-									__int8 Holstering = (min(*(float*)((unsigned __int32)Local_Player + 3872), *(float*)((unsigned __int32)Weapon + 2412)) + Get_Sequence_Duration_Type((unsigned __int32)Client_Module + 180400)(Weapon, Get_Studio_Header(Weapon), Select_Sequence_Type((unsigned __int32)Client_Module + 202896)(Weapon, (*Translate_Activity_Type(*(unsigned __int32*)Weapon + 1692))(Weapon, (*Get_Deploy_Activity_Type(*(unsigned __int32*)Weapon + 1600))(Weapon)))) > Global_Variables->Current_Time) * (Can_Attack ^ 1);
+										using Get_Deploy_Activity_Type = __int32(__thiscall**)(void* Weapon);
+
+										using Translate_Activity_Type = __int32(__thiscall**)(void* Weapon, __int32 Activity);
+
+										Holstering = (min(*(float*)((unsigned __int32)Local_Player + 3872), *(float*)((unsigned __int32)Weapon + 2412)) + Get_Sequence_Duration_Type((unsigned __int32)Client_Module + 180400)(Weapon, Get_Studio_Header(Weapon), Select_Sequence_Type((unsigned __int32)Client_Module + 202896)(Weapon, (*Translate_Activity_Type(*(unsigned __int32*)Weapon + 1692))(Weapon, (*Get_Deploy_Activity_Type(*(unsigned __int32*)Weapon + 1600))(Weapon)))) > Global_Variables->Current_Time) * (Can_Attack ^ 1);
+									}
+									else
+									{
+										Is_Chainsaw = *(__int32*)((unsigned __int32)Weapon + 3368) == 3;
+									}
 
 									Shove_Traverse_Sorted_Target_List_Label:
 									{
@@ -461,7 +499,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 											__int8 Forced = 0;
 
-											if (((Command->Buttons & 2048) + Reloading + Holstering + Is_Melee * (Weapon_Identifier * (Command->Buttons & 1) != 39)) * (Action + Reviving ^ 1) != 0)
+											if (((Command->Buttons & 2048) + Reloading + Holstering + Is_Melee * (Is_Chainsaw ^ 1)) * (Action + Reviving ^ 1) != 0)
 											{
 												if ((Target->Identifier ^ 72) % 348 >= 72)
 												{
@@ -471,7 +509,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 												}
 											}
 
-											if ((270 - Target->Identifier ^ Target->Identifier - 263) > 0)
+											if ((270 - Target->Identifier ^ Target->Identifier - 263) >= 0)
 											{
 												Shove_Label:
 												{
@@ -568,8 +606,10 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							if (Cancelable_Shove != 0)
 							{
-								if (Reviving + (Weapon_Identifier == 96) + (Can_Attack ^ 1) == 0)
+								if (Reviving + (Can_Attack ^ 1) == 0)
 								{
+									Is_Melee += Weapon_Identifier == 96;
+
 									Target_Structure* Aim_Target = nullptr;
 
 									if (Is_Melee == 0)
@@ -594,12 +634,9 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 											{
 												if (Weapon_Identifier == 153)
 												{
-													if (*(double*)((unsigned __int32)Weapon + 3392) != 0.)
-													{
-														Compensate_Burst = 1;
+													Compensate_Burst = *(double*)((unsigned __int32)Weapon + 3392) != 0.;
 
-														Command->Buttons |= 1;
-													}
+													Command->Buttons |= Compensate_Burst;
 												}
 												else
 												{
