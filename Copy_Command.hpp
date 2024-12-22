@@ -223,21 +223,63 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			}
 		};
 
-		//td: disable clock correction serversidely abusing m_nChokedPackets
-		if (*(__int32*)((unsigned __int32)Local_Player + 228) == 3)
+		//td: m_nServerTick should be used inside of Set_Move_Type, on restoration
+		auto Absolute_Speed = [&]() -> void
 		{
-			if (*(__int8*)((unsigned __int32)Local_Player + 7322) == 1)
+			if (Interface_Extra_Commands_Action.Integer > 0)
 			{
-				if (*(__int32*)((unsigned __int32)Local_Player + 7324) == 0)
+				if (Extended_Command == Initial_Extended_Command)
 				{
-					Sequence_Shift(-2);
+					Extended_Command->Extra_Commands = 0;
+
+					Extra_Commands = Interface_Extra_Commands_Action.Integer;
+				}
+
+				if (Initial_Extended_Command->Extra_Commands == 0)
+				{
+					*(float*)((unsigned __int32)Local_Player + 16) = 1.f;
+
+					*(__int32*)((unsigned __int32)Network_Channel + 16) = -1;
+
+					*(__int32*)((unsigned __int32)Network_Channel + 28) = 255;
 				}
 			}
-			else
+		};
+
+		if (*(__int32*)((unsigned __int32)Local_Player + 228) == 3)
+		{
+			if (*(__int8*)((unsigned __int32)Local_Player + 7322) == 0)
 			{
 				if (*(void**)((unsigned __int32)Local_Player + 10008) != INVALID_HANDLE_VALUE)
 				{
 					Sequence_Shift(2);
+				}
+				else
+				{
+					//td: fix prediction errors on jockey
+					if ((*(void**)((unsigned __int32)Local_Player + 10012) != INVALID_HANDLE_VALUE) + (*(void**)((unsigned __int32)Local_Player + 10024) != INVALID_HANDLE_VALUE) + (*(void**)((unsigned __int32)Local_Player + 10056) != INVALID_HANDLE_VALUE) == 0)
+					{
+						void* Ability = *(void**)((unsigned __int32)Client_Module + 7644532 + (((*(unsigned __int32*)((unsigned __int32)Local_Player + 7892) & 4095) - 4097) << 4));
+
+						if (Ability != nullptr)
+						{
+							if (*(__int32*)((unsigned __int32)Ability + 1700) == 3)
+							{
+								Absolute_Speed();
+							}
+						}
+					}
+					else
+					{
+						Absolute_Speed();
+					}
+				}
+			}
+			else
+			{
+				if (*(__int32*)((unsigned __int32)Local_Player + 7324) == 0)
+				{
+					Sequence_Shift(-2);
 				}
 			}
 
@@ -245,9 +287,20 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 		}
 		else
 		{
+			__int8 Action = *(__int32*)((unsigned __int32)Local_Player + 7080) != 0;
+
+			__int8 Reviving = *(void**)((unsigned __int32)Local_Player + 8076) != INVALID_HANDLE_VALUE;
+
 			if ((*(float*)((unsigned __int32)Local_Player + 4604) + 800.f * Global_Variables->Interval_Per_Tick >= 560.f) + *(__int8*)((unsigned __int32)Local_Player + 8068) + *(__int8*)((unsigned __int32)Local_Player + 9708) != 0)
 			{
 				Sequence_Shift(2);
+			}
+			else
+			{
+				if (Action + Reviving != 0)
+				{
+					Absolute_Speed();
+				}
 			}
 
 			Extended_Command->Sequence_Shift = Initial_Extended_Command->Sequence_Shift;
@@ -274,8 +327,6 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 			if ((*(__int32*)((unsigned __int32)Local_Player + 324) & 9) == 0)
 			{
-				__int8 Action = *(__int32*)((unsigned __int32)Local_Player + 7080) != 0;
-
 				if ((*(__int32*)((unsigned __int32)Local_Player + 5020) & 32) * (Action ^ 1) == 0)
 				{
 					using Can_Attack_Type = __int8(__thiscall*)(void* Player);
@@ -440,8 +491,6 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 							std::sort(Sorted_Target_List.begin(), Sorted_Target_List.end(), Target_List_Sort_Finish);
 
 							size_t Target_Number = 0;
-
-							__int8 Reviving = *(void**)((unsigned __int32)Local_Player + 8076) != INVALID_HANDLE_VALUE;
 
 							using Get_Eye_Position_Type = void(__thiscall*)(void* Entity, float* Eye_Position);
 
@@ -863,7 +912,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 			Correct_Movement();
 
-			*(__int8*)((unsigned __int32)__builtin_frame_address(0) + 235) = Extra_Commands <= 0;
+			*(__int8*)((unsigned __int32)__builtin_frame_address(0) + 235) = max(Extra_Commands <= 0, *(__int32*)((unsigned __int32)Network_Channel + 16) == -1);
 		}
 	}
 

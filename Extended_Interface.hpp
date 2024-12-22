@@ -11,6 +11,8 @@ struct Interface_Structure
 
 Interface_Structure Interface_Extra_Commands;
 
+Interface_Structure Interface_Extra_Commands_Action;
+
 Interface_Structure Interface_Interpolate_Extra_Commands;
 
 Interface_Structure Interface_Target_On_Simulation;
@@ -53,6 +55,8 @@ void Implement_Extended_Interface()
 	#define Pointer_Name(Interface) &Interface, (char*)#Interface + 10
 
 	Create_Interface(Pointer_Name(Interface_Extra_Commands), (char*)"5", nullptr);
+
+	Create_Interface(Pointer_Name(Interface_Extra_Commands_Action), (char*)"10", nullptr);
 
 	Create_Interface(Pointer_Name(Interface_Interpolate_Extra_Commands), (char*)"1", nullptr);
 
