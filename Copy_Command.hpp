@@ -237,8 +237,6 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 				if (Initial_Extended_Command->Extra_Commands == 0)
 				{
-					*(float*)((unsigned __int32)Local_Player + 16) = 1.f;
-
 					*(__int32*)((unsigned __int32)Network_Channel + 16) = -1;
 
 					*(__int32*)((unsigned __int32)Network_Channel + 28) = 255;
@@ -250,29 +248,20 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 		{
 			if (*(__int8*)((unsigned __int32)Local_Player + 7322) == 0)
 			{
-				if (*(void**)((unsigned __int32)Local_Player + 10008) != INVALID_HANDLE_VALUE)
+				if (*(void**)((unsigned __int32)Local_Player + 10008) == INVALID_HANDLE_VALUE)
 				{
-					Sequence_Shift(2);
+					__int8 Is_Jockey_Victim = *(void**)((unsigned __int32)Local_Player + 10056) != INVALID_HANDLE_VALUE;
+
+					if ((*(void**)((unsigned __int32)Local_Player + 10012) != INVALID_HANDLE_VALUE) + (*(void**)((unsigned __int32)Local_Player + 10024) != INVALID_HANDLE_VALUE) + Is_Jockey_Victim != 0)
+					{
+						Command->Buttons |= Is_Jockey_Victim * 2;
+
+						Absolute_Speed();
+					}
 				}
 				else
 				{
-					//td: fix prediction errors on jockey
-					if ((*(void**)((unsigned __int32)Local_Player + 10012) != INVALID_HANDLE_VALUE) + (*(void**)((unsigned __int32)Local_Player + 10024) != INVALID_HANDLE_VALUE) + (*(void**)((unsigned __int32)Local_Player + 10056) != INVALID_HANDLE_VALUE) == 0)
-					{
-						void* Ability = *(void**)((unsigned __int32)Client_Module + 7644532 + (((*(unsigned __int32*)((unsigned __int32)Local_Player + 7892) & 4095) - 4097) << 4));
-
-						if (Ability != nullptr)
-						{
-							if (*(__int32*)((unsigned __int32)Ability + 1700) == 3)
-							{
-								Absolute_Speed();
-							}
-						}
-					}
-					else
-					{
-						Absolute_Speed();
-					}
+					Sequence_Shift(2);
 				}
 			}
 			else
@@ -611,6 +600,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 																	if (Cancelable_Shove == 1)
 																	{
+																		//note: may be asynchronous
 																		float Shove_Multiplier = min((Global_Variables->Current_Time - *(float*)((unsigned __int32)Weapon + 2704) + *(float*)((unsigned __int32)Weapon + 2700)) / *(float*)((unsigned __int32)Weapon + 2700), 1.f);
 
 																		Command->Angles[1] += -45.f * Shove_Multiplier + 45.f * (1.f - Shove_Multiplier);

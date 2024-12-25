@@ -14,9 +14,9 @@ void __thiscall Redirected_Write_Texture(void* Unknown_Parameter_1, void* Unknow
 
 		unsigned __int32 Offset_X = Width;
 
-		unsigned __int32 Offset_Y = Height;
-
 		unsigned __int32 Character_Width = 0;
+
+		unsigned __int32 Offset_Y = Height;
 
 		unsigned __int32 Character_Height = 0;
 
@@ -28,11 +28,11 @@ void __thiscall Redirected_Write_Texture(void* Unknown_Parameter_1, void* Unknow
 			{
 				if (*(unsigned __int32*)((unsigned __int32)Texture + X * 4 + Y * 4 * Width) != 0)
 				{
-					Offset_X = min(Offset_X, X);
+					Offset_X = min(X, Offset_X);
 
 					Character_Width = max(Character_Width, X + 1);
 
-					Offset_Y = min(Offset_Y, Y);
+					Offset_Y = min(Y, Offset_Y);
 
 					Character_Height = max(Character_Height, Y + 1);
 				}

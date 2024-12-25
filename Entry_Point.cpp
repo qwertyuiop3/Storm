@@ -300,6 +300,8 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 					Byte_Manager::Set_Bytes(0, (void*)((unsigned __int32)Client_Module + 2930985), 1, 235);
 
 					Redirection_Manager::Redirect_Function(1, (void*)((unsigned __int32)Client_Module + 3118720), (void*)Redirected_Draw_Crosshair);
+
+					//rem: vehicle crosshair
 				}
 			}
 		}
