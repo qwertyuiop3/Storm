@@ -223,7 +223,9 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			}
 		};
 
-		//td: m_nServerTick should be used inside of Set_Move_Type, on restoration
+		static __int32 Accumulative_Correction;
+
+		//td: m_nServerTick should be used inside of Set_Move_Type
 		auto Absolute_Speed = [&]() -> void
 		{
 			if (Interface_Extra_Commands_Action.Integer > 0)
@@ -232,7 +234,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 				{
 					Extended_Command->Extra_Commands = 0;
 
-					Extra_Commands = Interface_Extra_Commands_Action.Integer;
+					Extra_Commands = max((__int32)(0.06f / Global_Variables->Interval_Per_Tick + 0.5f), Interface_Extra_Commands_Action.Integer);
+				}
+				else
+				{
+					Accumulative_Correction += 1;
 				}
 
 				if (Initial_Extended_Command->Extra_Commands == 0)
@@ -242,6 +248,18 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 					*(__int32*)((unsigned __int32)Network_Channel + 28) = 255;
 				}
 			}
+		};
+
+		auto Correct_Extended_Command = [&]() -> void
+		{
+			if (*(__int32*)((unsigned __int32)Network_Channel + 16) != -1)
+			{
+				Extended_Command->Extra_Commands += Accumulative_Correction;
+
+				Accumulative_Correction = 0;
+			}
+
+			Extended_Command->Sequence_Shift = Initial_Extended_Command->Sequence_Shift;
 		};
 
 		if (*(__int32*)((unsigned __int32)Local_Player + 228) == 3)
@@ -272,7 +290,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 				}
 			}
 
-			Extended_Command->Sequence_Shift = Initial_Extended_Command->Sequence_Shift;
+			Correct_Extended_Command();
 		}
 		else
 		{
@@ -286,13 +304,13 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			}
 			else
 			{
-				if (Action + Reviving != 0)
+				if (Action + Reviving != 0) //rem: use predicted values instead? (to preserve clock-corrected timers)
 				{
 					Absolute_Speed();
 				}
 			}
 
-			Extended_Command->Sequence_Shift = Initial_Extended_Command->Sequence_Shift;
+			Correct_Extended_Command();
 
 			*(__int32*)((unsigned __int32)Local_Player + 5620) = Command->Command_Number;
 

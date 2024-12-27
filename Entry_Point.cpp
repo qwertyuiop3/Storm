@@ -196,7 +196,7 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 
 				_putws(L"[ + ] Animations");
 				{
-					Redirection_Manager::Redirect_Function(1, (void*)((unsigned __int32)Client_Module + 205296), (void*)Redirected_Update_Animations);
+					Redirection_Manager::Redirect_Function((void*)((unsigned __int32)Client_Module + 205296), (void*)Redirected_Update_Animations);
 
 					Original_Estimate_Velocity_Caller = Redirection_Manager::Redirect_Function(0, (void*)((unsigned __int32)Client_Module + 311856), (void*)Redirected_Estimate_Velocity);
 
@@ -247,7 +247,7 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 
 					Original_Perform_Shove_Trace_Caller = (void*)((unsigned __int32)Client_Module + 3221111);
 
-					Redirection_Manager::Redirect_Function(1, (void*)((unsigned __int32)Client_Module + 3221102), (void*)Redirected_Perform_Shove_Trace);
+					Redirection_Manager::Redirect_Function((void*)((unsigned __int32)Client_Module + 3221102), (void*)Redirected_Perform_Shove_Trace);
 				}
 
 				_putws(L"[ + ] Network");
@@ -256,7 +256,7 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 
 					Original_Move_Caller = Redirection_Manager::Redirect_Function(3, (void*)((unsigned __int32)Engine_Module + 512288), (void*)Redirected_Move);
 
-					Redirection_Manager::Redirect_Function(1, (void*)((unsigned __int32)Engine_Module + 511680), (void*)Redirected_Send_Move);
+					Redirection_Manager::Redirect_Function((void*)((unsigned __int32)Engine_Module + 511680), (void*)Redirected_Send_Move);
 				}
 
 				_putws(L"[ + ] Input");
@@ -289,19 +289,17 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 				{
 					Original_Write_Texture_Caller = Redirection_Manager::Redirect_Function(0, (void*)((unsigned __int32)GetModuleHandleW(L"vguimatsurface.dll") + 100592), (void*)Redirected_Write_Texture);
 
-					Redirection_Manager::Redirect_Function(1, (void*)((unsigned __int32)Client_Module + 2913504), (void*)Redirected_Paint);
+					Redirection_Manager::Redirect_Function((void*)((unsigned __int32)Client_Module + 2913504), (void*)Redirected_Paint);
 
 					Original_Get_Glow_Color_Caller = Redirection_Manager::Redirect_Function(1, (void*)((unsigned __int32)Client_Module + 2455600), (void*)Redirected_Get_Glow_Color);
 
 					Byte_Manager::Set_Bytes(0, (void*)((unsigned __int32)Client_Module + 3244715), 1, 49);
 
-					Redirection_Manager::Redirect_Function(1, (void*)((unsigned __int32)Client_Module + 2301184), (void*)Redirected_Draw_Crosshair);
+					Redirection_Manager::Redirect_Function((void*)((unsigned __int32)Client_Module + 2301184), (void*)Redirected_Draw_Crosshair);
 
 					Byte_Manager::Set_Bytes(0, (void*)((unsigned __int32)Client_Module + 2930985), 1, 235);
 
-					Redirection_Manager::Redirect_Function(1, (void*)((unsigned __int32)Client_Module + 3118720), (void*)Redirected_Draw_Crosshair);
-
-					//rem: vehicle crosshair
+					Redirection_Manager::Redirect_Function((void*)((unsigned __int32)Client_Module + 3118720), (void*)Redirected_Draw_Crosshair);
 				}
 			}
 		}
