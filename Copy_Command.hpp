@@ -223,9 +223,9 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			}
 		};
 
-		static __int32 Accumulative_Correction;
+		static __int32 Accumulative_Correction; //rem: deviation from clock-corrected tick (not "accumulative correction")
 
-		//td: m_nServerTick should be used inside of Set_Move_Type
+		//rem: extra commands queued with no clock correction applied due to m_PacketDrop induced negation (not "absolute speed")
 		auto Absolute_Speed = [&]() -> void
 		{
 			if (Interface_Extra_Commands_Action.Integer > 0)
@@ -304,7 +304,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			}
 			else
 			{
-				if (Action + Reviving != 0) //rem: use predicted values instead? (to preserve clock-corrected timers)
+				if (Action + Reviving != 0)
 				{
 					Absolute_Speed();
 				}
@@ -352,11 +352,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							__int32 Weapon_Identifier = Get_Identifier(Weapon, 1, 0);
 
-							if ((Weapon_Identifier == 105) + (Weapon_Identifier == 121) != 0)
-							{
-								Cancelable_Shove = min(1 + (*(float*)((unsigned __int32)Weapon + 3312) == -1.f), Cancelable_Shove);
-							}
-							else
+							if ((Weapon_Identifier == 105) + (Weapon_Identifier == 121) == 0)
 							{
 								if ((129 * (Weapon_Identifier != 120) - Weapon_Identifier ^ Weapon_Identifier - 106) >= 0)
 								{
@@ -367,6 +363,10 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 										Cancelable_Shove = min((*(__int16*)((unsigned __int32)Weapon + 3304) == 0) + (*(float*)((unsigned __int32)Weapon + 3308) == 0.f), Cancelable_Shove);
 									}
 								}
+							}
+							else
+							{
+								Cancelable_Shove = min(1 + (*(float*)((unsigned __int32)Weapon + 3312) == -1.f), Cancelable_Shove);
 							}
 
 							__int8 In_Shove = Global_Variables->Current_Time >= *(float*)((unsigned __int32)Local_Player + 7904);
@@ -388,9 +388,19 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							__int8 Reloading = *(__int8*)((unsigned __int32)Weapon + 2493);
 
-							__int8 Can_Attack = (*(__int32*)((unsigned __int32)Weapon + 3368) > 1) * (In_Shove ^ 1); //note: predicted value should be used instead [CChainsaw::ItemPostFrame]
+							__int8 Can_Attack = 0;
 
-							if (Weapon_Identifier != 39)
+							if (Weapon_Identifier == 39)
+							{
+								void* Animation_Overlay = *(void**)((unsigned __int32)Weapon + 3408);
+
+								if (Animation_Overlay != nullptr) //1 tick behind. required until "weapon prediction" (misnomer) is implemented
+								{
+									Can_Attack = *(float*)(*(unsigned __int32*)((unsigned __int32)Animation_Overlay + 2392) + 28) > 0.95f;
+								}
+
+							}
+							else
 							{
 								Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (Ammo > 0 - Is_Melee * 2) * (Reloading ^ 1);
 
@@ -544,7 +554,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 									}
 									else
 									{
-										Is_Chainsaw = *(__int32*)((unsigned __int32)Weapon + 3368) == 3;
+										Is_Chainsaw = Can_Attack * (Command->Buttons & 1);
 									}
 
 									Shove_Traverse_Sorted_Target_List_Label:
