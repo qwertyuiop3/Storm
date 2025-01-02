@@ -9,32 +9,7 @@ __int32 Get_Identifier(void* Entity, __int8 Raw, __int8 Equipment)
 		return Identifier;
 	}
 
-	static std::unordered_set<__int32> Targets =
-	{
-		0,
-
-		13,
-
-		99,
-
-		232,
-
-		263,
-
-		264,
-
-		265,
-
-		270,
-
-		272,
-
-		275,
-
-		276,
-
-		277
-	};
+	static std::unordered_set<__int32> Targets = { 0, 13, 99, 232, 263, 264, 265, 270, 272, 275, 276, 277 };
 
 	if (Targets.contains(Identifier) == 1)
 	{
@@ -93,20 +68,7 @@ __int32 Get_Identifier(void* Entity, __int8 Raw, __int8 Equipment)
 	{
 		if (Equipment == 1)
 		{
-			static std::unordered_set<__int32> Equipment_List =
-			{
-				73,
-
-				105,
-
-				109,
-
-				121,
-
-				256,
-
-				260
-			};
+			static std::unordered_set<__int32> Equipment_List = { 73, 105, 109, 121, 256, 260 };
 
 			if (Equipment_List.contains(Identifier) == 1)
 			{
@@ -144,12 +106,7 @@ void* Original_Estimate_Velocity_Caller;
 
 void __thiscall Redirected_Estimate_Velocity(void* Entity, float* Velocity)
 {
-	static std::unordered_set<__int32> Invalids =
-	{
-		264,
-
-		277
-	};
+	static std::unordered_set<__int32> Invalids = { 264, 277 };
 
 	if (Invalids.contains(Get_Identifier(Entity, 1, 0)) == 1)
 	{
@@ -161,10 +118,6 @@ void __thiscall Redirected_Estimate_Velocity(void* Entity, float* Velocity)
 
 		Calculate_Velocity_Type((unsigned __int32)Client_Module + 290704)(Entity);
 
-		Velocity[0] = *(float*)((unsigned __int32)Entity + 136);
-
-		Velocity[1] = *(float*)((unsigned __int32)Entity + 140);
-
-		Velocity[2] = *(float*)((unsigned __int32)Entity + 144);
+		Byte_Manager::Copy_Bytes(1, Velocity, sizeof(float[3]), (float*)((unsigned __int32)Entity + 136));
 	}
 }

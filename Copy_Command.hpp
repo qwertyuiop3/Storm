@@ -223,18 +223,17 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			}
 		};
 
-		static __int32 Accumulative_Correction; //rem: deviation from clock-corrected tick (not "accumulative correction")
+		static __int32 Accumulative_Correction;
 
-		//rem: extra commands queued with no clock correction applied due to m_PacketDrop induced negation (not "absolute speed")
-		auto Absolute_Speed = [&]() -> void
+		auto Disable_Clock_Correction = [&](__int32 Queue) -> void
 		{
-			if (Interface_Extra_Commands_Action.Integer > 0)
+			if (Queue > 0)
 			{
 				if (Extended_Command == Initial_Extended_Command)
 				{
 					Extended_Command->Extra_Commands = 0;
 
-					Extra_Commands = max((__int32)(0.06f / Global_Variables->Interval_Per_Tick + 0.5f), Interface_Extra_Commands_Action.Integer);
+					Extra_Commands = max((__int32)(0.06f / Global_Variables->Interval_Per_Tick + 0.5f), Queue);
 				}
 				else
 				{
@@ -274,7 +273,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 					{
 						Command->Buttons |= Is_Jockey_Victim * 2;
 
-						Absolute_Speed();
+						Disable_Clock_Correction(Interface_Extra_Commands_Action.Integer);
 					}
 				}
 				else
@@ -306,7 +305,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			{
 				if (Action + Reviving != 0)
 				{
-					Absolute_Speed();
+					Disable_Clock_Correction(Interface_Extra_Commands_Action.Integer);
 				}
 			}
 
@@ -354,14 +353,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							if ((Weapon_Identifier == 105) + (Weapon_Identifier == 121) == 0)
 							{
-								if ((129 * (Weapon_Identifier != 120) - Weapon_Identifier ^ Weapon_Identifier - 106) >= 0)
-								{
-									using Is_Grenade_Type = __int8(__thiscall**)(void* Weapon);
+								static std::unordered_set<__int32> Grenades = { 106, 118, 129 };
 
-									if ((*Is_Grenade_Type(*(unsigned __int32*)Weapon + 1308))(Weapon) == 1)
-									{
-										Cancelable_Shove = min((*(__int16*)((unsigned __int32)Weapon + 3304) == 0) + (*(float*)((unsigned __int32)Weapon + 3308) == 0.f), Cancelable_Shove);
-									}
+								if (Grenades.contains(Weapon_Identifier) == 1)
+								{
+									Cancelable_Shove = min((*(__int16*)((unsigned __int32)Weapon + 3304) == 0) + (*(float*)((unsigned __int32)Weapon + 3308) == 0.f), Cancelable_Shove);
 								}
 							}
 							else
@@ -392,13 +388,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							if (Weapon_Identifier == 39)
 							{
-								void* Animation_Overlay = *(void**)((unsigned __int32)Weapon + 3408);
-
-								if (Animation_Overlay != nullptr) //1 tick behind. required until "weapon prediction" (misnomer) is implemented
-								{
-									Can_Attack = *(float*)(*(unsigned __int32*)((unsigned __int32)Animation_Overlay + 2392) + 28) > 0.95f;
-								}
-
+								Can_Attack = (min(Chainsaw_Cycles * 0.46153846f * Global_Variables->Interval_Per_Tick, 1.f) > 0.95f) * (In_Shove ^ 1);
 							}
 							else
 							{
