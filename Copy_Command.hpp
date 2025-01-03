@@ -293,7 +293,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 		}
 		else
 		{
-			__int8 Action = *(__int32*)((unsigned __int32)Local_Player + 7080) != 0;
+			__int8 Action = *(void**)((unsigned __int32)Local_Player + 7076) == *(void**)((unsigned __int32)Local_Player + 376);
 
 			__int8 Reviving = *(void**)((unsigned __int32)Local_Player + 8076) != INVALID_HANDLE_VALUE;
 
@@ -380,7 +380,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							void* Weapon_Data = Get_Weapon_Data_Type((unsigned __int32)Client_Module + 86432)(Weapon);
 
-							__int8 Is_Melee = (*(__int32*)((unsigned __int32)Weapon_Data + 352) * (*(__int32*)((unsigned __int32)Weapon_Data + 348) ^ 1) <= 1) * (Weapon_Identifier != 96);
+							__int8 Is_Melee = *(__int32*)((unsigned __int32)Weapon_Data + 352) * (*(__int32*)((unsigned __int32)Weapon_Data + 348) ^ 1) <= 1;
 
 							__int8 Reloading = *(__int8*)((unsigned __int32)Weapon + 2493);
 
@@ -618,7 +618,6 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 																	if (Cancelable_Shove == 1)
 																	{
-																		//note: may be asynchronous
 																		float Shove_Multiplier = min((Global_Variables->Current_Time - *(float*)((unsigned __int32)Weapon + 2704) + *(float*)((unsigned __int32)Weapon + 2700)) / *(float*)((unsigned __int32)Weapon + 2700), 1.f);
 
 																		Command->Angles[1] += -45.f * Shove_Multiplier + 45.f * (1.f - Shove_Multiplier);
@@ -665,8 +664,6 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 							{
 								if (Reviving + (Can_Attack ^ 1) == 0)
 								{
-									Is_Melee += Weapon_Identifier == 96;
-
 									Target_Structure* Aim_Target = nullptr;
 
 									if (Is_Melee == 0)
