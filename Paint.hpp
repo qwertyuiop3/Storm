@@ -240,9 +240,9 @@ void __thiscall Redirected_Paint(void* Panel)
 
 				if (Target->Identifier == 232)
 				{
-					static wchar_t* Survivors[8] = { (wchar_t*)L"Bill", (wchar_t*)L"Zoey", (wchar_t*)L"Francis", (wchar_t*)L"Louis", (wchar_t*)L"Nick", (wchar_t*)L"Rochelle", (wchar_t*)L"Coach", (wchar_t*)L"Ellis" };
+					static wchar_t* Survivors[8] = { (wchar_t*)L"Nick", (wchar_t*)L"Rochelle", (wchar_t*)L"Coach", (wchar_t*)L"Ellis", (wchar_t*)L"Bill", (wchar_t*)L"Zoey", (wchar_t*)L"Francis", (wchar_t*)L"Louis" };
 
-					Paint_Data->Name = Survivors[*(__int32*)((unsigned __int32)Target->Self + 52) - 3];
+					Paint_Data->Name = Survivors[*(__int32*)((unsigned __int32)Target->Self + 7308) + 4 * (*(__int32*)((unsigned __int32)Client_Module + 8144624) == 1)];
 				}
 
 				__int8 Ghost = 0;
