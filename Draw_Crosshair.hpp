@@ -64,4 +64,8 @@ void Redirected_Draw_Crosshair()
 	}
 
 	Rotation_Angle = __builtin_remainderf(Rotation_Angle + (*(Global_Variables_Structure**)((unsigned __int32)Client_Module + 7096744))->Frame_Time * Interface_Storm_Speed.Integer, 360.f);
+
+	using Get_Display_Type = void*(__cdecl*)();
+
+	*(__int32*)((unsigned __int32)Get_Display_Type((unsigned __int32)Client_Module + 2930128)() + 400) = 0;
 }
