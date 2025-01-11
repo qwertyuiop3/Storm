@@ -31,7 +31,7 @@ __int32 Get_Identifier(void* Entity, __int8 Raw, __int8 Equipment)
 
 					if (__builtin_strstr(Get_Sequence_Name_Type((unsigned __int32)Client_Module + 203392)(Entity, *(__int32*)((unsigned __int32)Entity + 2212)), "eath") == nullptr)
 					{
-						Valid = 1;
+						Valid = Identifier == 264 ? *(__int8*)((unsigned __int32)Entity + 4493) ^ 1 : 1;
 					}
 				}
 			}

@@ -293,7 +293,7 @@ void __thiscall Perform_Trace(void* Stack)
 			}
 		};
 
-		if (Upgrade_Type + Gender == 17)
+		if ((Upgrade_Type == 2) + (Gender == 15) == 2)
 		{
 			float Inflictor_Direction[3];
 
