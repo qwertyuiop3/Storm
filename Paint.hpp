@@ -313,6 +313,8 @@ void __thiscall Redirected_Paint(void* Panel)
 
 						Draw_Text_Type((unsigned __int32)Engine_Module + 2218736)(Font, 0, 0, 0, 0, 0, 0, Text);
 
+						Write_Character = 0;
+
 						if (Character != L'~')
 						{
 							Character += L'\1';
@@ -365,8 +367,6 @@ void __thiscall Redirected_Paint(void* Panel)
 
 						wchar_t Text[2] = { Paint_Data->Name[Character_Number] };
 
-						Write_Character = Text[0];
-
 						if (Ghost == 0)
 						{
 							Draw_Text_Type((unsigned __int32)Engine_Module + 2218736)(Font, Bounds[1] + 7 + Offset_X - Character_Bounds[0], Bounds[2] + Offset_Y, Paint_Data->Color[0], Paint_Data->Color[1], Paint_Data->Color[2], 255, Text);
@@ -375,8 +375,6 @@ void __thiscall Redirected_Paint(void* Panel)
 						{
 							Draw_Text_Type((unsigned __int32)Engine_Module + 2218736)(Font, Bounds[1] + 7 + Offset_X - Character_Bounds[0], Bounds[2] + Offset_Y, 128, 128, 128, 255, Text);
 						}
-
-						Write_Character = 0;
 
 						Offset_X += Character_Bounds[1] + 1;
 

@@ -270,6 +270,8 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 
 				_putws(L"[ + ] Effects");
 				{
+					Byte_Manager::Set_Bytes(0, (void*)((unsigned __int32)Client_Module + 407384), 1, 133);
+
 					Original_Calculate_View_Caller = Redirection_Manager::Redirect_Function(0, (void*)((unsigned __int32)Client_Module + 132944), (void*)Redirected_Calculate_View);
 
 					Byte_Manager::Set_Bytes(0, (void*)((unsigned __int32)Client_Module + 133424), 1, 235);

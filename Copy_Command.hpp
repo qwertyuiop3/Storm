@@ -114,11 +114,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 				if (__builtin_signbitf(Strafe_Angle) == 0)
 				{
-					Command->Move[1] = -400.f;
+					Command->Move[1] = -450.f;
 				}
 				else
 				{
-					Command->Move[1] = 400.f;
+					Command->Move[1] = 450.f;
 				}
 
 				Move_Angles[1] -= Strafe_Angle;
@@ -127,11 +127,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			{
 				if (__builtin_signbitf(Difference) == 0)
 				{
-					Command->Move[1] = -400.f;
+					Command->Move[1] = -450.f;
 				}
 				else
 				{
-					Command->Move[1] = 400.f;
+					Command->Move[1] = 450.f;
 				}
 			}
 		}
