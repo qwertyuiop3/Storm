@@ -300,6 +300,8 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			if ((*(float*)((unsigned __int32)Local_Player + 4604) + 800.f * Global_Variables->Interval_Per_Tick >= 560.f) + *(__int8*)((unsigned __int32)Local_Player + 8068) + *(__int8*)((unsigned __int32)Local_Player + 9708) != 0)
 			{
 				Sequence_Shift(2);
+
+				Command->Buttons |= 4194304;
 			}
 			else
 			{
