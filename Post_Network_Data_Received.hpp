@@ -87,8 +87,6 @@ void __thiscall Redirected_Post_Network_Data_Received(void* Unknown_Parameter, _
 	{
 		Predicton_Copy.Construct(Local_Player, Prediction_Frame, (void*)Predicton_Copy_Compare);
 
-		Consistent_Time = Commands_Acknowledged > 150;
-
 		using Transfer_Data_Type = __int32(__thiscall*)(Prediction_Copy_Structure* Prediction_Copy, void* Unknown_Parameter, __int32 Entity_Number, Prediction_Descriptor_Structure* Descriptor);
 
 		Transfer_Data_Type((unsigned __int32)Client_Module + 1573744)(&Predicton_Copy, nullptr, -1, (Prediction_Descriptor_Structure*)((unsigned __int32)Client_Module + 7236480));
