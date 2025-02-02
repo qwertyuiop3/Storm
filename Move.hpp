@@ -14,11 +14,11 @@ void Redirected_Move(float Unknown_Parameter, __int8 Final)
 	{
 		Redirected_Read_Packets(Final);
 
+		Local_Player = *(void**)((unsigned __int32)Client_Module + 7498712);
+
 		Run_Prediction_Type((unsigned __int32)Engine_Module + 527776)();
 
-		using Update_Animations_Type = void(__cdecl*)();
-
-		Update_Animations_Type((unsigned __int32)Client_Module + 205296)();
+		Redirected_Update_Animations();
 
 		using Fire_Events_Type = void(__cdecl*)();
 
@@ -28,7 +28,7 @@ void Redirected_Move(float Unknown_Parameter, __int8 Final)
 
 		Update_Animation_Type = 1;
 
-		Update_Animations_Type((unsigned __int32)Client_Module + 205296)();
+		Redirected_Update_Animations();
 
 		Update_Animation_Type = 0;
 	}
