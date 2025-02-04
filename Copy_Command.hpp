@@ -577,9 +577,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 													if ((Infected ^ 1) + (Gender == 15) != 0)
 													{
-														using Get_Sequence_Name_Type = char*(__thiscall*)(void* Entity, __int32 Sequence);
-
-														if (__builtin_strstr(Get_Sequence_Name_Type((unsigned __int32)Client_Module + 203392)(Target->Self, *(__int32*)((unsigned __int32)Target->Self + 2212)), "hove") == nullptr)
+														if (__builtin_strstr(Get_Sequence_Name(Target->Self), "hove") == nullptr)
 														{
 															using Perform_Shove_Trace = __int8(__thiscall*)(void* Weapon, float* Direction);
 

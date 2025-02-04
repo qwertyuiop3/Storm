@@ -1,3 +1,10 @@
+char* Get_Sequence_Name(void* Entity)
+{
+	using Get_Sequence_Name_Type = char*(__thiscall*)(void* Entity, __int32 Sequence);
+
+	return Get_Sequence_Name_Type((unsigned __int32)Client_Module + 203392)(Entity, *(__int32*)((unsigned __int32)Entity + 2212));
+}
+
 __int32 Get_Identifier(void* Entity, __int8 Raw, __int8 Equipment)
 {
 	using Get_Identifier_Type = void*(__cdecl**)();
@@ -27,9 +34,7 @@ __int32 Get_Identifier(void* Entity, __int8 Raw, __int8 Equipment)
 			{
 				if ((*(__int32*)((unsigned __int32)Entity + 572) - 131088 & 255) == 0)
 				{
-					using Get_Sequence_Name_Type = char*(__thiscall*)(void* Entity, __int32 Sequence);
-
-					if (__builtin_strstr(Get_Sequence_Name_Type((unsigned __int32)Client_Module + 203392)(Entity, *(__int32*)((unsigned __int32)Entity + 2212)), "eath") == nullptr)
+					if (__builtin_strstr(Get_Sequence_Name(Entity), "eath") == nullptr)
 					{
 						Valid = Identifier == 264 ? *(__int8*)((unsigned __int32)Entity + 4493) ^ 1 : 1;
 					}

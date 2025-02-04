@@ -285,6 +285,14 @@ void __thiscall Perform_Trace(void* Stack)
 							{
 								Damage = (__int32)(Damage + 1.f * (Damage < 1));
 							}
+
+							if (Identifier == 276)
+							{
+								if (__builtin_strstr(Get_Sequence_Name(Entity), "limb") != nullptr)
+								{
+									Damage = std::clamp(Damage, 0.f, *(__int32*)((unsigned __int32)Entity + 236) - 1.f);
+								}
+							}
 						}
 					}
 				}
