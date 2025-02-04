@@ -290,7 +290,7 @@ void __thiscall Perform_Trace(void* Stack)
 							{
 								if (__builtin_strstr(Get_Sequence_Name(Entity), "limb") != nullptr)
 								{
-									Damage = std::clamp(Damage, 0.f, *(__int32*)((unsigned __int32)Entity + 236) - 1.f);
+									Damage = min(Damage, *(__int32*)((unsigned __int32)Entity + 236) - 1.f);
 								}
 							}
 						}
