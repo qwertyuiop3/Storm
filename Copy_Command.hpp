@@ -343,7 +343,9 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 						if (Can_Attack_Type((unsigned __int32)Client_Module + 2541696)(Local_Player) == 1)
 						{
-							void* Weapon = *(__int8*)((unsigned __int32)Local_Player + 7867) == 0 ? *(void**)((unsigned __int32)Client_Module + 7644532 + (((*(unsigned __int32*)((unsigned __int32)Local_Player + 4228) & 4095) - 4097) << 4)) : nullptr;
+							using Get_Weapon_Type = void*(__thiscall*)(void* Entity);
+
+							void* Weapon = *(__int8*)((unsigned __int32)Local_Player + 7867) == 0 ? Get_Weapon_Type((unsigned __int32)Client_Module + 74304)(Local_Player) : nullptr;
 
 							if (Weapon == nullptr)
 							{
