@@ -16,21 +16,21 @@ __int32 Get_Identifier(void* Entity, __int8 Raw, __int8 Equipment)
 		return Identifier;
 	}
 
-	static std::unordered_set<__int32> Targets = { 0, 13, 99, 232, 263, 264, 265, 270, 272, 275, 276, 277 };
-
-	if (Targets.contains(Identifier) == 1)
+	if (*(__int8*)((unsigned __int32)Entity + 221) == 0)
 	{
-		__int8 Valid = 0;
+		static std::unordered_set<__int32> Targets = { 0, 13, 99, 232, 263, 264, 265, 270, 272, 275, 276, 277 };
 
-		if (Identifier == 13)
+		if (Targets.contains(Identifier) == 1)
 		{
-			*(__int32*)((unsigned __int32)Entity + 228) = 1;
+			__int8 Valid = 0;
 
-			Valid = *(__int8*)((unsigned __int32)Entity + 324) == 5;
-		}
-		else
-		{
-			if (*(__int8*)((unsigned __int32)Entity + 221) == 0)
+			if (Identifier == 13)
+			{
+				*(__int32*)((unsigned __int32)Entity + 228) = 1;
+
+				Valid = *(__int8*)((unsigned __int32)Entity + 324) == 5;
+			}
+			else
 			{
 				if ((*(__int32*)((unsigned __int32)Entity + 572) - 131088 & 255) == 0)
 				{
@@ -40,64 +40,67 @@ __int32 Get_Identifier(void* Entity, __int8 Raw, __int8 Equipment)
 					}
 				}
 			}
-		}
 
-		if (Valid == 1)
-		{
-			if (Identifier * (*(__int32*)((unsigned __int32)Entity + 228) == 3) == 232)
+			if (Valid == 1)
 			{
-				static std::unordered_map<__int32, __int32> Translators =
-				{
-					{ 1, 270 },
-
-					{ 2, 0 },
-
-					{ 3, 263 },
-
-					{ 4, 272 },
-
-					{ 5, 265 },
-
-					{ 6, 99 },
-
-					{ 8, 276 }
-				};
-
-				Identifier = Translators[*(__int32*)((unsigned __int32)Entity + 7312)];
-			}
-
-			return (Identifier - 232) % 43 ? Identifier : 232;
-		}
-	}
-	else
-	{
-		if (Equipment == 1)
-		{
-			static std::unordered_set<__int32> Equipment_List = { 73, 105, 109, 121, 256, 260 };
-
-			if (Equipment_List.contains(Identifier) == 1)
-			{
-				if (Identifier == 260)
+				if (Identifier * (*(__int32*)((unsigned __int32)Entity + 228) == 3) == 232)
 				{
 					static std::unordered_map<__int32, __int32> Translators =
 					{
-						{ 12, 73 },
+						{ 1, 270 },
 
-						{ 15, 121 },
+						{ 2, 0 },
 
-						{ 23, 105 },
+						{ 3, 263 },
 
-						{ 24, 109 }
+						{ 4, 272 },
+
+						{ 5, 265 },
+
+						{ 6, 99 },
+
+						{ 8, 276 }
 					};
 
-					Identifier = Translators[*(__int32*)((unsigned __int32)Entity + 2392)];
+					Identifier = Translators[*(__int32*)((unsigned __int32)Entity + 7312)];
 				}
 
-				if (Identifier != 0)
+				return (Identifier - 232) % 43 ? Identifier : 232;
+			}
+		}
+		else
+		{
+			if (Equipment == 1)
+			{
+				if ((*(__int32*)((unsigned __int32)Entity + 224) & 32) == 0)
 				{
-					if (*(void**)((unsigned __int32)Entity + 312) == INVALID_HANDLE_VALUE)
+					static std::unordered_set<__int32> Equipment_List = { 73, 105, 109, 121, 256, 260 };
+
+					if (Equipment_List.contains(Identifier) == 1)
 					{
-						return -Identifier;
+						if (Identifier == 260)
+						{
+							static std::unordered_map<__int32, __int32> Translators =
+							{
+								{ 12, 73 },
+
+								{ 15, 121 },
+
+								{ 23, 105 },
+
+								{ 24, 109 }
+							};
+
+							Identifier = Translators[*(__int32*)((unsigned __int32)Entity + 2392)];
+						}
+
+						if (Identifier != 0)
+						{
+							if (*(void**)((unsigned __int32)Entity + 312) == INVALID_HANDLE_VALUE)
+							{
+								return -Identifier;
+							}
+						}
 					}
 				}
 			}
