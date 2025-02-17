@@ -250,7 +250,9 @@ void __thiscall Perform_Trace(void* Stack)
 								Damage *= min(Multipliers[Group], 4.f - 2.75f * Is_Shotgun);
 							}
 
-							if (Get_Identifier(Entity, 1, 0) == 99)
+							__int32 Raw_Identifier = Get_Identifier(Entity, 1, 0);
+
+							if (Raw_Identifier == 99)
 							{
 								if (*(__int32*)((unsigned __int32)Entity + 2212) == 5)
 								{
@@ -284,13 +286,13 @@ void __thiscall Perform_Trace(void* Stack)
 							if (Damage != __builtin_inff())
 							{
 								Damage = (__int32)(Damage + 1.f * (Damage < 1));
-							}
 
-							if (Identifier == 276)
-							{
-								if (__builtin_strstr(Get_Sequence_Name(Entity), "limb") != nullptr)
+								if (Raw_Identifier == 276)
 								{
-									Damage = min(Damage, *(__int32*)((unsigned __int32)Entity + 236) - 1.f);
+									if (__builtin_strstr(Get_Sequence_Name(Entity), "limb") != nullptr)
+									{
+										Damage = min(Damage, *(__int32*)((unsigned __int32)Entity + 236) - 1.f);
+									}
 								}
 							}
 						}

@@ -129,29 +129,11 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 
 				HANDLE Standard_Output_Handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
-				CONSOLE_FONT_INFOEX Console_Font_Information;
-
-				Console_Font_Information.cbSize = sizeof(CONSOLE_FONT_INFOEX);
-
-				Console_Font_Information.nFont = 0;
-
-				Console_Font_Information.dwFontSize.X = 0;
-
-				Console_Font_Information.dwFontSize.Y = 12;
-
-				Console_Font_Information.FontFamily = FF_DONTCARE;
-
-				Console_Font_Information.FontWeight = FW_NORMAL;
-
-				wcscpy(Console_Font_Information.FaceName, L"Terminal");
+				CONSOLE_FONT_INFOEX Console_Font_Information = { sizeof(CONSOLE_FONT_INFOEX), 0, { 0, 12 }, FF_DONTCARE, FW_NORMAL, { L"Terminal" } };
 
 				SetCurrentConsoleFontEx(Standard_Output_Handle, 0, &Console_Font_Information);
 
-				CONSOLE_CURSOR_INFO Console_Cursor_Information;
-
-				Console_Cursor_Information.bVisible = 0;
-
-				Console_Cursor_Information.dwSize = sizeof(Console_Cursor_Information);
+				CONSOLE_CURSOR_INFO Console_Cursor_Information = { sizeof(Console_Cursor_Information) };
 
 				SetConsoleTextAttribute(Standard_Output_Handle, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY | BACKGROUND_BLUE);
 
@@ -168,6 +150,11 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 				FillConsoleOutputAttribute(Standard_Output_Handle, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY | BACKGROUND_BLUE, Console_Screen_Buffer_Information.dwSize.X * Console_Screen_Buffer_Information.dwSize.Y, Top_Left, &Characters_Written);
 
 				Engine_Module = GetModuleHandleW(L"engine.dll");
+
+				_putws(L"[ + ] Delimit Interface");
+				{
+					Byte_Manager::Set_Bytes(0, (void*)((unsigned __int32)Engine_Module + 1423205), 1, 235);
+				}
 
 				_putws(L"[ + ] Extend Interface");
 				{
