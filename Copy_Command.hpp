@@ -802,57 +802,60 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 													void* Hitbox = (void*)((unsigned __int32)Hitbox_Set + 12 + Hitboxes[Target->Identifier] * 68);
 
-													float* Hitbox_Minimum = (float*)((unsigned __int32)Hitbox + 8);
-
-													float* Hitbox_Maximum = (float*)((unsigned __int32)Hitbox + 20);
-
-													float Hitbox_Center[3]
+													if (*(__int32*)Hitbox < sizeof(Bones) / sizeof(Bones[0]))
 													{
-														(Hitbox_Minimum[0] + Hitbox_Maximum[0]) / 2.f,
+														float* Hitbox_Minimum = (float*)((unsigned __int32)Hitbox + 8);
 
-														(Hitbox_Minimum[1] + Hitbox_Maximum[1]) / 2.f,
+														float* Hitbox_Maximum = (float*)((unsigned __int32)Hitbox + 20);
 
-														(Hitbox_Minimum[2] + Hitbox_Maximum[2]) / 2.f
-													};
+														float Hitbox_Center[3]
+														{
+															(Hitbox_Minimum[0] + Hitbox_Maximum[0]) / 2.f,
 
-													float Target_Origin[3] =
-													{
-														Bones[*(__int32*)Hitbox][0][0] * Hitbox_Center[0] + Bones[*(__int32*)Hitbox][0][1] * Hitbox_Center[1] + Bones[*(__int32*)Hitbox][0][2] * Hitbox_Center[2] + Bones[*(__int32*)Hitbox][0][3],
+															(Hitbox_Minimum[1] + Hitbox_Maximum[1]) / 2.f,
 
-														Bones[*(__int32*)Hitbox][1][0] * Hitbox_Center[0] + Bones[*(__int32*)Hitbox][1][1] * Hitbox_Center[1] + Bones[*(__int32*)Hitbox][1][2] * Hitbox_Center[2] + Bones[*(__int32*)Hitbox][1][3],
+															(Hitbox_Minimum[2] + Hitbox_Maximum[2]) / 2.f
+														};
 
-														Bones[*(__int32*)Hitbox][2][0] * Hitbox_Center[0] + Bones[*(__int32*)Hitbox][2][1] * Hitbox_Center[1] + Bones[*(__int32*)Hitbox][2][2] * Hitbox_Center[2] + Bones[*(__int32*)Hitbox][2][3]
-													};
+														float Target_Origin[3] =
+														{
+															Bones[*(__int32*)Hitbox][0][0] * Hitbox_Center[0] + Bones[*(__int32*)Hitbox][0][1] * Hitbox_Center[1] + Bones[*(__int32*)Hitbox][0][2] * Hitbox_Center[2] + Bones[*(__int32*)Hitbox][0][3],
 
-													float Direction[3] =
-													{
-														Target_Origin[0] - Eye_Position[0],
+															Bones[*(__int32*)Hitbox][1][0] * Hitbox_Center[0] + Bones[*(__int32*)Hitbox][1][1] * Hitbox_Center[1] + Bones[*(__int32*)Hitbox][1][2] * Hitbox_Center[2] + Bones[*(__int32*)Hitbox][1][3],
 
-														Target_Origin[1] - Eye_Position[1],
+															Bones[*(__int32*)Hitbox][2][0] * Hitbox_Center[0] + Bones[*(__int32*)Hitbox][2][1] * Hitbox_Center[1] + Bones[*(__int32*)Hitbox][2][2] * Hitbox_Center[2] + Bones[*(__int32*)Hitbox][2][3]
+														};
 
-														Target_Origin[2] - Eye_Position[2]
-													};
+														float Direction[3] =
+														{
+															Target_Origin[0] - Eye_Position[0],
 
-													Vector_Normalize(Direction);
+															Target_Origin[1] - Eye_Position[1],
 
-													float Angles[3] =
-													{
-														__builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180.f / 3.1415927f,
+															Target_Origin[2] - Eye_Position[2]
+														};
 
-														__builtin_atan2f(Direction[1], Direction[0]) * 180.f / 3.1415927f
-													};
+														Vector_Normalize(Direction);
 
-													if (Perform_Trace(Angles) == 1)
-													{
-														Command->Tick_Number = Target->Tick_Number;
+														float Angles[3] =
+														{
+															__builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180.f / 3.1415927f,
 
-														Byte_Manager::Copy_Bytes(1, Command->Angles, sizeof(Angles), Angles);
+															__builtin_atan2f(Direction[1], Direction[0]) * 180.f / 3.1415927f
+														};
 
-														Command->Buttons |= 1;
+														if (Perform_Trace(Angles) == 1)
+														{
+															Command->Tick_Number = Target->Tick_Number;
 
-														*(float*)((unsigned __int32)Target->Self + 16) = Get_Target_Time(Target);
+															Byte_Manager::Copy_Bytes(1, Command->Angles, sizeof(Angles), Angles);
 
-														goto Aim_Found_Target_Label;
+															Command->Buttons |= 1;
+
+															*(float*)((unsigned __int32)Target->Self + 16) = Get_Target_Time(Target);
+
+															goto Aim_Found_Target_Label;
+														}
 													}
 												}
 

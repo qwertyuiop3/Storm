@@ -95,84 +95,89 @@ void __thiscall Redirected_Paint(void* Panel)
 						{
 							void* Hitbox = (void*)((unsigned __int32)Hitbox_Set + 12 + Hitbox_Number * 68);
 
-							float* Hitbox_Minimum = (float*)((unsigned __int32)Hitbox + 8);
-
-							float* Hitbox_Maximum = (float*)((unsigned __int32)Hitbox + 20);
-
-							float Hitbox_Vertices[8][3];
-
-							__int32 Axis_Number = 0;
-
-							Initialize_Vertices_Label:
+							if (*(__int32*)Hitbox < sizeof(Bones) / sizeof(Bones[0]))
 							{
-								Hitbox_Vertices[0][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Minimum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Minimum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Minimum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
+								float* Hitbox_Minimum = (float*)((unsigned __int32)Hitbox + 8);
 
-								Hitbox_Vertices[1][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Maximum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Minimum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Minimum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
+								float* Hitbox_Maximum = (float*)((unsigned __int32)Hitbox + 20);
 
-								Hitbox_Vertices[2][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Minimum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Maximum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Minimum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
+								float Hitbox_Vertices[8][3];
 
-								Hitbox_Vertices[3][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Minimum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Minimum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Maximum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
+								__int32 Axis_Number = 0;
 
-								Hitbox_Vertices[4][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Maximum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Maximum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Minimum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
-
-								Hitbox_Vertices[5][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Maximum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Minimum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Maximum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
-
-								Hitbox_Vertices[6][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Minimum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Maximum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Maximum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
-
-								Hitbox_Vertices[7][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Maximum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Maximum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Maximum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
-
-								Axis_Number += 1;
-
-								if (Axis_Number != sizeof(Hitbox_Vertices[0]) / sizeof(float))
+								Initialize_Vertices_Label:
 								{
-									goto Initialize_Vertices_Label;
+									Hitbox_Vertices[0][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Minimum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Minimum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Minimum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
+
+									Hitbox_Vertices[1][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Maximum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Minimum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Minimum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
+
+									Hitbox_Vertices[2][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Minimum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Maximum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Minimum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
+
+									Hitbox_Vertices[3][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Minimum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Minimum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Maximum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
+
+									Hitbox_Vertices[4][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Maximum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Maximum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Minimum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
+
+									Hitbox_Vertices[5][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Maximum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Minimum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Maximum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
+
+									Hitbox_Vertices[6][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Minimum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Maximum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Maximum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
+
+									Hitbox_Vertices[7][Axis_Number] = Bones[*(__int32*)Hitbox][Axis_Number][0] * Hitbox_Maximum[0] + Bones[*(__int32*)Hitbox][Axis_Number][1] * Hitbox_Maximum[1] + Bones[*(__int32*)Hitbox][Axis_Number][2] * Hitbox_Maximum[2] + Bones[*(__int32*)Hitbox][Axis_Number][3];
+
+									Axis_Number += 1;
+
+									if (Axis_Number != sizeof(Hitbox_Vertices[0]) / sizeof(float))
+									{
+										goto Initialize_Vertices_Label;
+									}
 								}
+
+								__int32 Vertex_Number = 0;
+
+								Transform_Vertices_Label:
+								{
+									using Screen_Transform_Type = __int8(__cdecl*)(float* World, float* Screen);
+
+									float Screen[3];
+
+									if (Screen_Transform_Type((unsigned __int32)Client_Module + 1841648)(Hitbox_Vertices[Vertex_Number], Screen) == 0)
+									{
+										using Get_Screen_Size_Type = __int32(__cdecl*)();
+
+										__int32 Screen_Width = Get_Screen_Size_Type((unsigned __int32)Client_Module + 738576)();
+
+										__int32 Screen_Height = Get_Screen_Size_Type((unsigned __int32)Client_Module + 738544)();
+
+										Screen[0] = Screen[0] / 2.f * Screen_Width + Screen_Width / 2.f;
+
+										Screen[1] = -Screen[1] / 2.f * Screen_Height + Screen_Height / 2.f;
+
+										Bounds[0] = min(Bounds[0], Screen[0]);
+
+										Bounds[1] = max(Bounds[1], Screen[0]);
+
+										Bounds[2] = min(Bounds[2], Screen[1]);
+
+										Bounds[3] = max(Bounds[3], Screen[1]);
+									}
+									else
+									{
+										return 0;
+									}
+
+									Vertex_Number += 1;
+
+									if (Vertex_Number != sizeof(Hitbox_Vertices) / sizeof(Hitbox_Vertices[0]))
+									{
+										goto Transform_Vertices_Label;
+									}
+								}
+
+								Hitbox_Number += 1;
+
+								goto Get_Bounds_Label;
 							}
 
-							__int32 Vertex_Number = 0;
-
-							Transform_Vertices_Label:
-							{
-								using Screen_Transform_Type = __int8(__cdecl*)(float* World, float* Screen);
-
-								float Screen[3];
-
-								if (Screen_Transform_Type((unsigned __int32)Client_Module + 1841648)(Hitbox_Vertices[Vertex_Number], Screen) == 0)
-								{
-									using Get_Screen_Size_Type = __int32(__cdecl*)();
-
-									__int32 Screen_Width = Get_Screen_Size_Type((unsigned __int32)Client_Module + 738576)();
-
-									__int32 Screen_Height = Get_Screen_Size_Type((unsigned __int32)Client_Module + 738544)();
-
-									Screen[0] = Screen[0] / 2.f * Screen_Width + Screen_Width / 2.f;
-
-									Screen[1] = -Screen[1] / 2.f * Screen_Height + Screen_Height / 2.f;
-
-									Bounds[0] = min(Bounds[0], Screen[0]);
-
-									Bounds[1] = max(Bounds[1], Screen[0]);
-
-									Bounds[2] = min(Bounds[2], Screen[1]);
-
-									Bounds[3] = max(Bounds[3], Screen[1]);
-								}
-								else
-								{
-									return 0;
-								}
-
-								Vertex_Number += 1;
-
-								if (Vertex_Number != sizeof(Hitbox_Vertices) / sizeof(Hitbox_Vertices[0]))
-								{
-									goto Transform_Vertices_Label;
-								}
-							}
-
-							Hitbox_Number += 1;
-
-							goto Get_Bounds_Label;
+							return 0;
 						}
 					}
 
@@ -242,7 +247,7 @@ void __thiscall Redirected_Paint(void* Panel)
 				{
 					static wchar_t* Survivors[8] = { (wchar_t*)L"Nick", (wchar_t*)L"Rochelle", (wchar_t*)L"Coach", (wchar_t*)L"Ellis", (wchar_t*)L"Bill", (wchar_t*)L"Zoey", (wchar_t*)L"Louis", (wchar_t*)L"Francis" };
 
-					Paint_Data->Name = Survivors[*(__int32*)((unsigned __int32)Target->Self + 7308) + 4 * (*(__int32*)((unsigned __int32)Client_Module + 8144624) == 1)];
+					Paint_Data->Name = Survivors[std::clamp(*(__int32*)((unsigned __int32)Target->Self + 7308), 0, 7) + 4 * (*(__int32*)((unsigned __int32)Client_Module + 8144624) == 1)];
 				}
 
 				__int8 Ghost = 0;
