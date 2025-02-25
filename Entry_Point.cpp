@@ -252,6 +252,8 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 
 					Byte_Manager::Set_Bytes(0, (void*)((unsigned __int32)Client_Module + 417204), 1, 235);
 
+					Byte_Manager::Set_Bytes(0, (void*)((unsigned __int32)Client_Module + 2538675), 1, 255);
+
 					Original_Copy_Command_Caller = Redirection_Manager::Redirect_Function(0, (void*)((unsigned __int32)Client_Module + 1094624), (void*)Redirected_Copy_Command);
 				}
 
