@@ -15,7 +15,9 @@ void __thiscall Redirected_Process_Movement(void* Unknown_Parameter, void* Playe
 
 	if (Get_Identifier(Player, 0, 0) == 272)
 	{
-		void* Ability = *(void**)((unsigned __int32)Client_Module + 7644532 + (((*(unsigned __int32*)((unsigned __int32)Player + 7892) & 4095) - 4097) << 4));
+		using Get_Ability_Type = void*(__thiscall*)(void* Entity);
+
+		void* Ability = Get_Ability_Type((unsigned __int32)Client_Module + 2438560)(Player);
 
 		if (Ability != nullptr)
 		{
