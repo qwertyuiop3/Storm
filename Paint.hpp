@@ -77,13 +77,13 @@ void __thiscall Redirected_Paint(void* Panel)
 		{
 			Target_Structure* Target = &Sorted_Target_List.at(Target_Number);
 
-			float Bounds[4] = { __builtin_inff(), -__builtin_inff(), __builtin_inff(), -__builtin_inff()};
+			float Bounds[4] = { __builtin_inff(), -__builtin_inff(), __builtin_inff(), -__builtin_inff() };
 
 			auto Get_Bounds = [&]() -> __int8
 			{
 				float Bones[128][3][4];
 
-				void* Hitbox_Set = Get_Hitbox_Set(Target, Bones, (*(Global_Variables_Structure**)((unsigned __int32)Client_Module + 7096744))->Current_Time);
+				void* Hitbox_Set = Get_Hitbox_Set(Target, Bones, (*(Global_Variables_Structure**)((unsigned __int32)Client_Module + 7096744))->Time);
 
 				if (Hitbox_Set != nullptr)
 				{

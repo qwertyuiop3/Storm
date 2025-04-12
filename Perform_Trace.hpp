@@ -70,7 +70,7 @@ void __thiscall Perform_Trace(void* Stack)
 
 		auto Compute_Damage = [&]() -> void
 		{
-			if (Interface_Penetration_Damage.Integer == 0)
+			if (Interface_Penetration_Damage.Floating_Point == 0.f)
 			{
 				Perform_Trace_Damage = 1.f;
 			}
@@ -140,7 +140,7 @@ void __thiscall Perform_Trace(void* Stack)
 
 							float Distance = Calculate_Distance_Type((unsigned __int32)Client_Module + 878608)((void*)((unsigned __int32)Local_Player + 540), Bounds);
 
-							if (Distance < 100)
+							if (Distance < 100.f)
 							{
 								Damage += 4.f * Damage * __builtin_powf(1.f - Distance / 100.f, 2.f);
 							}
@@ -164,27 +164,15 @@ void __thiscall Perform_Trace(void* Stack)
 						{
 							Apply_Shotgun_Scaling();
 
-							__int8 Is_Sniper_Rifle = (Bullet_Type - 8) > 0;
+							__int8 Is_Sniper_Rifle = Bullet_Type > 8;
 
 							if (Group == 1)
 							{
 								if (Gender == 14)
 								{
-									auto Is_Neutral = [&]() -> __int8
-									{
-										__int32 Sequence_Activity = *(__int32*)((unsigned __int32)Entity + 4688);
+									static std::unordered_set<__int32> Neutrals = { 563, 567, 592, 600, 648 };
 
-										unsigned __int32 Absolute_Sequence_Activity = Sequence_Activity - 563;
-
-										if (Absolute_Sequence_Activity <= 29)
-										{
-											return (536870929 & (1 << (Absolute_Sequence_Activity & 31))) != 0;
-										}
-
-										return (Sequence_Activity == 600) + (Sequence_Activity == 648);
-									};
-
-									if (Is_Neutral() == 1)
+									if (Neutrals.contains(*(__int32*)((unsigned __int32)Entity + 4688)) == 1)
 									{
 										Damage = __builtin_inff();
 									}
@@ -213,7 +201,7 @@ void __thiscall Perform_Trace(void* Stack)
 										{
 											if (Is_Sniper_Rifle * Realism == 0)
 											{
-												Damage = 450;
+												Damage = 450.f;
 											}
 										}
 										else
@@ -265,7 +253,7 @@ void __thiscall Perform_Trace(void* Stack)
 								{
 									if (*(void**)((unsigned __int32)Entity + 8040) != INVALID_HANDLE_VALUE)
 									{
-										if (Damage > 50)
+										if (Damage > 50.f)
 										{
 											__int8 Competitive = ('v' - Mode[0] ^ Mode[0] - 's') == 3;
 
@@ -285,7 +273,7 @@ void __thiscall Perform_Trace(void* Stack)
 
 							if (Damage != __builtin_inff())
 							{
-								Damage = (__int32)(Damage + 1.f * (Damage < 1));
+								Damage = (__int32)(Damage + 1.f * (Damage < 1.f));
 
 								if (Raw_Identifier == 276)
 								{

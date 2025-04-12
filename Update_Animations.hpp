@@ -2,7 +2,7 @@ struct Global_Variables_Structure
 {
 	__int8 Additional_Bytes_1[12];
 
-	float Current_Time;
+	float Time;
 
 	float Frame_Time;
 
@@ -19,9 +19,9 @@ void Redirected_Update_Animations()
 {
 	Global_Variables_Structure* Global_Variables = *(Global_Variables_Structure**)((unsigned __int32)Client_Module + 7096744);
 
-	float Previous_Current_Time = Global_Variables->Current_Time;
+	float Previous_Time = Global_Variables->Time;
 
-	Global_Variables->Current_Time = Update_Animation_Time;
+	Global_Variables->Time = Update_Animation_Time;
 
 	float Previous_Frame_Time = Global_Variables->Frame_Time;
 
@@ -54,5 +54,5 @@ void Redirected_Update_Animations()
 
 	Global_Variables->Frame_Time = Previous_Frame_Time;
 
-	Global_Variables->Current_Time = Previous_Current_Time;
+	Global_Variables->Time = Previous_Time;
 }

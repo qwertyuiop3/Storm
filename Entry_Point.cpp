@@ -2,8 +2,6 @@
 
 #include <TlHelp32.h>
 
-#include <cstdio>
-
 #include "Byte_Manager/Byte_Manager.hpp"
 
 #include "Redirection_Manager/Redirection_Manager.hpp"
@@ -22,10 +20,6 @@ void* Client_Module;
 
 #include "Update_Animations.hpp"
 
-#include <unordered_set>
-
-#include <unordered_map>
-
 #include "Estimate_Velocity.hpp"
 
 #include "Spawn_Grenade.hpp"
@@ -37,8 +31,6 @@ void* Client_Module;
 #include "Process_Movement.hpp"
 
 #include "Play_Footstep_Sound.hpp"
-
-#include <algorithm>
 
 #include "Finish_Move.hpp"
 
@@ -53,8 +45,6 @@ void* Client_Module;
 #include "Move.hpp"
 
 #include "Send_Move.hpp"
-
-#include <vector>
 
 #include "Copy_Command.hpp"
 
@@ -187,7 +177,7 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 
 					Original_Estimate_Velocity_Caller = Redirection_Manager::Redirect_Function(0, (void*)((unsigned __int32)Client_Module + 311856), (void*)Redirected_Estimate_Velocity);
 
-					unsigned __int8 Maintain_Sequence_Transitions_Bytes[3] = { 194, 24, 0 };
+					unsigned __int8 Maintain_Sequence_Transitions_Bytes[3] = { 194, 24 };
 
 					Byte_Manager::Copy_Bytes(0, (void*)((unsigned __int32)Client_Module + 245232), sizeof(Maintain_Sequence_Transitions_Bytes), Maintain_Sequence_Transitions_Bytes);
 
