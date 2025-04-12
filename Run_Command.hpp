@@ -42,6 +42,6 @@ void __thiscall Redirected_Run_Command(void* Prediction, void* Player, Command_S
 
 		Global_Variables_Structure* Global_Variables = *(Global_Variables_Structure**)((unsigned __int32)Client_Module + 7096744);
 
-		Global_Variables->Current_Time = (*(__int32*)((unsigned __int32)Player + 5324) - 1) * Global_Variables->Interval_Per_Tick;
+		Global_Variables->Time = (*(__int32*)((unsigned __int32)Player + 5324) - 1) * Global_Variables->Interval_Per_Tick;
 	}
 }

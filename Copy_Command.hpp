@@ -22,7 +22,7 @@ void* Get_Studio_Header(void* Entity)
 
 void* Get_Hitbox_Set(Target_Structure* Target, float(*Bones)[3][4], float Time)
 {
-	using Setup_Bones_Type = __int8(__thiscall*)(void* Entity, void* Bones, __int32 Maximum_Bones, __int32 Mask, float Current_Time);
+	using Setup_Bones_Type = __int8(__thiscall*)(void* Entity, void* Bones, __int32 Maximum_Bones, __int32 Mask, float Time);
 
 	if (Setup_Bones_Type((unsigned __int32)Client_Module + 246656)((void*)((unsigned __int32)Target->Self + 4), Bones, 128, 524032, Time) == 1)
 	{
@@ -93,7 +93,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 		if ((Command->Buttons & 2) + *(__int8*)((unsigned __int32)Local_Player + 324) == 4)
 		{
-			Command->Move[0] = 0;
+			Command->Move[0] = 0.f;
 
 			if (*(void**)((unsigned __int32)Local_Player + 316) == INVALID_HANDLE_VALUE)
 			{
@@ -269,11 +269,9 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			{
 				if (*(void**)((unsigned __int32)Local_Player + 10008) == INVALID_HANDLE_VALUE)
 				{
-					__int8 Is_Jockey_Victim = *(void**)((unsigned __int32)Local_Player + 10056) != INVALID_HANDLE_VALUE;
-
-					if ((*(void**)((unsigned __int32)Local_Player + 10012) != INVALID_HANDLE_VALUE) + (*(void**)((unsigned __int32)Local_Player + 10024) != INVALID_HANDLE_VALUE) + Is_Jockey_Victim != 0)
+					if ((*(void**)((unsigned __int32)Local_Player + 10012) != INVALID_HANDLE_VALUE) + (*(void**)((unsigned __int32)Local_Player + 10024) != INVALID_HANDLE_VALUE) + (*(void**)((unsigned __int32)Local_Player + 10056) != INVALID_HANDLE_VALUE) != 0)
 					{
-						Command->Buttons |= Is_Jockey_Victim * 2;
+						Command->Buttons |= (*(void**)((unsigned __int32)Local_Player + 10056) != INVALID_HANDLE_VALUE) * 2;
 
 						Disable_Clock_Correction(Interface_Extra_Commands_Action.Integer);
 					}
@@ -351,7 +349,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 						}
 						else
 						{
-							__int8 Cancelable_Shove = 1 + (*(float*)((unsigned __int32)Local_Player + 7336) < Global_Variables->Current_Time) * (*(float*)((unsigned __int32)Weapon + 2404) <= Global_Variables->Current_Time);
+							__int8 Cancelable_Shove = 1 + (*(float*)((unsigned __int32)Local_Player + 7336) < Global_Variables->Time) * (*(float*)((unsigned __int32)Weapon + 2404) <= Global_Variables->Time);
 
 							__int32 Weapon_Identifier = Get_Identifier(Weapon, 1, 0);
 
@@ -369,9 +367,9 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 								Cancelable_Shove = min(1 + (*(float*)((unsigned __int32)Weapon + 3312) == -1.f), Cancelable_Shove);
 							}
 
-							__int8 In_Shove = Global_Variables->Current_Time >= *(float*)((unsigned __int32)Local_Player + 7904);
+							__int8 In_Shove = Global_Variables->Time >= *(float*)((unsigned __int32)Local_Player + 7904);
 
-							if (Global_Variables->Current_Time >= *(float*)((unsigned __int32)Weapon + 2704))
+							if (Global_Variables->Time >= *(float*)((unsigned __int32)Weapon + 2704))
 							{
 								In_Shove = *(__int8*)((unsigned __int32)Weapon + 2720);
 							}
@@ -396,11 +394,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 							}
 							else
 							{
-								Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Current_Time) * (Ammo > 0 - Is_Melee * 2) * (Reloading ^ 1);
+								Can_Attack = (*(float*)((unsigned __int32)Weapon + 2400) <= Global_Variables->Time) * (Ammo > 0 - Is_Melee * 2) * (Reloading ^ 1);
 
 								if ((*(double*)((unsigned __int32)Weapon + 3392) == 0.) * Weapon_Identifier == 153)
 								{
-									Can_Attack *= *(float*)((unsigned __int32)Weapon + 3400) <= Global_Variables->Current_Time;
+									Can_Attack *= *(float*)((unsigned __int32)Weapon + 3400) <= Global_Variables->Time;
 								}
 							}
 
@@ -482,24 +480,17 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 								}
 							}
 
-							auto Target_List_Sort_Prepare = [](Target_Structure& X, Target_Structure& Y) -> __int8
+							auto Target_List_Sort = [](Target_Structure& X, Target_Structure& Y) -> __int8
 							{
-								return X.Priority < Y.Priority;
-							};
-
-							std::sort(Sorted_Target_List.begin(), Sorted_Target_List.end(), Target_List_Sort_Prepare);
-
-							auto Target_List_Sort_Finish = [](Target_Structure& X, Target_Structure& Y) -> __int8
-							{
-								if (X.Priority > Y.Priority)
+								if (X.Priority == Y.Priority)
 								{
-									return 1;
+									return X.Distance < Y.Distance;
 								}
 
-								return X.Distance < Y.Distance;
+								return X.Priority > Y.Priority;
 							};
 
-							std::sort(Sorted_Target_List.begin(), Sorted_Target_List.end(), Target_List_Sort_Finish);
+							std::sort(Sorted_Target_List.begin(), Sorted_Target_List.end(), Target_List_Sort);
 
 							size_t Target_Number = 0;
 
@@ -544,7 +535,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 										using Get_Deploy_Activity_Type = __int32(__thiscall**)(void* Weapon);
 
-										Holstering = (min(*(float*)((unsigned __int32)Local_Player + 3872), *(float*)((unsigned __int32)Weapon + 2412)) + Get_Sequence_Duration_Type((unsigned __int32)Client_Module + 180400)(Weapon, Get_Studio_Header(Weapon), Select_Sequence_Type((unsigned __int32)Client_Module + 202896)(Weapon, (*Translate_Activity_Type(*(unsigned __int32*)Weapon + 1692))(Weapon, (*Get_Deploy_Activity_Type(*(unsigned __int32*)Weapon + 1600))(Weapon)))) > Global_Variables->Current_Time) * (Can_Attack ^ 1);
+										Holstering = (min(*(float*)((unsigned __int32)Local_Player + 3872), *(float*)((unsigned __int32)Weapon + 2412)) + Get_Sequence_Duration_Type((unsigned __int32)Client_Module + 180400)(Weapon, Get_Studio_Header(Weapon), Select_Sequence_Type((unsigned __int32)Client_Module + 202896)(Weapon, (*Translate_Activity_Type(*(unsigned __int32*)Weapon + 1692))(Weapon, (*Get_Deploy_Activity_Type(*(unsigned __int32*)Weapon + 1600))(Weapon)))) > Global_Variables->Time) * (Can_Attack ^ 1);
 									}
 									else
 									{
@@ -620,7 +611,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 																	if (Cancelable_Shove == 1)
 																	{
-																		float Shove_Multiplier = min((Global_Variables->Current_Time - *(float*)((unsigned __int32)Weapon + 2704) + *(float*)((unsigned __int32)Weapon + 2700)) / *(float*)((unsigned __int32)Weapon + 2700), 1.f);
+																		float Shove_Multiplier = min((Global_Variables->Time - *(float*)((unsigned __int32)Weapon + 2704) + *(float*)((unsigned __int32)Weapon + 2700)) / *(float*)((unsigned __int32)Weapon + 2700), 1.f);
 
 																		Command->Angles[1] += -45.f * Shove_Multiplier + 45.f * (1.f - Shove_Multiplier);
 																	}
@@ -723,7 +714,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 												float Bones[128][3][4];
 
-												void* Hitbox_Set = Get_Hitbox_Set(Target, Bones, Global_Variables->Current_Time);
+												void* Hitbox_Set = Get_Hitbox_Set(Target, Bones, Global_Variables->Time);
 
 												if (Hitbox_Set != nullptr)
 												{
@@ -733,7 +724,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 														__int32 Bullets = *(__int32*)((unsigned __int32)Weapon_Data + 2520);
 
-														if (Interface_Penetration_Damage.Floating_Point == 0)
+														if (Interface_Penetration_Damage.Floating_Point == 0.f)
 														{
 															*(__int32*)((unsigned __int32)Weapon_Data + 2520) = 1;
 														}
