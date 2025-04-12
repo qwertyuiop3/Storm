@@ -1,10 +1,8 @@
 void __thiscall Perform_Shove_Trace(void* Stack)
 {
-	void* Entity = *(void**)((unsigned __int32)Stack + 332);
-
-	if (Entity == Perform_Trace_Target)
+	if (*(void**)((unsigned __int32)Stack + 332) == Perform_Trace_Target)
 	{
-		Perform_Trace_Damage = 1;
+		Perform_Trace_Damage = 1.f;
 	}
 }
 

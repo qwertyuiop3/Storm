@@ -77,7 +77,7 @@ void __thiscall Redirected_Paint(void* Panel)
 		{
 			Target_Structure* Target = &Sorted_Target_List.at(Target_Number);
 
-			float Bounds[4] = { __builtin_inff(), -__builtin_inff(), __builtin_inff(), -__builtin_inff()};
+			float Bounds[4] = { __builtin_inff(), -__builtin_inff(), __builtin_inff(), -__builtin_inff() };
 
 			auto Get_Bounds = [&]() -> __int8
 			{

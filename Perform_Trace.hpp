@@ -70,7 +70,7 @@ void __thiscall Perform_Trace(void* Stack)
 
 		auto Compute_Damage = [&]() -> void
 		{
-			if (Interface_Penetration_Damage.Integer == 0)
+			if (Interface_Penetration_Damage.Floating_Point == 0.f)
 			{
 				Perform_Trace_Damage = 1.f;
 			}
@@ -140,7 +140,7 @@ void __thiscall Perform_Trace(void* Stack)
 
 							float Distance = Calculate_Distance_Type((unsigned __int32)Client_Module + 878608)((void*)((unsigned __int32)Local_Player + 540), Bounds);
 
-							if (Distance < 100)
+							if (Distance < 100.f)
 							{
 								Damage += 4.f * Damage * __builtin_powf(1.f - Distance / 100.f, 2.f);
 							}
@@ -213,7 +213,7 @@ void __thiscall Perform_Trace(void* Stack)
 										{
 											if (Is_Sniper_Rifle * Realism == 0)
 											{
-												Damage = 450;
+												Damage = 450.f;
 											}
 										}
 										else
@@ -265,7 +265,7 @@ void __thiscall Perform_Trace(void* Stack)
 								{
 									if (*(void**)((unsigned __int32)Entity + 8040) != INVALID_HANDLE_VALUE)
 									{
-										if (Damage > 50)
+										if (Damage > 50.f)
 										{
 											__int8 Competitive = ('v' - Mode[0] ^ Mode[0] - 's') == 3;
 
@@ -285,7 +285,7 @@ void __thiscall Perform_Trace(void* Stack)
 
 							if (Damage != __builtin_inff())
 							{
-								Damage = (__int32)(Damage + 1.f * (Damage < 1));
+								Damage = (__int32)(Damage + 1.f * (Damage < 1.f));
 
 								if (Raw_Identifier == 276)
 								{

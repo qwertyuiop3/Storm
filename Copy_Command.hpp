@@ -93,7 +93,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 		if ((Command->Buttons & 2) + *(__int8*)((unsigned __int32)Local_Player + 324) == 4)
 		{
-			Command->Move[0] = 0;
+			Command->Move[0] = 0.f;
 
 			if (*(void**)((unsigned __int32)Local_Player + 316) == INVALID_HANDLE_VALUE)
 			{
@@ -733,7 +733,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 														__int32 Bullets = *(__int32*)((unsigned __int32)Weapon_Data + 2520);
 
-														if (Interface_Penetration_Damage.Floating_Point == 0)
+														if (Interface_Penetration_Damage.Floating_Point == 0.f)
 														{
 															*(__int32*)((unsigned __int32)Weapon_Data + 2520) = 1;
 														}
