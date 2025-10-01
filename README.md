@@ -10,7 +10,8 @@ d3x (for telling me that i don't have to bruteforce prediction frame)
 polak (for strafe deltas)
 ucuser0 (for his post regarding backup commands)
 kamay (for crossproducts of movement)
-deniz (for being friend)
+deniz (for hosting video)
+dr_p3pp3r (for his rediscovery of sequence manipulation)
 
 songs:
 david bowie - art decade

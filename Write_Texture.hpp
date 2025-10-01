@@ -2,31 +2,31 @@ void* Original_Write_Texture_Caller;
 
 wchar_t Write_Character;
 
-std::unordered_map<wchar_t, unsigned __int32[4]> Characters_Bounds;
+std::unordered_map<wchar_t, __int32[4]> Characters_Bounds;
 
-void __thiscall Redirected_Write_Texture(void* Unknown_Parameter_1, void* Unknown_Parameter_2, unsigned __int32 Width, unsigned __int32 Height, void* Texture)
+void __thiscall Redirected_Write_Texture(void* Unknown_Parameter_1, void* Unknown_Parameter_2, __int32 Width, __int32 Height, void* Texture)
 {
 	(decltype(&Redirected_Write_Texture)(Original_Write_Texture_Caller))(Unknown_Parameter_1, Unknown_Parameter_2, Width, Height, Texture);
 
 	if (Write_Character != 0)
 	{
-		unsigned __int32 X = 0;
+		__int32 X = 0;
 
-		unsigned __int32 Offset_X = Width;
+		__int32 Offset_X = Width;
 
-		unsigned __int32 Character_Width = 0;
+		__int32 Character_Width = 0;
 
-		unsigned __int32 Offset_Y = Height;
+		__int32 Offset_Y = Height;
 
-		unsigned __int32 Character_Height = 0;
+		__int32 Character_Height = 0;
 
 		Traverse_Horizontal_Label:
 		{
-			unsigned __int32 Y = 0;
+			__int32 Y = 0;
 
 			Traverse_Vertical_Label:
 			{
-				if (*(unsigned __int32*)((unsigned __int32)Texture + X * 4 + Y * 4 * Width) != 0)
+				if (*(__int32*)((unsigned __int32)Texture + X * 4 + Y * 4 * Width) != 0)
 				{
 					Offset_X = min(X, Offset_X);
 
@@ -53,7 +53,7 @@ void __thiscall Redirected_Write_Texture(void* Unknown_Parameter_1, void* Unknow
 			}
 		}
 
-		unsigned __int32* Character_Bounds = Characters_Bounds[Write_Character];
+		__int32* Character_Bounds = Characters_Bounds[Write_Character];
 
 		Character_Bounds[0] = Offset_X;
 

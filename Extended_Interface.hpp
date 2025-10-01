@@ -60,7 +60,7 @@ void Implement_Extended_Interface()
 
 	Create_Interface(Pointer_Name(Interface_Interpolate_Extra_Commands), (char*)"1", nullptr);
 
-	Create_Interface(Pointer_Name(Interface_Target_On_Simulation), (char*)"0", nullptr);
+	Create_Interface(Pointer_Name(Interface_Target_On_Simulation), (char*)"1", nullptr);
 
 	Create_Interface(Pointer_Name(Interface_Shotgun_Shove), (char*)"1", nullptr);
 
@@ -82,5 +82,5 @@ void Implement_Extended_Interface()
 
 	Create_Interface(Pointer_Name(Interface_Storm_Iterations), (char*)"16", nullptr);
 
-	Create_Interface(Pointer_Name(Interface_Storm_Speed), (char*)"512", nullptr);
+	Create_Interface(Pointer_Name(Interface_Storm_Speed), (char*)"540", nullptr);
 }

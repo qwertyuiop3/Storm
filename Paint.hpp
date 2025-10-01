@@ -331,9 +331,9 @@ void __thiscall Redirected_Paint(void* Panel)
 
 				size_t Character_Number = 0;
 
-				unsigned __int32 Width = 0;
+				__int32 Width = 0;
 
-				unsigned __int32 Height = 0;
+				__int32 Height = 0;
 
 				__int32 Offset_Y = 0;
 
@@ -341,13 +341,13 @@ void __thiscall Redirected_Paint(void* Panel)
 
 				Calculate_Text_Bounds_Label:
 				{
-					unsigned __int32* Character_Bounds = Characters_Bounds[Paint_Data->Name[Character_Number]];
+					__int32* Character_Bounds = Characters_Bounds[Paint_Data->Name[Character_Number]];
 
 					Width += Character_Bounds[1] + 1;
 
 					Height = max(Height, Character_Bounds[3]);
 
-					Offset_Y = max(Offset_Y, 3 - (__int32)Character_Bounds[2]);
+					Offset_Y = max(Offset_Y, 3 - Character_Bounds[2]);
 
 					Character_Number += 1;
 

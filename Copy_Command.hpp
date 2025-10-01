@@ -183,11 +183,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 			Vector_Normalize(Move_Right);
 
-			float Divider = Move_Forward[0] * Move_Right[1] - Move_Right[0] * Move_Forward[1];
+			float Divisor = Move_Forward[0] * Move_Right[1] - Move_Right[0] * Move_Forward[1];
 
-			Command->Move[0] = (Desired_Move[0] * Move_Right[1] - Move_Right[0] * Desired_Move[1]) / Divider;
+			Command->Move[0] = (Desired_Move[0] * Move_Right[1] - Move_Right[0] * Desired_Move[1]) / Divisor;
 
-			Command->Move[1] = (Move_Forward[0] * Desired_Move[1] - Desired_Move[0] * Move_Forward[1]) / Divider;
+			Command->Move[1] = (Move_Forward[0] * Desired_Move[1] - Desired_Move[0] * Move_Forward[1]) / Divisor;
 		};
 
 		Correct_Movement();
@@ -390,7 +390,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 							if (Weapon_Identifier == 39)
 							{
-								Can_Attack = (min(Chainsaw_Cycles * 0.46153846f * Global_Variables->Interval_Per_Tick, 1.f) > 0.95f) * (In_Shove ^ 1);
+								Can_Attack = (min(Chainsaw_Cycle * 0.46153846f * Global_Variables->Interval_Per_Tick, 1.f) > 0.95f) * (In_Shove ^ 1);
 							}
 							else
 							{
@@ -409,6 +409,15 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 							float Interpolation_Time = Get_Interpolation_Time_Type((unsigned __int32)Engine_Module + 594000)();
 
 							Sorted_Target_List.clear();
+
+							struct Target_Time_Structure
+							{
+								float Server[2];
+
+								__int32 Client[2];
+							};
+
+							static std::unordered_map<__int32, Target_Time_Structure> Target_Times;
 
 							auto Get_Target_Time = [&](Target_Structure* Target) -> float
 							{
@@ -453,7 +462,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 													(__int32)(Time / Global_Variables->Interval_Per_Tick + 0.5f)
 												};
 
-												if (*(float*)((unsigned __int32)Entity + 16) != Get_Target_Time(&Target))
+												if (Target_Times[Entity_Number].Server[0] * (Target_Times[Entity_Number].Client[0] + (__int32)(0.5f / Global_Variables->Interval_Per_Tick + 0.5f) > *(__int32*)((unsigned __int32)Engine_Module + 6905340)) != Get_Target_Time(&Target))
 												{
 													if (Identifier == 277)
 													{
@@ -499,6 +508,31 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 							float Eye_Position[3];
 
 							Get_Eye_Position_Type((unsigned __int32)Client_Module + 108512)(Local_Player, Eye_Position);
+
+							auto Set_Target_Time = [&](Target_Structure* Target, __int8 Restore) -> void
+							{
+								Target_Time_Structure* Time = &Target_Times[*(__int32*)((unsigned __int32)Target->Self + 88)];
+
+								if (Restore == 0)
+								{
+									Time->Server[1] = Time->Server[0];
+
+									Time->Client[1] = Time->Client[0];
+
+									if (Time->Server[0] != Get_Target_Time(Target))
+									{
+										Time->Server[0] = Get_Target_Time(Target);
+
+										Time->Client[0] = *(__int32*)((unsigned __int32)Engine_Module + 6905340);
+									}
+								}
+								else
+								{
+									Time->Server[0] = Time->Server[1];
+
+									Time->Client[0] = Time->Client[1];
+								}
+							};
 
 							Target_Structure* Shove_Target = nullptr;
 
@@ -626,7 +660,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 																	Cancelable_Shove = (Gender * Interface_Riot_Deprioritize.Integer * (Forced ^ 1)) == 15;
 
-																	*(float*)((unsigned __int32)Target->Self + 16) = Get_Target_Time(Target);
+																	Set_Target_Time(Target, 0);
 
 																	goto Shove_Found_Target_Label;
 																}
@@ -843,7 +877,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 															Command->Buttons |= 1;
 
-															*(float*)((unsigned __int32)Target->Self + 16) = Get_Target_Time(Target);
+															Set_Target_Time(Target, 0);
 
 															goto Aim_Found_Target_Label;
 														}
@@ -866,11 +900,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 									{
 										if (Shove_Target != nullptr)
 										{
-											*(float*)((unsigned __int32)Shove_Target->Self + 16) = 0.f;
+											Set_Target_Time(Shove_Target, 1);
 
 											if (Aim_Target != nullptr)
 											{
-												*(float*)((unsigned __int32)Aim_Target->Self + 16) = Get_Target_Time(Aim_Target);
+												Set_Target_Time(Aim_Target, 0);
 											}
 										}
 

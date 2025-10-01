@@ -1,6 +1,6 @@
 __int32 Extra_Commands;
 
-__int32 Chainsaw_Cycles;
+__int32 Chainsaw_Cycle;
 
 void* Original_Move_Caller;
 
@@ -24,8 +24,6 @@ void Redirected_Move(float Unknown_Parameter, __int8 Final)
 
 		Fire_Events_Type((unsigned __int32)Engine_Module + 521648)();
 
-		Update_Animation_Time = (*(Global_Variables_Structure**)((unsigned __int32)Client_Module + 7096744))->Time;
-
 		Update_Animation_Type = 1;
 
 		Redirected_Update_Animations();
@@ -43,11 +41,11 @@ void Redirected_Move(float Unknown_Parameter, __int8 Final)
 
 		if (Local_Player != nullptr)
 		{
-			Chainsaw_Cycles += 1 + (Chainsaw_Cycles == 0);
+			Chainsaw_Cycle += 1 + (Chainsaw_Cycle == 0);
 
 			static float Deploy_Time;
 
-			Chainsaw_Cycles *= *(float*)((unsigned __int32)Local_Player + 3872) == Deploy_Time;
+			Chainsaw_Cycle *= *(float*)((unsigned __int32)Local_Player + 3872) == Deploy_Time;
 
 			Deploy_Time = *(float*)((unsigned __int32)Local_Player + 3872);
 		}
