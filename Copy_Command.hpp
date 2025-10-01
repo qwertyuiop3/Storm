@@ -183,11 +183,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 			Vector_Normalize(Move_Right);
 
-			float Divider = Move_Forward[0] * Move_Right[1] - Move_Right[0] * Move_Forward[1];
+			float Divisor = Move_Forward[0] * Move_Right[1] - Move_Right[0] * Move_Forward[1];
 
-			Command->Move[0] = (Desired_Move[0] * Move_Right[1] - Move_Right[0] * Desired_Move[1]) / Divider;
+			Command->Move[0] = (Desired_Move[0] * Move_Right[1] - Move_Right[0] * Desired_Move[1]) / Divisor;
 
-			Command->Move[1] = (Move_Forward[0] * Desired_Move[1] - Desired_Move[0] * Move_Forward[1]) / Divider;
+			Command->Move[1] = (Move_Forward[0] * Desired_Move[1] - Desired_Move[0] * Move_Forward[1]) / Divisor;
 		};
 
 		Correct_Movement();

@@ -82,5 +82,5 @@ void Implement_Extended_Interface()
 
 	Create_Interface(Pointer_Name(Interface_Storm_Iterations), (char*)"16", nullptr);
 
-	Create_Interface(Pointer_Name(Interface_Storm_Speed), (char*)"512", nullptr);
+	Create_Interface(Pointer_Name(Interface_Storm_Speed), (char*)"540", nullptr);
 }
