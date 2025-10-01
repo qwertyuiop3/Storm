@@ -35,7 +35,7 @@ void Redirected_Update_Animations()
 		{
 			void* Animation_List = *(void**)((unsigned __int32)Client_Module + 7479612);
 
-			if ((*(__int8*)((unsigned __int32)Animation_List + 8 * Entity_Number + 4) & 1) != 0)
+			if ((*(__int8*)((unsigned __int32)Animation_List + 8 * Entity_Number + 4) & 1) == 1)
 			{
 				using Update_Animation_Type = void(__thiscall**)(void* Entity);
 

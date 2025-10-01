@@ -156,11 +156,7 @@ void __thiscall Perform_Trace(void* Stack)
 				{
 					if (Identifier == 264)
 					{
-						if ((Upgrade_Type == 1) + (Bullet_Type == 6))
-						{
-							Damage = __builtin_inff();
-						}
-						else
+						if ((Upgrade_Type == 1) + (Bullet_Type == 6) == 0)
 						{
 							Apply_Shotgun_Scaling();
 
@@ -211,6 +207,10 @@ void __thiscall Perform_Trace(void* Stack)
 									}
 								}
 							}
+						}
+						else
+						{
+							Damage = __builtin_inff();
 						}
 					}
 					else
