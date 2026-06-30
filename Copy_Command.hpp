@@ -462,19 +462,33 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 													(__int32)(Time / Global_Variables->Interval_Per_Tick + 0.5f)
 												};
 
-												if (Target_Times[Entity_Number].Server[0] * (Target_Times[Entity_Number].Client[0] + (__int32)(0.5f / Global_Variables->Interval_Per_Tick + 0.5f) > *(__int32*)((unsigned __int32)Engine_Module + 6905340)) != Get_Target_Time(&Target))
+												if (Target.Priority == 0)
 												{
-													if (Identifier == 277)
+													__int8 Dormant = Target_Times[Entity_Number].Server[0] * (Target_Times[Entity_Number].Client[0] + (__int32)(0.5f / Global_Variables->Interval_Per_Tick + 0.5f) > *(__int32*)((unsigned __int32)Engine_Module + 6905340)) == Get_Target_Time(&Target);
+
+													if (Weapon_Identifier * Dormant == 153)
 													{
-														if (*(float*)((unsigned __int32)Entity + 4844) == 1.f)
+														Dormant = ~(Target.Priority = -(*(double*)((unsigned __int32)Weapon + 3392) != 0.));
+													}
+
+													if (Dormant == 0)
+													{
+														if (Identifier == 277)
+														{
+															if (*(float*)((unsigned __int32)Entity + 4844) == 1.f)
+															{
+																Sorted_Target_List.push_back(Target);
+															}
+														}
+														else
 														{
 															Sorted_Target_List.push_back(Target);
 														}
 													}
-													else
-													{
-														Sorted_Target_List.push_back(Target);
-													}
+												}
+												else
+												{
+													Sorted_Target_List.push_back(Target);
 												}
 											}
 										}
