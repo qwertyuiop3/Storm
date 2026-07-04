@@ -82,7 +82,7 @@ void __thiscall Perform_Trace(void* Stack)
 
 				float Damage;
 
-				static void* Calculate_Damage = (void*)((unsigned __int32)GetModuleHandleW(L"server.dll") + 3950416);
+				static void* Calculate_Damage = (void*)((unsigned __int32)GetModuleHandleW(L"server.dll") + 3950592);
 				{
 					asm("movl %0, %%esi" : : "m"(Weapon_Data) : "esi");
 					asm("subl $16, %esp");
@@ -134,11 +134,11 @@ void __thiscall Perform_Trace(void* Stack)
 
 							float Bounds[3];
 
-							Get_Bounds_Type((unsigned __int32)Client_Module + 878528)((void*)((unsigned __int32)Entity + 540), Get_Center(Local_Player), Bounds);
+							Get_Bounds_Type((unsigned __int32)Client_Module + 878608)((void*)((unsigned __int32)Entity + 540), Get_Center(Local_Player), Bounds);
 
 							using Calculate_Distance_Type = float(__thiscall*)(void* Collision, float* Bounds);
 
-							float Distance = Calculate_Distance_Type((unsigned __int32)Client_Module + 878608)((void*)((unsigned __int32)Local_Player + 540), Bounds);
+							float Distance = Calculate_Distance_Type((unsigned __int32)Client_Module + 878688)((void*)((unsigned __int32)Local_Player + 540), Bounds);
 
 							if (Distance < 100.f)
 							{

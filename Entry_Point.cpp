@@ -212,7 +212,7 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 
 					Original_Process_Movement_Caller = Redirection_Manager::Redirect_Function(2, (void*)((unsigned __int32)Client_Module + 2590832), (void*)Redirected_Process_Movement);
 
-					Original_Play_Footstep_Sound_Caller = Redirection_Manager::Redirect_Function(0, (void*)((unsigned __int32)Client_Module + 978464), (void*)Redirected_Play_Footstep_Sound);
+					Original_Play_Footstep_Sound_Caller = Redirection_Manager::Redirect_Function(0, (void*)((unsigned __int32)Client_Module + 978528), (void*)Redirected_Play_Footstep_Sound);
 
 					Original_Finish_Move_Caller = Redirection_Manager::Redirect_Function(2, (void*)((unsigned __int32)Client_Module + 1553264), (void*)Redirected_Finish_Move);
 
@@ -238,13 +238,13 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 
 				_putws(L"[ + ] Input");
 				{
-					Byte_Manager::Set_Bytes(0, (void*)((unsigned __int32)Client_Module + 1250629), 3, 144);
+					Byte_Manager::Set_Bytes(0, (void*)((unsigned __int32)Client_Module + 1250661), 3, 144);
 
 					Byte_Manager::Set_Bytes(0, (void*)((unsigned __int32)Client_Module + 417204), 1, 235);
 
 					Byte_Manager::Set_Bytes(0, (void*)((unsigned __int32)Client_Module + 2538675), 1, 255);
 
-					Original_Copy_Command_Caller = Redirection_Manager::Redirect_Function(0, (void*)((unsigned __int32)Client_Module + 1094624), (void*)Redirected_Copy_Command);
+					Original_Copy_Command_Caller = Redirection_Manager::Redirect_Function(0, (void*)((unsigned __int32)Client_Module + 1094672), (void*)Redirected_Copy_Command);
 				}
 
 				_putws(L"[ + ] Effects");
@@ -257,13 +257,13 @@ __int32 __stdcall DllMain(HMODULE This_Module, unsigned __int32 Call_Reason, voi
 
 					Byte_Manager::Set_Bytes(0, (void*)((unsigned __int32)Client_Module + 2881566), 1, 246);
 
-					Original_Draw_Effect_Caller = Redirection_Manager::Redirect_Function(0, (void*)((unsigned __int32)Client_Module + 1425888), (void*)Redirected_Draw_Effect);
+					Original_Draw_Effect_Caller = Redirection_Manager::Redirect_Function(0, (void*)((unsigned __int32)Client_Module + 1425904), (void*)Redirected_Draw_Effect);
 
 					Byte_Manager::Set_Bytes(0, (void*)((unsigned __int32)Client_Module + 1868237), 1, 52);
 
 					Byte_Manager::Set_Bytes(0, (void*)((unsigned __int32)Client_Module + 2655546), 1, 216);
 
-					*(void**)((unsigned __int32)Client_Module + 8115120) = (void*)((unsigned __int32)Client_Module + 955708);
+					*(void**)((unsigned __int32)Client_Module + 8115120) = (void*)((unsigned __int32)Client_Module + 955756);
 				}
 
 				_putws(L"[ + ] Paint");

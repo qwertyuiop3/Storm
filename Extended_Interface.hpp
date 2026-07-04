@@ -45,7 +45,7 @@ void Implement_Extended_Interface()
 	{
 		using Create_Variable_Type = void(__thiscall*)(Interface_Structure* Interface, char* Name, char* Value, void* Unknown_Parameter_1, void* Unknown_Parameter_2, void* Handler);
 
-		Create_Variable_Type((unsigned __int32)Engine_Module + 2636368)(Interface, Name, Value, nullptr, nullptr, Handler);
+		Create_Variable_Type((unsigned __int32)Engine_Module + 2636592)(Interface, Name, Value, nullptr, nullptr, Handler);
 
 		*(__int32*)((unsigned __int32)Interface + 20) &= ~10;
 

@@ -321,11 +321,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 			using Set_Host_Type = void(__thiscall*)(void* Move_Helper, void* Player);
 
-			Set_Host_Type((unsigned __int32)Client_Module + 1331184)((void*)((unsigned __int32)Client_Module + 7174888), Local_Player);
+			Set_Host_Type((unsigned __int32)Client_Module + 1331216)((void*)((unsigned __int32)Client_Module + 7174888), Local_Player);
 
 			Redirected_Run_Command(Prediction, Local_Player, Command, (void*)((unsigned __int32)Client_Module + 7174888));
 
-			Set_Host_Type((unsigned __int32)Client_Module + 1331184)((void*)((unsigned __int32)Client_Module + 7174888), nullptr);
+			Set_Host_Type((unsigned __int32)Client_Module + 1331216)((void*)((unsigned __int32)Client_Module + 7174888), nullptr);
 
 			*(__int8*)((unsigned __int32)Prediction + 8) = 0;
 
@@ -787,7 +787,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 														*(__int32*)((unsigned __int32)Client_Module + 7075944) = Command->Random_Seed;
 
-														*(__int32*)((unsigned __int32)Client_Module + 7683464) = 1;
+														*(__int8*)((unsigned __int32)Client_Module + 7683464) = 1;
 
 														*(__int32*)((unsigned __int32)Client_Module + 7689576) = 0;
 
@@ -805,7 +805,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 														*(__int32*)((unsigned __int32)Client_Module + 7689576) = 1;
 
-														*(__int32*)((unsigned __int32)Client_Module + 7683464) = 0;
+														*(__int8*)((unsigned __int32)Client_Module + 7683464) = 0;
 
 														*(void**)((unsigned __int32)Engine_Module + 5050008) = Previous_Audio_Device;
 

@@ -60,7 +60,7 @@ void Redirected_Send_Move()
 		}
 	}
 
-	void* Network_Channel = *(void**)(*(unsigned __int32*)((unsigned __int32)Engine_Module + 4352236) + 24);
+	void* Network_Channel = *(void**)((unsigned __int32)Client + 24);
 
 	if (*(__int32*)((unsigned __int32)Network_Channel + 16) != -1)
 	{
