@@ -45,7 +45,7 @@ void __thiscall Redirected_Paint(void* Panel)
 					}
 					else
 					{
-						if (__builtin_sqrtf(Target.Distance) <= Interface_Equipment_Distance.Floating_Point)
+						if (Target.Distance <= __builtin_powf(Interface_Equipment_Distance.Floating_Point, 2.f))
 						{
 							Sorted_Target_List.push_back(Target);
 						}

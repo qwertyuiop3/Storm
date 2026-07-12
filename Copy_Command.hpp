@@ -82,12 +82,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 	{
 		Command->Buttons |= 4194304 * (Command->Command_Number % 2);
 
-		float Move_Angles[3] =
-		{
-			Command->Angles[0],
-
-			Command->Angles[1]
-		};
+		float Move_Angles[3] = { Command->Angles[0], Command->Angles[1] };
 
 		static float Previous_Move_Angle_Y;
 
@@ -141,10 +136,6 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 		{
 			Previous_Move_Angle_Y = Move_Angles[1];
 		}
-
-		float Previous_Move[2];
-
-		Byte_Manager::Copy_Bytes(1, Previous_Move, sizeof(Previous_Move), Command->Move);
 
 		float Desired_Move_Forward[3];
 
@@ -956,8 +947,6 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			}
 
 			Command->Buttons &= ~Block_Buttons;
-
-			Byte_Manager::Copy_Bytes(1, Command->Move, sizeof(Previous_Move), Previous_Move);
 
 			Correct_Movement();
 
