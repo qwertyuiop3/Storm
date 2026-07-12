@@ -82,12 +82,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 	{
 		Command->Buttons |= 4194304 * (Command->Command_Number % 2);
 
-		float Move_Angles[3] =
-		{
-			Command->Angles[0],
-
-			Command->Angles[1]
-		};
+		float Move_Angles[3] = { Command->Angles[0], Command->Angles[1] };
 
 		static float Previous_Move_Angle_Y;
 
@@ -141,10 +136,6 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 		{
 			Previous_Move_Angle_Y = Move_Angles[1];
 		}
-
-		float Previous_Move[2];
-
-		Byte_Manager::Copy_Bytes(1, Previous_Move, sizeof(Previous_Move), Command->Move);
 
 		float Desired_Move_Forward[3];
 
@@ -705,6 +696,8 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 							{
 								if (Reviving + (Can_Attack ^ 1) == 0)
 								{
+									float Pellet_Offset[2] = { };
+
 									Target_Structure* Aim_Target = nullptr;
 
 									if (Is_Melee == 0)
@@ -713,17 +706,25 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 										if (Weapon_Identifier == 2)
 										{
-											Command->Command_Number = -2134739495;
+											Command->Command_Number = 681986290;
 
-											Command->Random_Seed = 11144000;
+											Command->Random_Seed = 2012120776;
+
+											Pellet_Offset[0] = -0.60609853f;
+
+											Pellet_Offset[1] = -0.08457297f;
 										}
 										else
 										{
 											if (Weapon_Identifier == 148)
 											{
-												Command->Command_Number = -2139542887;
+												Command->Command_Number = 1304344125;
 
-												Command->Random_Seed = 1246243990;
+												Command->Random_Seed = 1948230308;
+
+												Pellet_Offset[0] = -0.301083f;
+
+												Pellet_Offset[1] = -0.49009472f;
 											}
 											else
 											{
@@ -735,11 +736,28 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 												}
 												else
 												{
-													if ((163 - Weapon_Identifier ^ Weapon_Identifier - 162) == 1)
+													if (Weapon_Identifier == 162)
 													{
-														Command->Command_Number = -2139097805;
+														Command->Command_Number = -847029837;
 
-														Command->Random_Seed = 494641349;
+														Command->Random_Seed = 74353963;
+
+														Pellet_Offset[0] = -0.02511403;
+
+														Pellet_Offset[1] = 0.1230706f;
+													}
+													else
+													{
+														if (Weapon_Identifier == 163)
+														{
+															Command->Command_Number = -2139097805;
+
+															Command->Random_Seed = 494641349;
+
+															Pellet_Offset[0] = -0.23628435f;
+
+															Pellet_Offset[1] = -0.09043737f;
+														}
 													}
 												}
 											}
@@ -874,24 +892,24 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 															Target_Origin[2] - Eye_Position[2]
 														};
 
-														Vector_Normalize(Direction);
-
 														float Angles[3] =
 														{
-															__builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180.f / 3.1415927f,
+															__builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180.f / 3.1415927f - Pellet_Offset[0],
 
-															__builtin_atan2f(Direction[1], Direction[0]) * 180.f / 3.1415927f
+															__builtin_atan2f(Direction[1], Direction[0]) * 180.f / 3.1415927f - Pellet_Offset[1]
 														};
 
 														if (Perform_Trace(Angles) == 1)
 														{
 															Command->Tick_Number = Target->Tick_Number;
 
-															Byte_Manager::Copy_Bytes(1, Command->Angles, sizeof(Angles), Angles);
+															Command->Angles[0] = Angles[0] + Pellet_Offset[0];
+
+															Command->Angles[1] = Angles[1] + Pellet_Offset[1];
+
+															Command->Angles[2] = Angles[2];
 
 															Command->Buttons |= 1;
-
-															Set_Target_Time(Target, 0);
 
 															goto Aim_Found_Target_Label;
 														}
@@ -915,11 +933,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 										if (Shove_Target != nullptr)
 										{
 											Set_Target_Time(Shove_Target, 1);
+										}
 
-											if (Aim_Target != nullptr)
-											{
-												Set_Target_Time(Aim_Target, 0);
-											}
+										if (Aim_Target != nullptr)
+										{
+											Set_Target_Time(Aim_Target, 0);
 										}
 
 										if (Is_Melee == 0)
@@ -932,9 +950,9 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 											float* Recoil = (float*)((unsigned __int32)Local_Player + 4612);
 
-											Command->Angles[0] -= Random_Type((unsigned __int32)Client_Module + 1756592)((char*)"CTerrorGun::FireBullet HorizSpread", -Maximum_Spread, Maximum_Spread, nullptr) + Recoil[0];
+											Command->Angles[0] -= Random_Type((unsigned __int32)Client_Module + 1756592)((char*)"CTerrorGun::FireBullet HorizSpread", -Maximum_Spread, Maximum_Spread, nullptr) + Pellet_Offset[0] + Recoil[0];
 
-											Command->Angles[1] -= Random_Type((unsigned __int32)Client_Module + 1756592)((char*)"CTerrorGun::FireBullet VertSpread", -Maximum_Spread, Maximum_Spread, nullptr) + Recoil[1];
+											Command->Angles[1] -= Random_Type((unsigned __int32)Client_Module + 1756592)((char*)"CTerrorGun::FireBullet VertSpread", -Maximum_Spread, Maximum_Spread, nullptr) + Pellet_Offset[1] + Recoil[1];
 
 											Command->Angles[2] -= Recoil[2];
 										}
@@ -956,8 +974,6 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			}
 
 			Command->Buttons &= ~Block_Buttons;
-
-			Byte_Manager::Copy_Bytes(1, Command->Move, sizeof(Previous_Move), Previous_Move);
 
 			Correct_Movement();
 
