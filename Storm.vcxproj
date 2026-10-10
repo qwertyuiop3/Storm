@@ -96,7 +96,6 @@
     <ClInclude Include="Estimate_Velocity.hpp" />
     <ClInclude Include="Get_Glow_Color.hpp" />
     <ClInclude Include="Interpolate.hpp" />
-    <ClInclude Include="Finish_Move.hpp" />
     <ClInclude Include="Move.hpp" />
     <ClInclude Include="Copy_Command.hpp" />
     <ClInclude Include="Paint.hpp" />

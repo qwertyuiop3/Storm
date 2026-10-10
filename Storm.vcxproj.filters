@@ -28,9 +28,6 @@
     <ClInclude Include="Item_Post_Frame.hpp">
       <Filter>Header++</Filter>
     </ClInclude>
-    <ClInclude Include="Finish_Move.hpp">
-      <Filter>Header++</Filter>
-    </ClInclude>
     <ClInclude Include="Run_Command.hpp">
       <Filter>Header++</Filter>
     </ClInclude>
